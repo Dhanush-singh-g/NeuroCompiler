@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Generated datasets
+data/raw/
+data/processed/
+
+# Trained models
+models/*.joblib
+models/*.pkl
+models/*.pt
+
+# Generated results
+results/*.csv
+results/*.json
+results/*.png
+
+# Temporary files
+*.log
+*.tmp
+.DS_Store
