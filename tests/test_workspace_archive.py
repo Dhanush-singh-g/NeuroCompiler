@@ -9,6 +9,7 @@ from pathlib import Path
 
 from scripts.package_research_workspace import package, ARCHIVE
 from scripts.restore_research_workspace import restore
+from scripts.join_research_archive import join
 
 
 class WorkspaceTests(unittest.TestCase):
@@ -87,6 +88,34 @@ class WorkspaceTests(unittest.TestCase):
                     'files':{name:{'bytes':len(content),'sha256':hashlib.sha256(content).hexdigest()}}}))
                 with self.assertRaises(ValueError):restore(archive, manifest, self.target)
                 self.assertFalse(self.target.exists())
+
+    def make_parts(self):
+        content=b'complete research bytes'
+        pieces=[content[:6],content[6:13],content[13:]]
+        records=[]
+        directory=self.base/'parts';directory.mkdir()
+        for index,piece in enumerate(pieces):
+            name=f'workspace.part{index:03d}'
+            (directory/name).write_bytes(piece)
+            records.append({'name':name,'bytes':len(piece),'sha256':hashlib.sha256(piece).hexdigest()})
+        (directory/'research-workspace-parts.json').write_text(json.dumps({'schema_version':1,
+            'archive':'workspace.tar.gz','archive_bytes':len(content),
+            'archive_sha256':hashlib.sha256(content).hexdigest(),'parts':records}))
+        return directory,content
+
+    def test_join_checks_parts_and_whole_archive_without_overwriting(self):
+        directory,content=self.make_parts()
+        output=join(directory)
+        self.assertEqual(output.read_bytes(),content)
+        with self.assertRaisesRegex(ValueError,'Refuse to overwrite'):join(directory)
+
+    def test_join_rejects_tampered_part_and_removes_partial_output(self):
+        directory,_=self.make_parts()
+        path=directory/'workspace.part001'
+        path.write_bytes(b'x'*path.stat().st_size)
+        with self.assertRaisesRegex(ValueError,'checksum mismatch'):join(directory)
+        self.assertFalse((directory/'workspace.tar.gz').exists())
+        self.assertFalse((directory/'workspace.tar.gz.partial').exists())
 
 
 if __name__ == '__main__':

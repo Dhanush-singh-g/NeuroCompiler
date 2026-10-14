@@ -5,8 +5,12 @@
 The user authorized committing and pushing all project work to
 Dhanush-singh-g/NeuroCompiler. Source, tests, reports, model bundles and the
 recorded dashboard snapshot belong in main. Generated data/models/results are
-preserved separately in the project-snapshot-2026-10-14 release, with a full
-per-file manifest and archive checksum; RESEARCH_ARCHIVE.json describes it.
+preserved separately on research-archive-2026-10-14, with a full per-file
+manifest and archive/part checksums; the project-snapshot-2026-10-14 release
+links this branch, and RESEARCH_ARCHIVE.json describes it. The release asset
+endpoint returned HTTP401 while authenticated Git/API operations worked, so
+Git is used for the archive too. Main-only clones remain small. Use the join
+helper before the restore helper; START_HERE.md documents the exact steps.
 Existing experimental snapshots remain unchanged. Historical reports below
 describe their original local-only state at the time of each experiment.
 

@@ -21,7 +21,7 @@ use `python3 --version`. Confirm that the version is 3.10 or newer.
 With Git installed, download the project:
 
 ```bash
-git clone https://github.com/Dhanush-singh-g/NeuroCompiler.git
+git clone --single-branch --branch main https://github.com/Dhanush-singh-g/NeuroCompiler.git
 cd NeuroCompiler
 ```
 
@@ -91,13 +91,24 @@ recorded snapshot is already included in the repository.
 
 Code, tests, reports, model bundles and the frontend are in Git. Large datasets,
 native binaries, raw timing records, logs and original experimental snapshots
-are preserved in the **project-snapshot-2026-10-14** GitHub release:
+are preserved on the separate **research-archive-2026-10-14** branch. The
+**project-snapshot-2026-10-14** release links that archive and its checksums:
 
 https://github.com/Dhanush-singh-g/NeuroCompiler/releases/tag/project-snapshot-2026-10-14
 
-These large downloads are unnecessary for viewing the dashboard. For research,
-download `neurocompiler-research-workspace-20261014.tar.gz` and its accompanying
-manifest and SHA256 file. The archive retains the generated data/, models/ and
+These large downloads are unnecessary for viewing the dashboard. The normal
+clone command above deliberately downloads only main. For research, download
+the archive branch into a separate sibling folder, then reassemble its parts:
+
+```bash
+git clone --single-branch --branch research-archive-2026-10-14 https://github.com/Dhanush-singh-g/NeuroCompiler.git ../NeuroCompiler-research-archive
+python scripts/join_research_archive.py ../NeuroCompiler-research-archive
+```
+
+The branch stores the archive in parts smaller than GitHub's ordinary file
+limit, with per-part checksums. The helper reconstructs the original
+`neurocompiler-research-workspace-20261014.tar.gz` only if every checksum passes.
+The archive retains the generated data/, models/ and
 results/ trees, including the original nested snapshots; it omits virtual
 environments and Python caches.
 Internal upstream documentation symlinks are materialized as regular files,
@@ -106,13 +117,15 @@ with their original targets retained in the manifest for portability.
 Restore it into this checkout with:
 
 ```bash
-python scripts/restore_research_workspace.py path/to/neurocompiler-research-workspace-20261014.tar.gz --manifest path/to/research-workspace-manifest.json --sha256-file path/to/research-workspace.sha256
+python scripts/restore_research_workspace.py ../NeuroCompiler-research-archive/neurocompiler-research-workspace-20261014.tar.gz --manifest ../NeuroCompiler-research-archive/research-workspace-manifest.json --sha256-file ../NeuroCompiler-research-archive/research-workspace.sha256
 ```
 
 The helper verifies the archive hash, paths and per-file checksums. It refuses
 to overwrite different existing files, and skips files that are already
 identical. It never unpickles models or executes native artifacts. Allow disk
-space for the downloaded archive plus approximately 3 GB of extracted files.
+space for Git's archive checkout, the joined archive and approximately 3 GB of
+extracted files (roughly 9 GB in total). This is optional; the dashboard checkout
+is small.
 Only after restoration can you regenerate the displayed snapshot with:
 
 ```bash

@@ -11,5 +11,11 @@
   "symlink_policy": "Internal file symlinks materialized with original target recorded; external/nonfile links rejected",
   "files": 6529,
   "uncompressed_bytes": 2995330244,
-  "release_url": "https://github.com/Dhanush-singh-g/NeuroCompiler/releases/tag/project-snapshot-2026-10-14"
+  "release_url": "https://github.com/Dhanush-singh-g/NeuroCompiler/releases/tag/project-snapshot-2026-10-14",
+  "storage": {
+    "branch": "research-archive-2026-10-14",
+    "parts": 58,
+    "parts_manifest": "research-workspace-parts.json",
+    "branch_url": "https://github.com/Dhanush-singh-g/NeuroCompiler/tree/research-archive-2026-10-14"
+  }
 }
