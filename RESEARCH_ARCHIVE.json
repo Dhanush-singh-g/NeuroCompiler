@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-14T01:04:33.951755+00:00",
+  "archive": "neurocompiler-research-workspace-20261014.tar.gz",
+  "archive_sha256": "992030b192a0cfe1fe61023a2b43467552c2cb628c6d381b2df2f3aa4455c918",
+  "archive_bytes": 1937023187,
+  "excluded": [
+    "Python __pycache__ directories and .pyc/.pyo files",
+    "Git metadata, virtual environments and machine-private setup outside data/models/results"
+  ],
+  "symlink_policy": "Internal file symlinks materialized with original target recorded; external/nonfile links rejected",
+  "files": 6529,
+  "uncompressed_bytes": 2995330244,
+  "release_url": "https://github.com/Dhanush-singh-g/NeuroCompiler/releases/tag/project-snapshot-2026-10-14"
+}

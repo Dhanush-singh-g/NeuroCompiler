@@ -23,9 +23,14 @@ models/*.pkl
 models/*.pt
 
 # Generated results
+results/
 results/*.csv
 results/*.json
 results/*.png
+results/*.zip
+results/*.bc
+results/*.ll
+results/*.out
 
 # Temporary files
 *.log
