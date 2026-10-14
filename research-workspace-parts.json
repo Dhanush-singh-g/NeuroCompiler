@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "archive": "neurocompiler-research-workspace-20261014.tar.gz",
+  "archive_sha256": "992030b192a0cfe1fe61023a2b43467552c2cb628c6d381b2df2f3aa4455c918",
+  "archive_bytes": 1937023187,
+  "parts": [
+    {
+      "name": "workspace.part001",
+      "bytes": 33554432,
+      "sha256": "44594987026e48ed91bc75149d8af28917e882bfef3303f201693ed04e2dfd22"
+    },
+    {
+      "name": "workspace.part002",
+      "bytes": 33554432,
+      "sha256": "4533f046e13969e6e5027380742425916e58adab0ad5ab018f23face5e2b4c3c"
+    },
+    {
+      "name": "workspace.part003",
+      "bytes": 33554432,
+      "sha256": "e401d4f4a9e71982c3f589d2827dc7efeca141014f1bd3bde62180b82eadb081"
+    },
+    {
+      "name": "workspace.part004",
+      "bytes": 33554432,
+      "sha256": "efce09b87a63cd285e556ee189441799f0f700388bb8960bef9becb11716152d"
+    },
+    {
+      "name": "workspace.part005",
+      "bytes": 33554432,
+      "sha256": "ccd757c00f4b8480875e63ecf2f5e0357d2288002e700a75ea7208dfcacff225"
+    },
+    {
+      "name": "workspace.part006",
+      "bytes": 33554432,
+      "sha256": "f32bf344fd723c305ea9183207e0d838f81e2386408c014c8d55a0a214609312"
+    },
+    {
+      "name": "workspace.part007",
+      "bytes": 33554432,
+      "sha256": "5e7670e7cbf86607a05ab150935f287d8f0b60ed0bce26bb2b228bca08886268"
+    },
+    {
+      "name": "workspace.part008",
+      "bytes": 33554432,
+      "sha256": "3ede1b2e59b45b80996bf24e0cfe8366125b36248d82521e5883018caf8dc9a8"
+    },
+    {
+      "name": "workspace.part009",
+      "bytes": 33554432,
+      "sha256": "fbae7ef53f29dd48e1350bdb80eea22cc6b6a781ab5d13af0bb4181b189bcbef"
+    },
+    {
+      "name": "workspace.part010",
+      "bytes": 33554432,
+      "sha256": "283287eecf395d9e9eefe992a161d3078c86370862d5b34121abd27f31fda641"
+    },
+    {
+      "name": "workspace.part011",
+      "bytes": 33554432,
+      "sha256": "a13a9f4ccf93594c6f491470f75b088f321a9cb168a8db529c3a7aa0eb1aec9b"
+    },
+    {
+      "name": "workspace.part012",
+      "bytes": 33554432,
+      "sha256": "a3350f76f34ecf000f7362181c374dbb6171aaf9a545df4ed3d8cbab185c9645"
+    },
+    {
+      "name": "workspace.part013",
+      "bytes": 33554432,
+      "sha256": "38231e9b2a3e958c837309413b5c6a3ed9f4b7b6599e836950530c804a6cfd2c"
+    },
+    {
+      "name": "workspace.part014",
+      "bytes": 33554432,
+      "sha256": "7660a4d1e24c82d0b12c44e9c9a37f60c5000c32bf3d3bf444b475f839247b1c"
+    },
+    {
+      "name": "workspace.part015",
+      "bytes": 33554432,
+      "sha256": "8468f0eab9dc126cd9da0c6f116114881116f126df97ed39c5e5e285de467f18"
+    },
+    {
+      "name": "workspace.part016",
+      "bytes": 33554432,
+      "sha256": "948746b191244d9aa227c79c69c22a941e016d79c44c9fb789313a2b40d50cf8"
+    },
+    {
+      "name": "workspace.part017",
+      "bytes": 33554432,
+      "sha256": "0c0868bff808875da88afec6966afcf688a0b8d2caf2f09fa684a1e09b7e20a7"
+    },
+    {
+      "name": "workspace.part018",
+      "bytes": 33554432,
+      "sha256": "2099cd0d83da3004cc157498e0a771b3d8ea7e7bd677171aee32cede01556972"
+    },
+    {
+      "name": "workspace.part019",
+      "bytes": 33554432,
+      "sha256": "6dfb4245976fbdf75f23cf1f9a6070f84f64c0022e72cec2b043d597132da455"
+    },
+    {
+      "name": "workspace.part020",
+      "bytes": 33554432,
+      "sha256": "8fe22820df88fbb978c0dc557200cd1f6302ef9f6a816946f0dd4f7191936f33"
+    },
+    {
+      "name": "workspace.part021",
+      "bytes": 33554432,
+      "sha256": "1af3f00ac71e18888d61b4a393f6eff3850a8a46a853a076c2e80039acda1d79"
+    },
+    {
+      "name": "workspace.part022",
+      "bytes": 33554432,
+      "sha256": "7605efe5f2bb789771b0c64fdca7d07af139ea78ffc8b9b14cbcc15b523a6e93"
+    },
+    {
+      "name": "workspace.part023",
+      "bytes": 33554432,
+      "sha256": "94776fbb73dc729f93a96fc0410e9c31912446ea418c13b6c8a4e425dd2aae55"
+    },
+    {
+      "name": "workspace.part024",
+      "bytes": 33554432,
+      "sha256": "58dd09ba03da73f799865b8dbaed6148ce96bb0fb9a8dd83fef4b77ca7adc10a"
+    },
+    {
+      "name": "workspace.part025",
+      "bytes": 33554432,
+      "sha256": "668a870280a288e161b9c1c8d7eb95b229b06a20983b6dc44b0747fd07b57ffb"
+    },
+    {
+      "name": "workspace.part026",
+      "bytes": 33554432,
+      "sha256": "7dd6d43db10138891aa66f6698a50f9f0efb9558e0d5ee9361dced27e3ad9cad"
+    },
+    {
+      "name": "workspace.part027",
+      "bytes": 33554432,
+      "sha256": "39ce09ec5557680618a5c221969118ba0a0dd4e7c8e7703fde51205f386729d5"
+    },
+    {
+      "name": "workspace.part028",
+      "bytes": 33554432,
+      "sha256": "d9a862a2a5702927030d89f5ec15daa041b78a965c6030e956026338d57beadf"
+    },
+    {
+      "name": "workspace.part029",
+      "bytes": 33554432,
+      "sha256": "9931e5a198802e2b906426547cfe2ae3d08085f5ae87f4121e7eb924cb970995"
+    },
+    {
+      "name": "workspace.part030",
+      "bytes": 33554432,
+      "sha256": "afd486c6425b481d75a9e05d2f780fe98b78bfedcbd6183fb43f7c73952b85d6"
+    },
+    {
+      "name": "workspace.part031",
+      "bytes": 33554432,
+      "sha256": "cd4b4c45958d86a0398b9b2d61aaba854e1591abc27fb4f745c93560928befe5"
+    },
+    {
+      "name": "workspace.part032",
+      "bytes": 33554432,
+      "sha256": "c70e1e7b30f5dfbc2569342e406d6a73b9a170d5848dc6d1410f7b6b69f7174a"
+    },
+    {
+      "name": "workspace.part033",
+      "bytes": 33554432,
+      "sha256": "729adfd71808c14f2eb1cd88507b9913f591dabde4fb7b793f5a3aea5e07bdb2"
+    },
+    {
+      "name": "workspace.part034",
+      "bytes": 33554432,
+      "sha256": "29b71e55bb54fcc64c1d489a5d6b652ef5b2e1b60ac1c0bd5f97ed4a668e6d1e"
+    },
+    {
+      "name": "workspace.part035",
+      "bytes": 33554432,
+      "sha256": "5aef6c1cb1dd633098d7e8df2638e544c86229f28ee3652425f14bb56f7a11ef"
+    },
+    {
+      "name": "workspace.part036",
+      "bytes": 33554432,
+      "sha256": "a6d6f6f111e24293942eb642a253c8801fd9a14eae938116eb36aaa95f30e52e"
+    },
+    {
+      "name": "workspace.part037",
+      "bytes": 33554432,
+      "sha256": "0b719d2392b4cf1f2cedbee55e63c6da6ac6ce05ca2d40ee5fdaffe041fadb9c"
+    },
+    {
+      "name": "workspace.part038",
+      "bytes": 33554432,
+      "sha256": "9cdf47c6895840170c061cc8f2ad84bdd0682fcddb98543b82aaea5d9d1b88cf"
+    },
+    {
+      "name": "workspace.part039",
+      "bytes": 33554432,
+      "sha256": "764816ea9dfd8bfc152ee016c06b1991e34aae1ead0fedb1bb3f4a8b434375dc"
+    },
+    {
+      "name": "workspace.part040",
+      "bytes": 33554432,
+      "sha256": "47b3bbfd794603930768072c9b617e55b9b67a5a81f230be9f39965dd1fe5c6e"
+    },
+    {
+      "name": "workspace.part041",
+      "bytes": 33554432,
+      "sha256": "0796e859215325d617539f2c2d4f74b4bf12e20e62fc62bdb8edf39e241cf5bf"
+    },
+    {
+      "name": "workspace.part042",
+      "bytes": 33554432,
+      "sha256": "043e93b815d3f5b325c25b337fd9acb85fb365ad17ed1bcf0055aca4050c559b"
+    },
+    {
+      "name": "workspace.part043",
+      "bytes": 33554432,
+      "sha256": "60c35a32340d23d7d707fc16eca1e5db2af0244c6404c860bfc6110ca062ddf4"
+    },
+    {
+      "name": "workspace.part044",
+      "bytes": 33554432,
+      "sha256": "4fc6f2cf6dc0e44e0da4e723f33e9c2ff716513aadf7d731f04c54fd24fc7aaf"
+    },
+    {
+      "name": "workspace.part045",
+      "bytes": 33554432,
+      "sha256": "a540746c6f5b8722a1f457ee3ae48fb0bbc6bf374ff56007614cd933bc90b4d0"
+    },
+    {
+      "name": "workspace.part046",
+      "bytes": 33554432,
+      "sha256": "be24a582a7871d3a812e4fd1b094f7f3d06dcd7f6990c5c1bcad79d90ce7db28"
+    },
+    {
+      "name": "workspace.part047",
+      "bytes": 33554432,
+      "sha256": "cac2a952264359edde0a7ee9f0a6bf68e803ec6075c4711277fd32f36c424173"
+    },
+    {
+      "name": "workspace.part048",
+      "bytes": 33554432,
+      "sha256": "11a29b55cff1755265ff3b2fb9abb461a06cbaf3eef7640b7d30b14287e75de9"
+    },
+    {
+      "name": "workspace.part049",
+      "bytes": 33554432,
+      "sha256": "b3af8ae5e2b33cc916c0922406c26dc852b96078fa21e77dbf04b8606ee5c1ae"
+    },
+    {
+      "name": "workspace.part050",
+      "bytes": 33554432,
+      "sha256": "c1eb9e0637e3c2774a46b75176177a4b6575c44a0f1c04d3efae185825736b02"
+    },
+    {
+      "name": "workspace.part051",
+      "bytes": 33554432,
+      "sha256": "f2885ff2f9b304e599aecd292425f6d4f2ea5b6abfbd5fc5277f4d8c95cda88a"
+    },
+    {
+      "name": "workspace.part052",
+      "bytes": 33554432,
+      "sha256": "0325ad75b0e0e996ce7362e56377c077f666ecbe4cae4a6127798b409bb91efe"
+    },
+    {
+      "name": "workspace.part053",
+      "bytes": 33554432,
+      "sha256": "43a004bcbce84499ff4216a818f01eb04b07062bd0adeb8327716dc825115da2"
+    },
+    {
+      "name": "workspace.part054",
+      "bytes": 33554432,
+      "sha256": "44d2c97ec0fd003041b2a142122ab5eae0ab886a211123561e023fcd4e0a6c33"
+    },
+    {
+      "name": "workspace.part055",
+      "bytes": 33554432,
+      "sha256": "454ca285206d8182942cbbbdd7460bc59c2310e84b6ff945c5ba1be4cc14ad2e"
+    },
+    {
+      "name": "workspace.part056",
+      "bytes": 33554432,
+      "sha256": "acdbe4bcc073504b30624f0cf55e9d531578f5f1e585cb8af3b0e917196b32b1"
+    },
+    {
+      "name": "workspace.part057",
+      "bytes": 33554432,
+      "sha256": "0dcc23f960c87d5f4ea1a99e4ec26f64bde4590206460925f70ecdba350dc0e1"
+    },
+    {
+      "name": "workspace.part058",
+      "bytes": 24420563,
+      "sha256": "42fddc8735f2aa745f0c67e9dac5bed2c3fdef233551e47e919e451fc91ff359"
+    }
+  ]
+}
