@@ -6,6 +6,7 @@ dashboard remains available through **Research evidence** in the navigation.
 The live app is separate from the frozen research experiments.
 
 [Checked desktop screenshot](presentation/screenshots/decision.png) ·
+[Comparison summary screenshot](presentation/screenshots/comparison.png) ·
 [Verification record](presentation/VERIFICATION.md)
 
 For copyable C programs, exact inputs, expected outputs, and diagnostic examples,
@@ -86,6 +87,18 @@ To update this checkout later, stop the app, run `git pull --ff-only`, and rerun
 setup if the dependencies or toolchain manifest changed. It preserves the
 separate research environment and your original checkout.
 
+For the updated comparison backend, stop the running server and use:
+
+```bash
+cd ~/NeuroCompiler-live
+git pull --ff-only
+bash scripts/setup_presentation.sh
+bash scripts/start_presentation.sh
+```
+
+Setup now prefers a supported system Python even when Conda `(base)` is active.
+To choose one explicitly, run `NEUROCOMPILER_PYTHON=/usr/bin/python3 bash scripts/setup_presentation.sh`.
+
 ## A five-minute presentation
 
 | Time | Action | What to explain |
@@ -146,7 +159,7 @@ The later candidate timing table is explicitly post-prediction exploration.
 | Predict | Exact portable JSON export of `sl_transform_policy_bundle.joblib`'s `raw_ridge1_floor0` model. Standardization, linear coefficients, intercept, margin, threshold, and O3-alias handling preserve the original decision rule. No pickle loading in the live app. |
 | Explain | Largest standardized-feature × coefficient contributions. Remaining fields/intercept also contribute. Six-standard-deviation flags are extrapolation warnings, not calibrated confidence. |
 | Check | Two successful executions of O0 and every candidate must have byte-identical stdout on the supplied input. A mismatch blocks timing. This does not prove semantic correctness for every possible input. |
-| Measure | Twelve baseline/candidate pairs per distinct binary, three blocks, balanced starting order. Separate child CPU service time and process wall time, including startup. CPU affinity is set to one available logical CPU. Every sample is retained. |
+| Measure | Protocol `live-native-process-v2`: a small C helper measures fork/exec/wait4, excluding Python launch and Python pre-execution setup. Twelve baseline/candidate pairs per distinct binary, three blocks, fixed-seed shuffled order balanced within each block. Separate child CPU service time and process wall time include executable startup. CPU affinity is set to one available logical CPU; raw samples include the CPU identifier. Every completed cell retains its samples. |
 | Interpret | Both clocks require at least 10 ms median duration per side, at most 10% within-side duration CV, and at most 3% pooled/every-block starting-order difference. The O3 null also needs its 95% paired-bootstrap interval and every block within reciprocal 3%. Failure means inconclusive. Passing controls still do not make this a formal research evaluation. |
 | Inspect/export | Side-by-side IR with line-set highlighting, metrics, downloadable LLVM10 bitcode for the model choice and approved O3, Markdown summary, and complete JSON containing input, features, decisions, attributions, artifact hashes, and raw samples. Bitcode hashes are checked again at download. |
 
@@ -155,6 +168,23 @@ The four alternatives are **O3**, **mem2reg → loop-rotate → LICM → O3**,
 from the existing model's training menu; this is not an O2/O3-only comparator
 or a model that invents arbitrary pass sequences. Byte-identical alternatives
 are labelled aliases and share their canonical measurement.
+
+The **NeuroCompiler vs O3** summary shows time change as a percentage, paired geometric-mean
+observations, and a point-estimate gap to the fastest qualified measured sample
+when available. Positive time change means more time; a 1.25× speedup means 20%
+less time, not 25%. When NeuroCompiler selects O3 or its exact binary alias, code
+is unchanged and the reference ratio is 1 by definition. The noisy O3 self-control
+ratio stays in diagnostics/raw reports and must not be presented as a learned
+gain or regression. Unqualified observed percentages are explicitly unreliable.
+The fastest qualified point estimate is identified after timing; it is neither
+the learned recommendation nor a proven optimum. Missing/failed candidates
+cannot be ranked reliably.
+
+The decision view distinguishes **identical executable menus** from **different
+executables with no predicted benefit**. Technical feature contributions are
+collapsed by default. Small predicted effects below the demo's 3% gain threshold
+and extrapolation beyond training feature scale are explicitly flagged. Model
+weights, the original prediction rule, and deployment qualification are unchanged.
 
 The exported model has **39 candidate targets across seven real and six
 synthetic training programs**. The exact source model and report hashes, training

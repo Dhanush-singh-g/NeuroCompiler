@@ -14,6 +14,7 @@ from src.benchmarks.compact import MENU
 from src.presentation.model import load_model, predict
 from src.presentation.server import Application, Handler, markdown_report, toolchain, validate_input
 from src.presentation.worker import pair_summary
+from src.presentation.summary import comparison_summary, decision_diagnostics
 
 
 class InputTests(unittest.TestCase):
@@ -38,6 +39,17 @@ class InputTests(unittest.TestCase):
         self.assertEqual(m['real_training_programs'], 7)
         self.assertEqual(m['synthetic_training_programs'], 6)
 
+    def test_invalid_model_thresholds_are_rejected(self):
+        from unittest.mock import patch
+        model=load_model()
+        with tempfile.TemporaryDirectory() as scratch:
+            path=Path(scratch)/'model.json'
+            for key,value in [('floor',-1),('margin',float('nan'))]:
+                changed=dict(model);changed[key]=value
+                path.write_text(json.dumps(changed))
+                with patch('src.presentation.model.MODEL_PATH',path), self.assertRaises(ValueError):
+                    load_model()
+
 
 class MeasurementTests(unittest.TestCase):
     def samples(self, ratio=1., short=False, order=False):
@@ -61,6 +73,46 @@ class MeasurementTests(unittest.TestCase):
         self.assertFalse(pair_summary(self.samples(short=True), control=True)['qualified'])
         self.assertFalse(pair_summary(self.samples(1.1), control=True)['qualified'])
         self.assertFalse(pair_summary(self.samples(order=True))['qualified'])
+
+    def test_identical_code_does_not_become_fake_regression(self):
+        control=pair_summary(self.samples(.9), control=True)
+        control['verdict']='inconclusive'
+        decision={'choice':'O3','aliases':{'O3':'O3'}}
+        s=comparison_summary(decision,{'O3':control})['clocks']['cpu']
+        self.assertEqual(s['status'],'unchanged')
+        self.assertEqual(s['time_change_percent'],0.)
+        self.assertFalse(s['qualified'])
+        self.assertIsNone(s['gap_to_best_percent'])
+        self.assertTrue(s['failure_reasons'])
+
+    def test_time_percentage_and_gap_have_correct_denominator(self):
+        control=pair_summary(self.samples(),control=True);control['verdict']='same_binary'
+        slow=pair_summary(self.samples(.8));slow['verdict']='slower_in_demo'
+        fast=pair_summary(self.samples(1.25));fast['verdict']='faster_in_demo'
+        cells={'O3':control,'slow':slow,'fast':fast}
+        decision={'choice':'slow','aliases':{c:c for c in cells}}
+        s=comparison_summary(decision,cells)['clocks']['cpu']
+        self.assertEqual(s['status'],'slower')
+        self.assertAlmostEqual(s['time_change_percent'],25.)
+        self.assertAlmostEqual(s['gap_to_best_percent'],56.25)
+        decision['choice']='fast'
+        s=comparison_summary(decision,cells)['clocks']['cpu']
+        self.assertEqual(s['status'],'faster')
+        self.assertAlmostEqual(s['time_change_percent'],-20.)
+        self.assertAlmostEqual(s['gap_to_best_percent'],0.)
+        varying=self.samples(.8)
+        varying[0]['baseline']['cpu'] *= 8
+        irregular=pair_summary(varying);irregular['verdict']='inconclusive'
+        decision['choice']='irregular';decision['aliases']['irregular']='irregular'
+        measured=comparison_summary(decision,{'O3':control,'irregular':irregular})['clocks']['cpu']
+        self.assertAlmostEqual(measured['baseline_ms']/measured['neurocompiler_ms'],measured['speedup'])
+
+    def test_different_binary_and_identical_menu_are_distinguished(self):
+        s={'O3':0.,'candidate':-.1}
+        self.assertEqual(decision_diagnostics(s,{'O3':'O3','candidate':'O3'},'O3')['code'],'identical_menu')
+        d=decision_diagnostics(s,{'O3':'O3','candidate':'candidate'},'O3')
+        self.assertEqual(d['code'],'baseline_preferred')
+        self.assertEqual(d['distinct_executables'],2)
 
 
 class LiveIntegrationTests(unittest.TestCase):
@@ -142,6 +194,8 @@ class LiveIntegrationTests(unittest.TestCase):
         self.assertEqual(result['correctness']['checks']['O0 reference']['stdout_preview'],'55\n')
         self.assertLess(result['prediction_frozen_at'],result['measurement_started_at'])
         self.assertFalse(result['measurement']['self_control_passed']) # Too short, not a fabricated gain.
+        self.assertEqual(result['measurement']['protocol'],'live-native-process-v2')
+        self.assertEqual(result['measurement']['summary']['clocks']['cpu']['time_change_percent'],0.)
         self.assertTrue(all(c['verdict']=='inconclusive' for c in result['measurement']['cells'].values()))
         export = self.request(f"/api/jobs/{compared['id']}/report.json")
         self.assertEqual(export['source_sha256'],hashlib.sha256(source.encode()).hexdigest())
@@ -190,6 +244,24 @@ class LiveIntegrationTests(unittest.TestCase):
         job = self.wait(self.request('/api/jobs',{'operation':'compare','analysis_id':analysis['id'],'trusted_code':True}))
         self.assertEqual(job['status'],'failed')
         self.assertIn('2 second limit',job['message'])
+
+    def test_08_native_clocks_and_timing_helper_integrity(self):
+        from unittest.mock import patch
+        from src.presentation.worker import execute, compare, JobError
+        analysis=self.analyze('#include <time.h>\nint main(void){struct timespec t={0,20000000};nanosleep(&t,0);return 0;}')
+        root=self.app.runs/analysis['id']
+        request=json.loads((root/'request.json').read_text())
+        observed=execute(root/'O3/program',request,root)
+        self.assertGreaterEqual(observed['wall'],.019)
+        self.assertLess(observed['cpu'],observed['wall'])
+        self.assertIsInstance(observed['cpu_id'],int)
+        changed_model=root/'changed-model.json';changed_model.write_text('{}')
+        with patch('src.presentation.worker.MODEL_PATH',changed_model), self.assertRaisesRegex(JobError,'Model changed'):
+            compare(root,{'analysis_root':str(root)})
+        (root/'native-runner').write_bytes(b'changed')
+        job=self.wait(self.request('/api/jobs',{'operation':'compare','analysis_id':analysis['id'],'trusted_code':True}))
+        self.assertEqual(job['status'],'failed')
+        self.assertIn('Timing helper changed',job['message'])
 
 
 if __name__ == '__main__':

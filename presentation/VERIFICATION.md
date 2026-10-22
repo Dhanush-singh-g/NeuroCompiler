@@ -1,5 +1,46 @@
 # Live application verification — 22 October 2026
 
+## Comparison clarity and native timing update
+
+The existing visual theme/layout is retained. The decision view now distinguishes
+identical executable menus from a model preference for O3, displays time estimates
+in percent, and collapses technical attribution details. Small effects and
+training-scale extrapolation are flagged. The comparison summary explicitly
+identifies NeuroCompiler's choice, its time change against O3, reliability
+failures, and any available gap to the fastest qualified point estimate.
+
+Choosing the same O3 executable is displayed as unchanged code, with a reference
+ratio of 1; the raw null-control ratio remains diagnostic data. Percentage time
+changes use reciprocal speedup with the correct denominator. Summary times use
+paired geometric means so they agree with the paired ratio; the detailed table
+continues to show medians. Qualified-menu rankings are post-measurement point
+estimates, not learned choices or proven optima.
+
+`live-native-process-v2` uses a small C fork/exec/wait4 helper to exclude Python
+launch and Python pre-execution setup from the measured interval. Native process
+startup remains included. The helper preserves affinity/resource limits, records
+the CPU identifier, and terminates its child when its parent dies. Helper and
+model hashes are checked before execution. Model hashing uses the same bytes as
+inference; invalid numerical thresholds/scores are rejected. A fixed-seed
+shuffled schedule balances starting order within every block. Quality thresholds
+are unchanged. This versions the presentation protocol only; old results and
+formal research protocols are not rewritten or pooled.
+
+Current checks: **34 live/dashboard/archive tests** and **32 original
+transform/compact tests** pass. Added cases cover identity versus noisy controls,
+faster/slower percentages, gap denominators, distinct-menu explanations, invalid
+model thresholds, native clock separation, and changed helper/model rejection.
+Desktop/mobile acceptance checks cover the updated summary, unchanged-code case,
+and inconclusive tiny programs. The unsupported-interpreter PATH setup check
+selects a compatible Python; the cloud's private legacy libtinfo activation is
+still required, whereas documented Ubuntu setup installs that system dependency.
+
+The model coefficients/menu and original raw decision rule are unchanged. These
+engineering changes do not establish improved model accuracy or generalization.
+The checked live timing controls remain inconclusive and are not new labels.
+
+## Initial application verification
+
 Verified on the current **x86_64 Linux cloud environment**. Windows/WSL2 setup is
 documented in `PRESENTATION.md` and needs rehearsal on the presentation computer.
 

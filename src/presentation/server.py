@@ -90,6 +90,7 @@ def markdown_report(result):
     if measurement and measurement['status'] == 'completed':
         lines += ['## Live comparison', '',
                   f"O3 self-control passed: {measurement['self_control_passed']}", '',
+                  'The table retains raw paired ratios. The O3 row is an identical-code null control, not a learned gain/loss. For the unchanged O3 executable the comparison reference is 1 by definition.', '',
                   '| Pipeline | CPU ratio [95% interval] | Wall ratio [95% interval] | Interpretation |',
                   '| --- | --- | --- | --- |']
         for choice, cell in measurement['cells'].items():
@@ -99,6 +100,19 @@ def markdown_report(result):
                 values.append(f"{stat['speedup']:.3f} [{stat['interval'][0]:.3f}, {stat['interval'][1]:.3f}]")
             lines.append(f"| {choice} | {values[0]} | {values[1]} | {cell['verdict']} |")
         lines += ['', measurement['timer'], '', measurement['quality_rule'], '', measurement['interval_scope'], '', measurement['scope']]
+        if measurement.get('summary'):
+            lines += ['', '## NeuroCompiler versus O3', '']
+            for clock, summary in measurement['summary']['clocks'].items():
+                lines += [f"### {clock.upper()}", '', summary['headline'], '',
+                          f"Time change: {summary['time_change_percent']:+.2f}% (positive means more time).",
+                          f"Both-clock measurement qualification: {summary['qualified']}.",
+                          'Identical executables have zero code change; the null control ratio is not a learned speedup.' if summary['same_executable'] else 'Unqualified point estimates must not be treated as reliable gains or losses.', '']
+                if summary['best_measured_choice']:
+                    lines += [f"Fastest qualified point estimate: {summary['best_measured_choice']}.",
+                              f"Gap to that point estimate: {summary['gap_to_best_percent']:.2f}% more time." if summary['gap_to_best_percent'] is not None else 'Gap unavailable.', '', summary['scope'], '']
+                for reason in summary['failure_reasons']:
+                    lines.append('- '+reason)
+                lines.append('')
     elif measurement:
         lines += ['## Execution blocked', '', measurement['reason']]
     else:

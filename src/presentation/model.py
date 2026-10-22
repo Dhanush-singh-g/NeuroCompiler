@@ -8,13 +8,16 @@ import numpy as np
 
 from src.benchmarks.compact import MENU
 from src.features.transform import FEATURE_NAMES, candidate_vector, parse_ir, summaries, METRICS
+from src.presentation.summary import decision_diagnostics
 
 ROOT = Path(__file__).resolve().parents[2]
 MODEL_PATH = ROOT / 'presentation/model.json'
 
 
 def load_model():
-    model = json.loads(MODEL_PATH.read_text())
+    contents = MODEL_PATH.read_bytes()
+    model = json.loads(contents)
+    model['_artifact_sha256'] = hashlib.sha256(contents).hexdigest()
     if (model['schema'] != 1 or model['toolchain_major'] != 10
             or model['menu'] != MENU or model['feature_names'] != FEATURE_NAMES
             or model['deployment_qualified'] is not False or model['approved_policy'] != 'O3'):
@@ -26,6 +29,8 @@ def load_model():
             raise ValueError('Invalid model parameters')
     if min(model['scale']) <= 0 or not math.isfinite(model['intercept']):
         raise ValueError('Invalid model scale/intercept')
+    if any(not math.isfinite(model[k]) or model[k] < 0 for k in ('margin', 'floor')):
+        raise ValueError('Invalid model decision threshold')
     return model
 
 
@@ -41,6 +46,8 @@ def predict(irs, sizes, aliases, input_bytes, iterations):
         standardized = (np.asarray(vector) - model['center']) / model['scale']
         contributions = standardized * model['coefficients']
         raw = float(model['intercept'] + contributions.sum())
+        if not math.isfinite(raw) or not np.isfinite(contributions).all():
+            raise ValueError('Model score is not finite; input is outside the supported numerical range.')
         scores[choice] = raw if aliases[choice] != 'O3' else 0.
         indices = sorted(range(len(vector)), key=lambda i: abs(contributions[i]), reverse=True)[:6]
         explanations[choice] = {
@@ -53,6 +60,13 @@ def predict(irs, sizes, aliases, input_bytes, iterations):
     # Preserve the original selector's menu ordering and tie behavior exactly.
     best = max(list(MENU)[1:], key=lambda choice: scores[choice])
     choice = best if scores[best] - model['margin'] > math.log1p(model['floor']) else 'O3'
+    diagnostics = decision_diagnostics(scores, aliases, choice)
+    notes = []
+    if choice != 'O3' and scores[choice] < math.log1p(.03):
+        notes.append('The predicted effect is below 3%, the demo\'s gain threshold. This is a small model estimate, not a confident improvement.')
+    if choice != 'O3' and explanations[choice]['outside_training_scale_fields']:
+        notes.append('Some input features exceed the training feature scale. The model is extrapolating; prediction reliability is unvalidated.')
+    diagnostics['recommendation_notes'] = notes
     metrics = {}
     for name, functions in parsed.items():
         totals, indirect = summaries(functions)
@@ -62,9 +76,8 @@ def predict(irs, sizes, aliases, input_bytes, iterations):
         'choice': choice, 'approved_choice': 'O3', 'policy': model['policy'],
         'deployment_qualified': False, 'scores': scores, 'explanations': explanations,
         'aliases': aliases, 'feature_count': len(FEATURE_NAMES), 'vectors': vectors,
-        'metrics': metrics, 'model_sha256': hashlib.sha256(MODEL_PATH.read_bytes()).hexdigest(),
+        'metrics': metrics, 'model_sha256': model['_artifact_sha256'],
         'model_source_sha256': model['source_model_sha256'],
-        'reason': ('No distinct alternative exceeds the experimental decision threshold.'
-                   if choice == 'O3' else 'Highest experimental predicted score above its decision threshold.'),
+        'diagnostics': diagnostics, 'reason': diagnostics['explanation'],
         'scope': 'Static prediction made before native execution; no live timing informs this decision.',
     }

@@ -8,22 +8,24 @@ import json
 import math
 import os
 import platform
-import resource
 import signal
 import subprocess
 import sys
 import tempfile
-import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
 
 from src.benchmarks.compact import MENU, CODEGEN
-from src.presentation.model import predict
+from src.presentation.model import predict, MODEL_PATH
+from src.presentation.summary import comparison_summary
 
 ROOT = Path(__file__).resolve().parents[2]
 PAIRS, BLOCKS = 12, 3
+_order_rng = np.random.default_rng(20261022)
+PAIR_ORDER = [bool(value) for _ in range(BLOCKS)
+              for value in _order_rng.permutation([False, False, True, True])]
 
 
 def now():
@@ -78,6 +80,8 @@ def analyze(root, request):
     # A separate O0 build provides the output reference; compilation executes
     # no submitted program. Reference is only run after explicit execution.
     command([tools/'clang', '-O0', *frontend[3:], source, '-lm', '-o', root/'reference'], root)
+    command(['gcc', '-std=c11', '-O2', '-Wall', '-Wextra', ROOT/'src/presentation/native_runner.c',
+             '-o', root/'native-runner'], root)
     irs, sizes, aliases, artifacts = {}, {}, {}, {}
     for index, (choice, stages) in enumerate(MENU.items()):
         progress(root, 'pipelines', f'Building pipeline {index+1} of {len(MENU)}', 22 + index*12)
@@ -114,48 +118,44 @@ def analyze(root, request):
         'measurement': None,
         'input': {k: request[k] for k in ('source', 'arguments', 'stdin', 'iterations')},
         'reference_sha256': digest((root/'reference').read_bytes()),
+        'runner_sha256': digest((root/'native-runner').read_bytes()),
+        'runner_source_sha256': digest((ROOT/'src/presentation/native_runner.c').read_bytes()),
     }
     save(root/'result.json', result)
     return result
 
 
-def limits():
-    resource.setrlimit(resource.RLIMIT_CPU, (3, 3))
-    resource.setrlimit(resource.RLIMIT_AS, (768*1024*1024, 768*1024*1024))
-    resource.setrlimit(resource.RLIMIT_FSIZE, (65536, 65536))
-    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
-    resource.setrlimit(resource.RLIMIT_NOFILE, (32, 32))
-    if hasattr(os, 'sched_setaffinity'):
-        allowed = os.sched_getaffinity(0)
-        os.sched_setaffinity(0, {min(allowed)})
-
-
 def execute(executable, request, work):
-    # Worker is single-threaded, so the POSIX preexec limit hook runs without
-    # the multi-threaded HTTP process's locks. No shell or user compile flags.
+    analysis = executable.parent if executable.name == 'reference' else executable.parent.parent
+    runner = analysis/'native-runner'
+    if not runner.is_file():
+        raise JobError('Timing helper is missing. Analyze the program again.')
     with tempfile.TemporaryDirectory(prefix='invocation-', dir=work) as scratch:
-        with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
-            before = resource.getrusage(resource.RUSAGE_CHILDREN)
-            start = time.perf_counter_ns()
-            process = subprocess.Popen([str(executable), *request['arguments']], cwd=scratch,
+        with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors, tempfile.TemporaryFile() as timing:
+            process = subprocess.Popen([str(runner), str(timing.fileno()), str(executable), *request['arguments']], cwd=scratch,
                                        stdin=subprocess.PIPE, stdout=output, stderr=errors,
-                                       preexec_fn=limits, env={'PATH': '/usr/bin:/bin', 'LANG': 'C', 'LC_ALL': 'C'})
+                                       pass_fds=(timing.fileno(),),
+                                       env={'PATH': '/usr/bin:/bin', 'LANG': 'C', 'LC_ALL': 'C'})
             try:
                 process.communicate(request['stdin'].encode(), timeout=2)
             except subprocess.TimeoutExpired as error:
                 process.kill()
                 process.wait()
                 raise JobError('Program exceeded the 2 second limit. Reduce its workload or fix the loop.') from error
-            wall = (time.perf_counter_ns()-start)/1e9
-            after = resource.getrusage(resource.RUSAGE_CHILDREN)
-            cpu = after.ru_utime + after.ru_stime - before.ru_utime - before.ru_stime
             output.seek(0); errors.seek(0)
             stdout, stderr = output.read(65537), errors.read(65537)
             if process.returncode:
-                raise JobError(f'Program exited with status {process.returncode}. ' + stderr.decode(errors='replace')[:2000])
+                raise JobError(f'Native timing helper exited with status {process.returncode}. ' + stderr.decode(errors='replace')[:2000])
+            timing.seek(0)
+            measured = json.loads(timing.read(2048))
+            if measured['exit_code']:
+                raise JobError(f"Program exited with status {measured['exit_code']}. " + stderr.decode(errors='replace')[:2000])
+            if any(not math.isfinite(measured[c]) or measured[c] < 0 for c in ('cpu','wall')):
+                raise JobError('Invalid native timing result.')
             if len(stdout) > 65536 or len(stderr) > 65536:
                 raise JobError('Program output exceeded 64 KiB. Print a short deterministic checksum.')
-            return {'wall': wall, 'cpu': max(cpu, 1e-9), 'stdout_sha256': digest(stdout),
+            return {'wall': measured['wall'], 'cpu': max(measured['cpu'], 1e-9),
+                    'cpu_id': measured['cpu_id'], 'stdout_sha256': digest(stdout),
                     'stdout_bytes': len(stdout), 'stdout_preview': stdout.decode(errors='replace')[:2000]}
 
 
@@ -173,6 +173,7 @@ def pair_summary(samples, control=False):
             order_differences.append(float(abs(np.mean(groups[0])-np.mean(groups[1]))))
         durations = {side: np.asarray([s[side][clock] for s in samples]) for side in ('baseline','candidate')}
         medians = {side: float(np.median(values)) for side, values in durations.items()}
+        geometric = {side: float(np.exp(np.log(values).mean())) for side, values in durations.items()}
         # Evaluate repeatability within each implementation. Pooling two sides
         # would incorrectly call a large true speed difference "noise".
         cv = max(float(np.std(values)/np.mean(values)) for values in durations.values())
@@ -182,6 +183,8 @@ def pair_summary(samples, control=False):
         clocks[clock] = {'speedup': float(np.exp(ratios.mean())), 'interval': interval,
                          'block_ratios': blocks, 'median_seconds': medians['candidate'],
                          'baseline_median_seconds': medians['baseline'], 'coefficient_of_variation': cv,
+                         'baseline_geometric_seconds': geometric['baseline'],
+                         'candidate_geometric_seconds': geometric['candidate'],
                          'max_order_log_difference': max(order_differences), 'order_ok': order_ok,
                          'stable': stable, 'qualified': stable and (null_ok if control else True)}
     return {'clocks': clocks, 'qualified': all(c['qualified'] for c in clocks.values()), 'samples': samples}
@@ -191,10 +194,14 @@ def compare(root, request):
     analysis_root = Path(request['analysis_root'])
     result = json.loads((analysis_root/'result.json').read_text())
     original = json.loads((analysis_root/'request.json').read_text())
+    if digest(MODEL_PATH.read_bytes()) != result['decision']['model_sha256']:
+        raise JobError('Model changed after prediction; analyze again.')
     if digest((analysis_root/'input.c').read_bytes()) != result['source_sha256']:
         raise JobError('Source changed after prediction; analyze again.')
     if digest((analysis_root/'reference').read_bytes()) != result['reference_sha256']:
         raise JobError('Correctness reference changed after prediction; analyze again.')
+    if digest((analysis_root/'native-runner').read_bytes()) != result['runner_sha256']:
+        raise JobError('Timing helper changed after prediction; analyze again.')
     if any(original[k] != result['input'][k] for k in ('source','arguments','stdin','iterations')):
         raise JobError('Input changed after prediction; analyze again.')
     executables = {c: analysis_root/c/'program' for c in MENU}
@@ -224,14 +231,14 @@ def compare(root, request):
         samples = []
         progress(root, 'measure', f'Measuring {choice}: balanced paired runs', 25+int(65*cell_index/(1+len(canonical))))
         for index in range(PAIRS):
-            first = bool(index % 2)
+            first = PAIR_ORDER[index]
             pair = {}
             for side in (['candidate', 'baseline'] if first else ['baseline', 'candidate']):
                 actual = choice if side == 'candidate' else 'O3'
                 invocation = execute(executables[actual], original, root)
                 if invocation['stdout_sha256'] != expected:
                     raise JobError('Output changed during measurement. Timings are invalid.')
-                pair[side] = {clock: invocation[clock] for clock in ('cpu', 'wall')}
+                pair[side] = {field: invocation[field] for field in ('cpu', 'wall', 'cpu_id')}
             samples.append({'block': index//4, 'candidate_first': first, **pair})
         cells[choice] = pair_summary(samples, control=choice == 'O3')
     for choice in MENU:
@@ -251,13 +258,16 @@ def compare(root, request):
         else:
             cell['verdict'] = 'no_clear_difference'
     result['measurement'] = {
+        'protocol': 'live-native-process-v2',
         'status': 'completed', 'cells': cells, 'self_control_passed': cells['O3']['qualified'],
         'pairs_per_distinct_cell': PAIRS, 'blocks': BLOCKS,
-        'timer': 'Whole process wall time and child CPU service time, including startup; not library API time.',
+        'candidate_first_schedule': PAIR_ORDER,
+        'timer': 'Native fork/exec/wait4 process wall and child CPU time, including executable startup. Python launch/setup is excluded. Not library API time.',
         'quality_rule': 'Both clocks: >=10 ms median, <=10% duration CV, <=3% pooled/every-block starting-order difference. O3 null: 95% paired-bootstrap interval and every block within reciprocal 3%.',
         'interval_scope': 'Exploratory paired bootstrap of 12 pairs; does not capture cross-machine or full systematic uncertainty.',
         'scope': 'Presentation experiment only. Not the frozen research protocol, new training data, or proof of learned generalization. All samples retained.',
     }
+    result['measurement']['summary'] = comparison_summary(result['decision'], cells)
     return result
 
 
