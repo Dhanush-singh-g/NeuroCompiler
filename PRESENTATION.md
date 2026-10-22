@@ -8,6 +8,9 @@ The live app is separate from the frozen research experiments.
 [Checked desktop screenshot](presentation/screenshots/decision.png) ·
 [Verification record](presentation/VERIFICATION.md)
 
+For copyable C programs, exact inputs, expected outputs, and diagnostic examples,
+see [DEMO_PROGRAMS.md](DEMO_PROGRAMS.md).
+
 ## Start on your Windows computer
 
 Use **x86_64 Windows with WSL2 Ubuntu 22.04**. The browser runs on Windows; the
