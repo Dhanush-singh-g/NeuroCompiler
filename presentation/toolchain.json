@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "url": "https://dl.fbaipublicfiles.com/compiler_gym/llvm-v0-linux.tar.bz2",
+  "archive_sha256": "59c3f328efd51994a11168ca15e43a8d422233796c6bc167c9eb771c7bd6b57e",
+  "binaries": {
+    "clang": "d5ba08bb0056c28d93860f6651a00f10afd8b4fa2121c66cf6fba1fa89a93083",
+    "opt": "6f9aa489196ca2d5ca48a42fca014875369d3314265932f13fe6bf9c6f0c2bd2",
+    "llvm-dis": "766484cc3ee813694ef799dd63015838d76220f0ac77d97217123e21b3dd0353"
+  },
+  "provenance": "CompilerGym0.2.5 compiler_gym/third_party/llvm/__init__.py; upstream Linux LLVM10 runtime."
+}

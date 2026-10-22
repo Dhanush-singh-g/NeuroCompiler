@@ -1,5 +1,13 @@
 # NeuroCompiler
 
+**Live presentation branch:** [PRESENTATION.md](PRESENTATION.md) explains the
+Windows/WSL2 setup and five-minute demonstration. The new decision explorer
+accepts C programs, extracts static features, shows an existing experimental
+model's LLVM pipeline prediction, and optionally checks output and compares
+native runs against O3. Start it with `bash scripts/start_presentation.sh` after
+setup. The approved policy remains O3; this feature does not establish learned
+generalization or alter the preserved research studies.
+
 An experimental LLVM optimization project using supervised learning, with RL and
 hybrid policies planned. Runtime improvement over O3 is the research objective;
 successful learned generalization has not yet been established.

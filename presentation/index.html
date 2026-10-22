@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore a learned compiler decision, inspect LLVM transformations, and compare live results against O3.">
+  <title>NeuroCompiler — Live decision explorer</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/" aria-label="NeuroCompiler home"><span class="brand-mark">N<span>↗</span></span><span>NeuroCompiler<span class="brand-sub">THE DECISION EXPLORER</span></span></a>
+  <nav aria-label="Main"><a class="nav-active" href="#workspace">Live lab</a><a href="/research/" target="_blank" rel="noopener">Research evidence ↗</a><button id="scope-shortcut" class="text-button">About the model</button></nav>
+  <span class="connection" id="connection"><span class="dot"></span>Connecting</span>
+</header>
+<main>
+  <section class="hero">
+    <div><div class="eyebrow"><span class="mini-square"></span> LEARNED COMPILER OPTIMIZATION / LIVE LAB</div>
+      <h1>Your program.<br>A learned <em>decision.</em></h1>
+      <p class="hero-copy">Go from C source to a model-selected LLVM pipeline.<br>See the prediction first. Test it against <code>-O3</code> second.</p>
+    </div>
+    <div class="hero-aside"><span class="small-label">INSIDE THE SELECTOR</span><div class="hero-stats"><div><strong>156</strong><span>static features</span></div><div><strong>04</strong><span>LLVM pipelines</span></div></div><p><span class="badge amber">EXPERIMENTAL</span> Predictions are exploratory.<br>The approved policy remains <code>-O3</code>.</p></div>
+  </section>
+  <section class="workspace" id="workspace" aria-label="Live compiler workspace">
+    <div class="section-line"><h2><span>01</span> Program workspace</h2><span class="small-label">C SOURCE → STATIC FEATURES → SUPERVISED PREDICTION</span></div>
+    <div class="work-grid">
+      <section class="editor-card" aria-label="Program input">
+        <div class="card-toolbar"><div class="file-label"><span class="file-icon">C</span><span id="filename">main.c</span></div><div class="editor-actions"><label class="upload" for="upload">↑ Open .c file</label><input type="file" id="upload" accept=".c,text/x-c" hidden><button id="reset" class="text-button">Reset</button></div></div>
+        <div class="example-row"><label for="example">Start with an example</label><select id="example" disabled><option>Loading examples…</option></select></div>
+        <div class="code-editor"><div id="line-numbers" aria-hidden="true">1</div><textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="C source code" wrap="off"></textarea></div>
+        <div class="editor-foot"><span id="source-size">0 bytes</span><span>C / LLVM 10</span><span>UTF-8</span></div>
+        <details class="input-details"><summary>Program input & workload <span>arguments, stdin, iterations</span></summary><div class="input-grid"><label>Command-line arguments<input id="arguments" placeholder="e.g. 1200" autocomplete="off"></label><label>Iterations descriptor<input id="iterations" type="number" value="0" min="0" max="1000000000"></label><label class="wide">Standard input<textarea id="stdin" rows="2" placeholder="Text supplied to stdin"></textarea></label></div><p class="muted">The descriptor is a model feature. Set arguments separately to change the program’s actual workload.</p></details>
+        <div class="run-bar"><button class="primary" id="analyze" disabled><span>Analyze & predict</span><span>↗</span></button><span>Compiles your code.<br>Does not execute it.</span></div>
+      </section>
+      <aside class="journey-card" aria-label="How NeuroCompiler works">
+        <div class="journey-head"><span class="small-label">THE NEUROCOMPILER PATH</span><span class="badge green">SUPERVISED LEARNING</span></div>
+        <ol class="journey"><li id="step-compile"><span class="step-icon">01</span><div><h3>Compile the possibilities</h3><p>Build four real LLVM pass pipelines from the same source.</p></div></li><li id="step-predict"><span class="step-icon">02</span><div><h3>Let the model choose</h3><p>A frozen Ridge model scores candidate-specific compiler features.</p></div></li><li id="step-compare"><span class="step-icon">03</span><div><h3>Put it to the test</h3><p>Check output, then compare paired native runs against O3.</p></div></li></ol>
+        <div class="pipeline-preview"><span class="small-label">CANDIDATE PASS PIPELINES</span><div><span>O3</span><span>loop preparation → O3</span><span>O3 → GVN → DCE</span><span>instcombine → O3</span></div></div>
+        <div class="journey-note"><span>↳</span><p>The recommendation is frozen <strong>before</strong> any program runs. Timing every candidate afterward does not turn search into learning.</p></div>
+      </aside>
+    </div>
+    <div id="progress-panel" class="progress-panel" hidden role="status" aria-live="polite"><div><span class="spinner"></span><strong id="progress-message">Starting experiment</strong><button id="cancel" class="text-button">Cancel</button></div><progress id="progress" max="100" value="0"></progress></div>
+    <div id="error" class="error-panel" hidden role="alert"></div>
+    <p class="input-note" id="example-description">Small, self-contained C programs with deterministic stdout. No external files or libraries beyond libc and libm.</p>
+  </section>
+  <section class="results-section" aria-labelledby="results-heading">
+    <div class="section-line"><h2 id="results-heading"><span>02</span> Decision & evidence</h2><div class="downloads" id="downloads" hidden><a id="download-md" download>↓ Report .md</a><a id="download-json" download>↓ Raw data .json</a></div></div>
+    <div class="result-tabs" role="tablist" aria-label="Experiment details"><button id="tab-decision" data-tab="decision" role="tab" aria-selected="true" aria-controls="panel-decision">Model decision</button><button id="tab-benchmark" data-tab="benchmark" role="tab" aria-selected="false" aria-controls="panel-benchmark">Live comparison</button><button id="tab-ir" data-tab="ir" role="tab" aria-selected="false" aria-controls="panel-ir">LLVM IR</button><button id="tab-scope" data-tab="scope" role="tab" aria-selected="false" aria-controls="panel-scope">Model & scope</button></div>
+    <div id="panel-decision" class="tab-panel" role="tabpanel" aria-labelledby="tab-decision"><div class="empty-state" id="decision-empty"><span class="empty-mark">⌁</span><h3>A decision starts with your code.</h3><p>Choose an example or paste a program, then select Analyze & predict.<br>Your features, pipeline scores, and model explanation will appear here.</p></div><div id="decision-content" hidden></div></div>
+    <div id="panel-benchmark" class="tab-panel" role="tabpanel" aria-labelledby="tab-benchmark" hidden>
+      <div class="comparison-intro"><div><h3>A prediction is a hypothesis. Measure it.</h3><p>Compare deterministic stdout with O0, then run balanced O3/candidate pairs. CPU and wall clocks stay separate.</p></div><span class="badge amber">LOCAL EXECUTION</span></div>
+      <div class="execution-box"><label><input type="checkbox" id="trusted"> This is my own trusted code. Run it on this computer.</label><button id="compare" class="primary" disabled>Run live comparison ↗</button><p>Programs run with time, memory, and output limits. This local app is not a security sandbox.</p></div>
+      <div id="benchmark-content"><div class="empty-state compact"><h3>No program has been executed.</h3><p>Analyze your code first, then enable trusted execution to compare it.</p></div></div>
+    </div>
+    <div id="panel-ir" class="tab-panel" role="tabpanel" aria-labelledby="tab-ir" hidden><div class="ir-toolbar"><div><h3>The transformation, in LLVM IR.</h3><p>Inspect O3 beside another pipeline. Fewer instructions do not necessarily mean faster code.</p></div><label>Compare with<select id="ir-choice"></select></label></div><div id="ir-metrics"></div><div class="ir-grid"><section><h4>BASELINE / O3</h4><pre id="ir-base" tabindex="0">Analyze a program to inspect its LLVM IR.</pre></section><section><h4 id="ir-title">CANDIDATE</h4><pre id="ir-candidate" tabindex="0">Candidate IR will appear here.</pre></section></div></div>
+    <div id="panel-scope" class="tab-panel" role="tabpanel" aria-labelledby="tab-scope" hidden><div class="scope-grid"><div><span class="small-label">AN EXPERIMENTAL LEARNED SELECTOR</span><h3>Real model. Explicit limits.</h3><p>The live app uses an existing, frozen Ridge regressor trained on candidate transformation features. It predicts log speedup relative to O3. It does not use your program’s runtime to make its prediction.</p><p>This is the earlier <strong>LLVM10</strong> workflow. The later LLVM19 library studies use a different feature schema and remain separate.</p><a class="inline-link" href="/research/" target="_blank" rel="noopener">Explore the preserved research evidence ↗</a></div><div id="model-details" class="model-details">Loading model provenance…</div></div><div class="scope-bottom"><h4>What this demonstration can establish</h4><p>A working path from your source to features, a learned prediction, executable pipelines, input-specific output checks, and an exploratory comparison. An inconclusive result is kept visible.</p><h4>What remains a research objective</h4><p>Reliable improvement over O3 on genuinely unseen programs. The experimental model failed deployment gates; the approved policy remains O3. Live inputs are not untouched research tests or new training labels. RL and hybrid learning remain future work.</p></div></div>
+  </section>
+  <footer><span class="footer-brand">NeuroCompiler<span> / </span>MAKE THE DECISION VISIBLE.</span><span>Predict → verify → measure → explain</span></footer>
+</main>
+</body>
+</html>

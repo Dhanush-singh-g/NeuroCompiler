@@ -36,3 +36,6 @@ results/*.out
 *.log
 *.tmp
 .DS_Store
+
+# Local live-app tools, submitted source, executables, and experiment reports
+.presentation/

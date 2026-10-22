@@ -1,0 +1,47 @@
+[
+  {
+    "id": "sieve",
+    "name": "Prime sieve / training example",
+    "description": "An existing synthetic training workload, shown explicitly as a familiar model example. This is not unseen-program evaluation.",
+    "arguments": "1600",
+    "iterations": 1600,
+    "stdin": "",
+    "source": "#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\nstatic uint32_t random_word(uint32_t *s) { *s=*s*1664525u+1013904223u; return *s; }\nint main(int argc, char **argv) {\n  unsigned iterations=argc>1?(unsigned)strtoul(argv[1],0,10):1;\n  uint32_t state=1234567u; uint64_t checksum=0;\nunsigned char a[16384];for(unsigned k=0;k<iterations;k++){\n      for(unsigned i=0;i<16384;i++)a[i]=1;\n      for(unsigned i=2;i*i<16384;i++)if(a[i])for(unsigned j=i*i;j<16384;j+=i)a[j]=0;\n      for(unsigned i=2;i<16384;i++)if(a[i])checksum+=i+k;}\n printf(\"%llu\\n\",(unsigned long long)checksum); return 0; }\n"
+  },
+  {
+    "id": "histogram",
+    "name": "Byte histogram",
+    "description": "Integer-heavy counting with a deterministic checksum. Presentation example, not an unseen research test.",
+    "arguments": "1200",
+    "iterations": 1200,
+    "stdin": "",
+    "source": "#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\n\n/* A self-contained, deterministic workload. Print only the checksum. */\nint main(int argc, char **argv) {\n    unsigned rounds = argc > 1 ? (unsigned)strtoul(argv[1], 0, 10) : 1200;\n    static unsigned char data[65536];\n    uint32_t state = 2026u;\n    for (unsigned i = 0; i < sizeof data; ++i) {\n        state = state * 1664525u + 1013904223u;\n        data[i] = (unsigned char)(state >> 24);\n    }\n    uint64_t checksum = 0;\n    for (unsigned r = 0; r < rounds; ++r) {\n        unsigned counts[256] = {0};\n        for (unsigned i = 0; i < sizeof data; ++i)\n            ++counts[(data[i] + r) & 255u];\n        for (unsigned i = 0; i < 256; ++i)\n            checksum += (uint64_t)counts[i] * (i + 1u);\n    }\n    printf(\"%llu\\n\", (unsigned long long)checksum);\n    return 0;\n}\n"
+  },
+  {
+    "id": "mix",
+    "name": "Integer mixing",
+    "description": "Dependency-heavy bit operations. Presentation example; results depend on this computer and input.",
+    "arguments": "800",
+    "iterations": 800,
+    "stdin": "",
+    "source": "#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\n\nint main(int argc, char **argv) {\n    unsigned rounds = argc > 1 ? (unsigned)strtoul(argv[1], 0, 10) : 800;\n    uint32_t x = 0x12345678u;\n    uint64_t checksum = 0;\n    for (unsigned r = 0; r < rounds; ++r) {\n        for (unsigned i = 0; i < 32768; ++i) {\n            x ^= x >> 15;\n            x *= 0x2c1b3c6du;\n            x ^= x >> 12;\n            x += i + r;\n        }\n        checksum += x;\n    }\n    printf(\"%llu\\n\", (unsigned long long)checksum);\n    return 0;\n}\n"
+  },
+  {
+    "id": "matrix",
+    "name": "Matrix arithmetic",
+    "description": "Floating-point loops with strict default math. Presentation example, with no fast-math flags.",
+    "arguments": "240",
+    "iterations": 240,
+    "stdin": "",
+    "source": "#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\n\nint main(int argc, char **argv) {\n    unsigned rounds = argc > 1 ? (unsigned)strtoul(argv[1], 0, 10) : 240;\n    static double a[64][64], b[64][64], c[64][64];\n    for (unsigned i = 0; i < 64; ++i)\n        for (unsigned j = 0; j < 64; ++j) {\n            a[i][j] = (double)((i * 13u + j * 7u) & 255u) / 256.0;\n            b[i][j] = (double)((i * 3u + j * 11u) & 255u) / 256.0;\n        }\n    uint64_t checksum = 0;\n    for (unsigned r = 0; r < rounds; ++r) {\n        for (unsigned i = 0; i < 64; ++i)\n            for (unsigned j = 0; j < 64; ++j) {\n                double sum = 0;\n                for (unsigned k = 0; k < 64; ++k)\n                    sum += a[i][k] * b[k][j];\n                c[i][j] = sum;\n            }\n        checksum += (uint64_t)(c[r % 64][(r * 7) % 64] * 1000000.0);\n        a[r % 64][r % 64] += .000001;\n    }\n    printf(\"%llu\\n\", (unsigned long long)checksum);\n    return 0;\n}\n"
+  },
+  {
+    "id": "stdin",
+    "name": "Your first C input",
+    "description": "Reads two integers from standard input. Demonstrates program input; too short for a meaningful speed comparison.",
+    "arguments": "",
+    "iterations": 0,
+    "stdin": "21 34\n",
+    "source": "#include <stdio.h>\n\nint main(void) {\n    long a, b;\n    if (scanf(\"%ld %ld\", &a, &b) != 2) return 1;\n    printf(\"%ld\\n\", a + b);\n    return 0;\n}\n"
+  }
+]
