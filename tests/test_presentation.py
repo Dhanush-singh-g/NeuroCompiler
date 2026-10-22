@@ -93,11 +93,13 @@ class MeasurementTests(unittest.TestCase):
         decision={'choice':'slow','aliases':{c:c for c in cells}}
         s=comparison_summary(decision,cells)['clocks']['cpu']
         self.assertEqual(s['status'],'slower')
+        self.assertEqual(s['preferred_choice'],'O3')
         self.assertAlmostEqual(s['time_change_percent'],25.)
         self.assertAlmostEqual(s['gap_to_best_percent'],56.25)
         decision['choice']='fast'
         s=comparison_summary(decision,cells)['clocks']['cpu']
         self.assertEqual(s['status'],'faster')
+        self.assertEqual(s['preferred_choice'],'fast')
         self.assertAlmostEqual(s['time_change_percent'],-20.)
         self.assertAlmostEqual(s['gap_to_best_percent'],0.)
         varying=self.samples(.8)
@@ -173,6 +175,8 @@ class LiveIntegrationTests(unittest.TestCase):
         analysis = self.analyze(source, stdin='21 34\n')
         result = analysis['result']
         self.assertFalse(result['native_execution'])
+        card=self.request('/api/scorecard')
+        self.assertGreaterEqual(card['totals']['inputs'],1)
         self.assertIsNone(result['measurement'])
         self.assertEqual(result['decision']['feature_count'],156)
         self.assertEqual(set(result['decision']['scores']),set(MENU))
@@ -194,6 +198,10 @@ class LiveIntegrationTests(unittest.TestCase):
         self.assertEqual(result['correctness']['checks']['O0 reference']['stdout_preview'],'55\n')
         self.assertLess(result['prediction_frozen_at'],result['measurement_started_at'])
         self.assertFalse(result['measurement']['self_control_passed']) # Too short, not a fabricated gain.
+        self.assertIsNone(result['measurement']['summary']['clocks']['cpu']['preferred_choice'])
+        card=self.request('/api/scorecard')
+        self.assertGreaterEqual(card['totals']['unchanged'],1)
+        self.assertEqual(card['totals']['wins'],0)
         self.assertEqual(result['measurement']['protocol'],'live-native-process-v2')
         self.assertEqual(result['measurement']['summary']['clocks']['cpu']['time_change_percent'],0.)
         self.assertTrue(all(c['verdict']=='inconclusive' for c in result['measurement']['cells'].values()))

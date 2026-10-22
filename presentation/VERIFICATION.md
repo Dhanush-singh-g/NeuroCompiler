@@ -1,5 +1,33 @@
 # Live application verification — 22 October 2026
 
+## Large runtimes, preference, and session scorecard
+
+The existing theme is retained. O3 and NeuroCompiler program runtimes now have
+large separate cards, other pipeline times are larger in the table, and a large
+demo-preference banner highlights a comparator only for qualified faster/slower
+results. It explicitly keeps identical code and inconclusive results without a
+preferred option. CPU/WALL changes the displayed runtime values. These are
+executable times, excluding analysis and compilation overhead.
+
+The session scorecard separates the known sieve training example, other bundled
+demos, and custom inputs with unverified provenance. Repeated input/model pairs
+count once using the latest completed comparison; model versions and different
+inputs remain separate. Wins/losses require both clocks, correctness blocks are
+separate, and failed timing checks are tracked even for unchanged code. Session
+counts are descriptive and reset with the server; JSON export is available.
+Expandable plain-language descriptions explain the optimization passes.
+
+**40 selected tests pass** across live-app, scorecard, dashboard, and archive
+tests. Added cases cover repeat-input deduplication, latest-comparison behavior,
+provenance separation, model versions, correctness blocks, and rejecting a win
+supported by only one clock. Browser checks pass on desktop/mobile, including
+runtime font size, same-code/no-preference behavior, pass explanations, and a
+real session-summary download. UI-only fixtures separately exercise NC/O3
+preferred-card highlighting and unqualified suppression; fixtures are not saved
+or presented as native experiments. Actual live controls remain inconclusive.
+
+No model weights, research data, or formal protocols changed in this update.
+
 ## Comparison clarity and native timing update
 
 The existing visual theme/layout is retained. The decision view now distinguishes

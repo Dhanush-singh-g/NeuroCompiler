@@ -145,6 +145,7 @@ async function poll(id) {
       $('downloads').hidden = false;
       $('download-md').href = `/api/jobs/${id}/report.md`;
       $('download-json').href = `/api/jobs/${id}/report.json`;
+      await refreshScorecard();
     } else if (job.status !== 'cancelled') showError(job.message);
     updateButtons();
   } catch (error) {
@@ -223,7 +224,7 @@ function renderTimingTable() {
     const s = cell.clocks[clock];
     const tone = cell.verdict === 'faster_in_demo'?'good':cell.verdict === 'slower_in_demo'?'bad':'';
     const same=latest.decision.aliases[choice]==='O3';
-    return `<tr><td>${escape(pipeline(choice))}${choice===latest.decision.choice?'<span class="predicted-tag">NEUROCOMPILER CHOICE</span>':''}</td><td>${(s.median_seconds*1000).toFixed(2)} ms</td><td>${same?'1.000× · same executable':`${s.speedup.toFixed(3)}× [${s.interval[0].toFixed(3)}, ${s.interval[1].toFixed(3)}]`}</td><td><span class="verdict ${tone}">${same?'Unchanged code':escape(verdicts[cell.verdict])}</span>${cell.alias_of?`<span class="predicted-tag">Shared binary / ${escape(pipeline(cell.alias_of))}</span>`:''}</td></tr>`;
+    return `<tr><td>${escape(pipeline(choice))}${choice===latest.decision.choice?'<span class="predicted-tag">NEUROCOMPILER CHOICE</span>':''}</td><td class="runtime-cell">${(s.median_seconds*1000).toFixed(2)} <small>ms</small></td><td>${same?'1.000× · same executable':`${s.speedup.toFixed(3)}× [${s.interval[0].toFixed(3)}, ${s.interval[1].toFixed(3)}]`}</td><td><span class="verdict ${tone}">${same?'Unchanged code':escape(verdicts[cell.verdict])}</span>${cell.alias_of?`<span class="predicted-tag">Shared binary / ${escape(pipeline(cell.alias_of))}</span>`:''}</td></tr>`;
   }).join('');
 }
 function renderOutcome() {
@@ -232,7 +233,12 @@ function renderOutcome() {
   const delta=summary.time_change_percent;
   const difference=summary.same_executable?'0.0% change':`${Math.abs(delta).toFixed(1)}% ${delta>0?'more':'less'} time`;
   const gap=summary.gap_to_best_percent===null?'Not available':`${summary.gap_to_best_percent.toFixed(1)}%`;
-  panel.innerHTML=`<div class="benchmark-heading"><h3>NeuroCompiler vs O3</h3><span class="badge ${summary.qualified?'green':'amber'}">${summary.same_executable?'SAME EXECUTABLE':summary.qualified?'DEMO MEASUREMENT':'UNRELIABLE MEASUREMENT'}</span></div><p class="outcome-headline">${escape(summary.headline)}</p><div class="feature-strip"><div><strong>${difference}</strong><span>${summary.same_executable?'Exact code identity, not a measured speedup':summary.qualified?'Paired time difference on this input':'Observed point estimate only; not a reliable gain/loss'}</span></div><div><strong>${summary.baseline_ms.toFixed(2)} / ${summary.neurocompiler_ms.toFixed(2)} ms</strong><span>O3 / NeuroCompiler paired geometric means (${clock.toUpperCase()})</span></div><div><strong>${gap}</strong><span>Point-estimate gap to fastest qualified sample in this menu</span></div></div>${summary.best_measured_choice?`<p class="result-note">Fastest qualified point estimate: <strong>${escape(pipeline(summary.best_measured_choice))}</strong>. This is post-measurement exploration, separate from the pre-timing model prediction.</p>`:'<p class="result-note">The fastest reliable alternative cannot be identified because the measurement checks did not qualify.</p>'}${summary.failure_reasons.length?`<details class="input-details"><summary>Why the timing is inconclusive</summary><ul>${summary.failure_reasons.map(r=>`<li>${escape(r)}</li>`).join('')}</ul><p class="muted">The raw O3 self-control ratio is ${latest.measurement.cells.O3.clocks[clock].speedup.toFixed(3)}×; it measures timing noise, not a change in O3 code. All samples remain in the JSON report. Controls and model thresholds were not relaxed.</p></details>`:''}`;
+  const clockSummaries=latest.measurement.summary.clocks;
+  const bothQualified=clockSummaries.cpu.qualified && clockSummaries.wall.qualified && clockSummaries.cpu.status===clockSummaries.wall.status;
+  const preferred=bothQualified && !summary.same_executable && ['faster','slower'].includes(summary.status) ? summary.preferred_choice : null;
+  const preference=summary.same_executable?'Same executable — no preference':preferred==='O3'?'Prefer O3 over NeuroCompiler’s choice':preferred?'Prefer NeuroCompiler’s choice over O3':bothQualified?'No clear winner — O3 remains the default':'No reliable preference yet';
+  const runtimeCards=`<div class="preference-banner ${preferred?'has-preference':''}"><span class="small-label">DEMO PREFERENCE / BOTH CLOCKS</span><strong id="preferred-option">${preference}</strong><span>${summary.same_executable?'NeuroCompiler chose the baseline executable. Timing noise does not create a winner.':preferred?'Supported by qualified CPU and wall comparisons on this input. This does not qualify the model for deployment.':'A lower observed runtime alone is not sufficient to choose a winner.'}</span></div><div class="runtime-showcase"><div class="runtime-card ${preferred==='O3'?'is-preferred':''}"><span class="small-label">O3 BASELINE</span><strong id="o3-runtime">${summary.baseline_ms.toFixed(2)} <small>ms</small></strong><span>Program runtime · ${clock.toUpperCase()}</span></div><div class="runtime-card ${preferred && preferred!=='O3'?'is-preferred':''}"><span class="small-label">NEUROCOMPILER CHOICE</span><strong id="nc-runtime">${summary.neurocompiler_ms.toFixed(2)} <small>ms</small></strong><span>${escape(pipeline(latest.decision.choice))} · ${clock.toUpperCase()}</span></div></div><p class="result-note">Paired geometric-mean executable times; analysis and compilation time are excluded. Other pipeline runtimes are listed below.</p>`;
+  panel.innerHTML=`<div class="benchmark-heading"><h3>NeuroCompiler vs O3</h3><span class="badge ${summary.qualified?'green':'amber'}">${summary.same_executable?'SAME EXECUTABLE':summary.qualified?'DEMO MEASUREMENT':'UNRELIABLE MEASUREMENT'}</span></div><p class="outcome-headline">${escape(summary.headline)}</p>${runtimeCards}<div class="feature-strip"><div><strong>${difference}</strong><span>${summary.same_executable?'Exact code identity, not a measured speedup':summary.qualified?'Paired time difference on this input':'Observed point estimate only; not a reliable gain/loss'}</span></div><div><strong>${gap}</strong><span>Point-estimate gap to fastest qualified sample in this menu</span></div></div>${summary.best_measured_choice?`<p class="result-note">Fastest qualified point estimate: <strong>${escape(pipeline(summary.best_measured_choice))}</strong>. This is post-measurement exploration, separate from the pre-timing model prediction.</p>`:'<p class="result-note">The fastest reliable alternative cannot be identified because the measurement checks did not qualify.</p>'}${summary.failure_reasons.length?`<details class="input-details"><summary>Why the timing is inconclusive</summary><ul>${summary.failure_reasons.map(r=>`<li>${escape(r)}</li>`).join('')}</ul><p class="muted">The raw O3 self-control ratio is ${latest.measurement.cells.O3.clocks[clock].speedup.toFixed(3)}×; it measures timing noise, not a change in O3 code. All samples remain in the JSON report. Controls and model thresholds were not relaxed.</p></details>`:''}`;
 }
 function drawChart() {
   const canvas = $('timing-chart');
@@ -286,6 +292,15 @@ async function renderIR() {
 }
 $('ir-choice').addEventListener('change',renderIR);
 
+async function refreshScorecard() {
+  const panel=$('session-scorecard');
+  try {
+    const data=await api('/api/scorecard'), t=data.totals;
+    const groupNames={training_example:'Known training example',bundled_demo:'Other bundled demos',custom:'Custom / unverified provenance'};
+    panel.innerHTML=`<div class="scorecard-metrics"><div><strong>${t.inputs}</strong><span>Input/model pairs assessed</span></div><div><strong>${t.kept_o3} / ${t.changed_choice}</strong><span>Kept O3 / chose different code</span></div><div><strong>${t.wins} / ${t.losses}</strong><span>Qualified demo wins / losses</span></div><div><strong>${t.unchanged} / ${t.inconclusive}</strong><span>Unchanged code / inconclusive differences</span></div></div><div class="table-scroll"><table><thead><tr><th>INPUT PROVENANCE</th><th>ASSESSED</th><th>TESTED</th><th>WINS</th><th>LOSSES</th><th>UNCHANGED</th><th>NO CLEAR DIFFERENCE</th><th>INCONCLUSIVE</th><th>BLOCKED</th></tr></thead><tbody>${Object.entries(data.groups).map(([key,g])=>`<tr><td>${groupNames[key]}</td>${['inputs','tested','wins','losses','unchanged','no_clear_difference','inconclusive','blocked'].map(k=>`<td>${g[k]}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="result-note">${t.tested} input/model pair(s) have a completed comparison; ${t.unqualified_timings} failed timing checks. Unchanged-code results can also have failed timing checks. ${data.source_files} distinct source text(s), not independent program families.</p><details class="input-details"><summary>How these session counts work</summary><p class="muted">${escape(data.scope)}</p><p class="muted">${escape(data.provenance_note)}</p><p class="muted">${escape(data.quality_note)}</p></details>`;
+  } catch(error) { panel.textContent='Session scorecard unavailable. '+error.message; }
+}
+
 async function init() {
   try {
     session = await api('/api/session');
@@ -307,6 +322,7 @@ async function init() {
       $('downloads').hidden=false;$('download-md').href=`/api/jobs/${latest.id}/report.md`;$('download-json').href=`/api/jobs/${latest.id}/report.json`;
       $('step-compile').className=$('step-predict').className='done';
     }
+    await refreshScorecard();
     const running=history.jobs.find(j=>j.status==='running');
     if(running) startProgress(running);
     updateButtons();

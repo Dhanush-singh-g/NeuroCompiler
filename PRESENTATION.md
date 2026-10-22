@@ -121,7 +121,32 @@ If the machine or live timing fails during the talk, show the static prediction,
 IR view, and preserved research dashboard. Clearly call saved results recorded
 evidence; do not present a recording as live execution.
 
-## What you can input
+## Read the runtime cards, preference, and session scorecard
+
+After **Run live comparison**, two large cards show **O3 baseline** and
+**NeuroCompiler choice** program runtimes in milliseconds. CPU/WALL changes both
+cards; these are paired geometric-mean executable times, not model inference or
+compilation time. Other pipelines have larger median runtimes in the table.
+
+The large **Demo preference** banner compares NeuroCompiler's choice with O3.
+It names a preferred option only for qualified faster/slower results on both
+clocks. Identical code has no preference; failed checks remain inconclusive.
+A lower observed number alone never selects a winner. The post-measurement
+fastest qualified menu sample remains separate from the learned prediction.
+
+The **Session scorecard** counts completed input/model combinations once, using
+their last completed comparison. It separates the known sieve training example,
+other bundled demos, and custom inputs with unverified provenance. Different
+arguments/stdin are inputs, not independent programs. Wins/losses require both
+clocks; unchanged code and failed timing checks are counted separately. These
+are descriptive demo counts, not model accuracy or proof of generalization.
+Download **Session summary** before restarting the server; a restart starts a
+new session. Browser refresh retains the active server's counts.
+
+Expand **What do these optimizations do?** in the workspace for plain-language
+explanations of O3, GVN, DCE, LICM, mem2reg, loop rotation, and instcombine.
+
+## Supported program input
 
 - Paste or upload a **single self-contained C file**, up to 48 KiB, with `main`.
 - Use standard C/libc and libm. No external projects, extra source files, custom

@@ -17,6 +17,7 @@ from urllib.parse import unquote, urlsplit
 
 from src.presentation.model import ROOT, load_model
 from src.presentation.worker import save
+from src.presentation.scorecard import session_scorecard
 
 ASSETS = {'index.html': 'text/html', 'app.js': 'application/javascript', 'style.css': 'text/css', 'favicon.svg':'image/svg+xml'}
 RESEARCH_ASSETS = {'index.html', 'app.js', 'style.css', 'data.json', 'results.js',
@@ -106,6 +107,7 @@ def markdown_report(result):
                 lines += [f"### {clock.upper()}", '', summary['headline'], '',
                           f"Time change: {summary['time_change_percent']:+.2f}% (positive means more time).",
                           f"Both-clock measurement qualification: {summary['qualified']}.",
+                          f"Demo preference over the other comparator: {summary.get('preferred_choice') or 'None (unchanged, inconclusive, or no clear advantage)' }.",
                           'Identical executables have zero code change; the null control ratio is not a learned speedup.' if summary['same_executable'] else 'Unqualified point estimates must not be treated as reliable gains or losses.', '']
                 if summary['best_measured_choice']:
                     lines += [f"Fastest qualified point estimate: {summary['best_measured_choice']}.",
@@ -279,6 +281,12 @@ class Handler(BaseHTTPRequestHandler):
         if path == '/api/jobs':
             with self.app.lock:
                 return self.send(200, {'jobs':[self.app.status(i) for i in reversed(self.app.jobs)]})
+        if path == '/api/scorecard':
+            with self.app.lock:
+                states = [self.app.status(i) for i in self.app.jobs]
+                results = [s['result'] for s in states if s['status'] == 'completed']
+            examples = json.loads((ROOT/'presentation/examples.json').read_text())
+            return self.send(200, session_scorecard(results, examples))
         match = re.fullmatch(r'/api/jobs/([a-f0-9]{16})(?:/(report\.md|report\.json|selected\.bc|approved\.bc|ir/[A-Za-z0-9_]+))?', path)
         if match:
             try:

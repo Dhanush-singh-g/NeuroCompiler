@@ -31,6 +31,10 @@ def main():
         page.locator('#example').select_option('sieve')
         expect(page.locator('#example')).to_have_value('sieve')
         expect(page.locator('#compare')).to_be_disabled()
+        expect(page.locator('#session-scorecard')).to_contain_text('Input/model pairs assessed')
+        page.locator('.pass-guide summary').click()
+        expect(page.locator('.pass-guide')).to_contain_text('Removes calculations')
+        page.locator('.pass-guide summary').click()
         page.screenshot(path=str(output/'initial-desktop.png'),full_page=True)
         page.locator('#analyze').click()
         expect(page.locator('#decision-content')).to_be_visible(timeout=60000)
@@ -57,6 +61,10 @@ def main():
         page.locator('#compare').click()
         expect(page.locator('#timing-table')).to_be_visible(timeout=120000)
         expect(page.locator('#nc-summary')).to_contain_text('NeuroCompiler vs O3')
+        expect(page.locator('#o3-runtime')).to_contain_text('ms')
+        expect(page.locator('#nc-runtime')).to_contain_text('ms')
+        assert page.locator('#o3-runtime').evaluate('e=>parseFloat(getComputedStyle(e).fontSize)')>=40
+        expect(page.locator('#preferred-option')).to_be_visible()
         expect(page.locator('#timing-table tr')).to_have_count(4)
         expect(page.locator('#benchmark-content')).to_contain_text('Output checks passed')
         page.locator('[data-clock="wall"]').click()
@@ -104,6 +112,14 @@ def main():
         expect(page.locator('#nc-summary')).to_contain_text('0.0% change')
         expect(page.locator('#nc-summary')).to_contain_text('NeuroCompiler kept the O3 executable')
         expect(page.locator('#nc-summary')).to_contain_text('Why the timing is inconclusive')
+        expect(page.locator('#preferred-option')).to_have_text('Same executable — no preference')
+        expect(page.locator('#session-scorecard')).to_contain_text('Unchanged code / inconclusive differences')
+        with page.expect_download() as downloaded:
+            page.get_by_role('link',name='Session summary').click()
+        card=json.loads(Path(downloaded.value.path()).read_text())
+        assert card['groups']['training_example']['inputs']==1
+        assert card['groups']['bundled_demo']['unchanged']>=1
+        assert card['totals']['tested']>=2
         checks.append('Edits invalidate stale results, compiler errors recover, stdin is real, and short programs stay inconclusive')
         upload = b'#include <stdio.h>\nint main(void){puts("uploaded C program");return 0;}\n'
         page.locator('#upload').set_input_files({'name':'audience.c','mimeType':'text/x-c','buffer':upload})

@@ -62,6 +62,7 @@ def comparison_summary(decision, cells):
         if not qualified and not reasons:
             reasons.append('The other clock failed quality checks; both clocks must pass.')
         clocks[clock] = {
+            'preferred_choice': choice if status == 'faster' else 'O3' if status == 'slower' else None,
             'status': status, 'headline': headline, 'qualified': qualified,
             'same_executable': same, 'time_change_percent': delta,
             'time_change_interval_percent': interval, 'speedup': ratio,
