@@ -26,6 +26,14 @@ with sync_playwright() as p:
  page.locator('[data-tab="scope"]').click()
  expect(page.locator('#generalization-results')).to_contain_text('12 authored synthetic programs / 6 families')
  expect(page.locator('#generalization-results')).to_contain_text('Fixed + O3 guard (derived)')
+ validation=json.loads((root/'presentation/model_validation.json').read_text())
+ fraction=100*validation['family_balanced']['sl_tie_aware_best_action_fraction']
+ expect(page.locator('#evidence-audit')).to_contain_text(f'{fraction:.1f}%')
+ expect(page.locator('#evidence-audit')).to_contain_text('not runtime accuracy')
+ with page.expect_download() as dl:page.get_by_role('link',name='Download evidence audit .json').click()
+ evidence=json.loads(Path(dl.value.path()).read_text())
+ assert evidence['integrity']['status']=='consistent'
+ assert evidence['coefficient_refit_checked'] is True
  page.locator('#generalization-results').screenshot(path=str(output/'unseen-count-evaluation.png'))
  for family in ['crc32','edit_distance','heapsort','floyd_warshall','integer_sqrt','rational_bezier']:
   page.locator('#example').select_option('evaluated_'+family)
@@ -40,6 +48,8 @@ with sync_playwright() as p:
   assert seq['final_instructions']==frozen['counts']['hybrid_guarded']
   assert seq['final_instructions']==result['decision']['metrics']['LearnedPolicy']['instructions']
   expect(page.locator('#standard-runtime')).to_have_text('Not measured')
+  expect(page.locator('#input-support')).to_contain_text('not calibrated confidence')
+  assert seq['input_support']['selection_changed'] is False
   if family in ['integer_sqrt','rational_bezier']:
    expect(page.locator('.selected-sequence')).to_contain_text('O3 (static instruction-count fallback)')
    assert result['artifact_aliases']['LearnedPolicy']=='O3'

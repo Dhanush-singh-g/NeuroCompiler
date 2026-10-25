@@ -1,5 +1,33 @@
 # Live application verification
 
+## Evidence and prediction diagnostics — 25 October 2026
+
+**67 selected tests pass.** They include stale/tampered artifact rejection,
+incorrect aggregate rejection even when report hashes are refreshed, fold
+leakage detection, training-range bound consistency, equal checkpoint selection,
+and family bootstrap clustering. The real LLVM fifty-function module is flagged
+outside the observed training range; reference/selected native output agrees.
+The advisory check leaves the original policy selection unchanged.
+
+Four-fold training-family SL validation records immediate-reward MAE 0.04141
+and best-immediate-action fraction 70.4%, with ties accepted and equal family
+weight. These are component diagnostics, not runtime or overall compiler
+accuracy. Original SL/RL coefficients were replayed from the frozen data and
+matched. Every original declared implementation hash remains valid.
+
+The post-hoc baseline audit uses all five states plus O3 for fixed/random
+sequences. The exploratory six-family interval for the fixed/hybrid count ratio
+is [0.9816, 1.0088], so a hybrid advantage remains unestablished. Seven total input
+arguments now have candidate-output coverage; the new five account for 720
+additional passing checks, including all guarded baseline outputs.
+
+Browser checks verify all six existing evaluated demos and mode/count export
+consistency, native CRC output, two clocks, range warnings on unfamiliar C,
+Markdown/JSON exports, and mobile layout. New evidence metrics and the audit
+JSON download are checked against the actual artifacts. All added analyses are
+post-hoc and are described in [CREDIBILITY.md](../CREDIBILITY.md). They do not
+open a new unseen-program study or change the deployed weights.
+
 ## Expanded family-disjoint count study — 25 October 2026
 
 Forty authored synthetic training programs from 24 families produce 3,832

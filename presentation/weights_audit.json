@@ -1,0 +1,12 @@
+{
+  "status": "consistent",
+  "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+  "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+  "training_programs": 40,
+  "training_families": 24,
+  "training_rows": 3832,
+  "test_programs": 12,
+  "test_families": 6,
+  "weights_refit_checked": true,
+  "scope": "Checks frozen hashes, split/reward/feature consistency and report arithmetic. Does not independently prove native correctness, calibrated confidence, or runtime gains."
+}

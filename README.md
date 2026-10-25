@@ -1,3 +1,8 @@
+> **Evidence audit update:** family-disjoint SL validation, equal-checkpoint
+> baselines, 720 additional output checks and advisory input-range diagnostics
+> are documented in [CREDIBILITY.md](CREDIBILITY.md). These improve validation
+> and reporting; they do not establish a new runtime or RL-specific gain.
+
 > **Expanded SL/RL demo:** 40 training programs, 3,832 native-checked
 > transitions, a frozen 12-program unseen-family count evaluation, and an
 > explicit static checkpoint/O3 guard are available on this presentation

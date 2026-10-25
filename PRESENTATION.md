@@ -5,6 +5,16 @@ prediction → output checks → O1 / O2 / O3 / NeuroCompiler comparison** appli
 dashboard remains available through **Research evidence** in the navigation.
 The live app is separate from the frozen research experiments.
 
+## Evidence and accuracy diagnostics
+
+The **Model & scope** tab includes a verified evidence summary, four-fold
+family-disjoint SL diagnostics, equal-checkpoint fixed/random controls, and a
+JSON audit download. SL selects a best immediate action in 70.4% of diagnostic
+validation states; this is not runtime accuracy or overall compiler accuracy.
+Learned rollouts also flag features outside training ranges, as an advisory
+check that leaves selected passes unchanged. See [CREDIBILITY.md](CREDIBILITY.md)
+for definitions, baselines, reproducibility and limits.
+
 ## Clear standard vs learned runtime summary
 
 After analysis, the summary above the detail tabs shows **Standard LLVM -O3**

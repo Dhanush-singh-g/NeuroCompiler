@@ -1,0 +1,2007 @@
+{
+  "schema": 1,
+  "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+  "source_report_sha256": "cb51a202ddae20ce757872d7a503c62313ba28d165447a2e3d49743e3b6035fb",
+  "results": [
+    {
+      "id": "crc32_0",
+      "family": "crc32",
+      "counts": {
+        "O3": 74,
+        "Oz": 74,
+        "fixed": 53,
+        "random": 114,
+        "sl_raw": 55,
+        "sl_guarded": 55,
+        "rl_raw": 55,
+        "rl_guarded": 55,
+        "hybrid_raw": 55,
+        "hybrid_guarded": 55,
+        "fixed_checkpoint_guarded": 53,
+        "random_checkpoint_guarded": 74
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            132,
+            62,
+            61,
+            54,
+            53
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "2b183886db10d66d07094c53e0b6fb0e165804194e4d2f30039b4a6e8df44c62",
+          "executable_sha256": "7de4fb896cbc9efcc66df5cf721d7ff19d6341ac06d16f75ea255a37d89a0226"
+        },
+        "random": {
+          "checkpoint_counts": [
+            132,
+            132,
+            132,
+            114,
+            114
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "1933348ba2f6f0f85aa8f83cd9f0ed9ed28f3955ec0f2a1750e6b714decca6fd",
+          "executable_sha256": "e10ca9f2bad9380c743371c3e6f8ba7bee5a9ee5453e763a0c848b11db8a7ddb"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "e10ca9f2bad9380c743371c3e6f8ba7bee5a9ee5453e763a0c848b11db8a7ddb"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "ce7238ee35b2accea27f7bc6cdfb42abbda7c62adfa3bb058f91c56f4e4a3803"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "7de4fb896cbc9efcc66df5cf721d7ff19d6341ac06d16f75ea255a37d89a0226"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "89489d0931e79c8058df85085dd8152ab40b864ae0f01ec09f22ba3462ef52f8"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "7de4fb896cbc9efcc66df5cf721d7ff19d6341ac06d16f75ea255a37d89a0226"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "7de4fb896cbc9efcc66df5cf721d7ff19d6341ac06d16f75ea255a37d89a0226"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "7de4fb896cbc9efcc66df5cf721d7ff19d6341ac06d16f75ea255a37d89a0226"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "7de4fb896cbc9efcc66df5cf721d7ff19d6341ac06d16f75ea255a37d89a0226"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "7de4fb896cbc9efcc66df5cf721d7ff19d6341ac06d16f75ea255a37d89a0226"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "7de4fb896cbc9efcc66df5cf721d7ff19d6341ac06d16f75ea255a37d89a0226"
+        }
+      }
+    },
+    {
+      "id": "crc32_1",
+      "family": "crc32",
+      "counts": {
+        "O3": 74,
+        "Oz": 74,
+        "fixed": 53,
+        "random": 55,
+        "sl_raw": 55,
+        "sl_guarded": 55,
+        "rl_raw": 55,
+        "rl_guarded": 55,
+        "hybrid_raw": 55,
+        "hybrid_guarded": 55,
+        "fixed_checkpoint_guarded": 53,
+        "random_checkpoint_guarded": 55
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            132,
+            62,
+            61,
+            54,
+            53
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "3ee5f558d8fe3904ee57d6cd03b7674c268e9cc6044aab2945928856538ca398",
+          "executable_sha256": "30e5063ffe9d96cc5b482852954cdaa6712a678d48f0d807e1f88cb68c529d54"
+        },
+        "random": {
+          "checkpoint_counts": [
+            132,
+            141,
+            72,
+            72,
+            55
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "d451c7bffd18225c4e11b6148d8835119cbb5cf4cb77544ccd461b3be163409e",
+          "executable_sha256": "dd87bc9100d45d4c3bf8c7119d0a81084d460de7b73e204471860451f00ff51d"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "6965c0224598ee4b71060226569455d58614fd66c0fb90cce2282ffe27f9990c"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "5015d235c2b96d66eef1b47c6c5bdedf77699ee52da64ce96aaa2c5b73188dd2"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "30e5063ffe9d96cc5b482852954cdaa6712a678d48f0d807e1f88cb68c529d54"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "dd87bc9100d45d4c3bf8c7119d0a81084d460de7b73e204471860451f00ff51d"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "30e5063ffe9d96cc5b482852954cdaa6712a678d48f0d807e1f88cb68c529d54"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "30e5063ffe9d96cc5b482852954cdaa6712a678d48f0d807e1f88cb68c529d54"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "30e5063ffe9d96cc5b482852954cdaa6712a678d48f0d807e1f88cb68c529d54"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "30e5063ffe9d96cc5b482852954cdaa6712a678d48f0d807e1f88cb68c529d54"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "30e5063ffe9d96cc5b482852954cdaa6712a678d48f0d807e1f88cb68c529d54"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "30e5063ffe9d96cc5b482852954cdaa6712a678d48f0d807e1f88cb68c529d54"
+        }
+      }
+    },
+    {
+      "id": "edit_distance_0",
+      "family": "edit_distance",
+      "counts": {
+        "O3": 147,
+        "Oz": 160,
+        "fixed": 126,
+        "random": 146,
+        "sl_raw": 124,
+        "sl_guarded": 124,
+        "rl_raw": 126,
+        "rl_guarded": 126,
+        "hybrid_raw": 126,
+        "hybrid_guarded": 126,
+        "fixed_checkpoint_guarded": 126,
+        "random_checkpoint_guarded": 146
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            292,
+            165,
+            164,
+            138,
+            126
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "3b87d1c7c1767e9fff6436ac511f9cc86c6e3a41b407e3eb3a01e3ba04b3a1dc",
+          "executable_sha256": "0ea19bd2dc80a6cd0cbec816fccad8729825aa9db8291f5f9fd4d48f8befb3d5"
+        },
+        "random": {
+          "checkpoint_counts": [
+            292,
+            292,
+            273,
+            273,
+            146
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "709520baf5013eafee2e6a086307169e7e57065c1b975b13889110b372b15a89",
+          "executable_sha256": "95ecb39ddedc96b74d2545291a4d593e4eb043161bdfbd9882cc38ea48bd0e5c"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "442a378150ae8ef416f42977d2b792bfac6c514568557fc042dcbd7eb379ad55"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "7fcac55b5a50c98772597511edf26139babfb84e4ccc1e395cdb19649a7f0bc9"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "0ea19bd2dc80a6cd0cbec816fccad8729825aa9db8291f5f9fd4d48f8befb3d5"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "95ecb39ddedc96b74d2545291a4d593e4eb043161bdfbd9882cc38ea48bd0e5c"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "47a9921bfbf47e94e5502a66b5cdfad548584d90982022b12b044bd723f5e063"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "47a9921bfbf47e94e5502a66b5cdfad548584d90982022b12b044bd723f5e063"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4ecc90a7a64f4ab061546109efa5e67d4a552d4abd1cf63f4c3b13e545d027d9"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4ecc90a7a64f4ab061546109efa5e67d4a552d4abd1cf63f4c3b13e545d027d9"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4ecc90a7a64f4ab061546109efa5e67d4a552d4abd1cf63f4c3b13e545d027d9"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4ecc90a7a64f4ab061546109efa5e67d4a552d4abd1cf63f4c3b13e545d027d9"
+        }
+      }
+    },
+    {
+      "id": "edit_distance_1",
+      "family": "edit_distance",
+      "counts": {
+        "O3": 147,
+        "Oz": 160,
+        "fixed": 126,
+        "random": 230,
+        "sl_raw": 124,
+        "sl_guarded": 124,
+        "rl_raw": 126,
+        "rl_guarded": 126,
+        "hybrid_raw": 126,
+        "hybrid_guarded": 126,
+        "fixed_checkpoint_guarded": 126,
+        "random_checkpoint_guarded": 147
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            292,
+            165,
+            164,
+            138,
+            126
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "acf78935e7930c66aea0af990dc1a756cd413f1a4e51df88f20d27073f8374d1",
+          "executable_sha256": "a78f665e8229abb7e46224106d71d4ca96328eb31cb5f28ff052121acd72779c"
+        },
+        "random": {
+          "checkpoint_counts": [
+            292,
+            288,
+            226,
+            262,
+            230
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "c871f4e51a42d581ecb4ad543bfcb1b8ef3f2aa3a7a4388272cb6b11cc495245",
+          "executable_sha256": "821a5d037ccb10ee65a9a6879e3e9f9a30fe3e781bd452ef114169ab84a9de05"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "821a5d037ccb10ee65a9a6879e3e9f9a30fe3e781bd452ef114169ab84a9de05"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "1cd3d0cc16c8a5b43b3d796953a9c01b13502768b2dd242e7d329f2291a4993d"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "a78f665e8229abb7e46224106d71d4ca96328eb31cb5f28ff052121acd72779c"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "a76a02a2b844ba2032ed7f50244892d3f80686693a9ad68259bcf035a5ee99a2"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "a60544cf91ebb8523be0feba370852ced8c9afa97ea17011c25b72f74f1fff6f"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "a60544cf91ebb8523be0feba370852ced8c9afa97ea17011c25b72f74f1fff6f"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "b8b51afac33777c529cfebe40bcf05fc2ff309e0777eddeed193a865251c72d5"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "b8b51afac33777c529cfebe40bcf05fc2ff309e0777eddeed193a865251c72d5"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "b8b51afac33777c529cfebe40bcf05fc2ff309e0777eddeed193a865251c72d5"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "b8b51afac33777c529cfebe40bcf05fc2ff309e0777eddeed193a865251c72d5"
+        }
+      }
+    },
+    {
+      "id": "heapsort_0",
+      "family": "heapsort",
+      "counts": {
+        "O3": 170,
+        "Oz": 147,
+        "fixed": 145,
+        "random": 266,
+        "sl_raw": 144,
+        "sl_guarded": 144,
+        "rl_raw": 142,
+        "rl_guarded": 142,
+        "hybrid_raw": 142,
+        "hybrid_guarded": 142,
+        "fixed_checkpoint_guarded": 145,
+        "random_checkpoint_guarded": 170
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            327,
+            181,
+            179,
+            162,
+            145
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "57e9971534843ff27654bba389bb91f309e5f9e6b8af9fe1f28123e9a82c71bf",
+          "executable_sha256": "533bd963ea4c587696488b0756b1a274e1f366d024295bbb072497f08be7cab6"
+        },
+        "random": {
+          "checkpoint_counts": [
+            327,
+            363,
+            266,
+            277,
+            266
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "c0dd0ad3bd7439aaae76fdb66ecd5c4b40f55347c216545f2799ce10cc3a7033",
+          "executable_sha256": "83b34a04e15d7868bf3dd857a2b85c5caf3fac0b1aace1a2e3592d0a8bf881b2"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "83b34a04e15d7868bf3dd857a2b85c5caf3fac0b1aace1a2e3592d0a8bf881b2"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "304e0a2070af979a5b3a131392f285f66dd67f0e50e0be83d8848753abf474a5"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "533bd963ea4c587696488b0756b1a274e1f366d024295bbb072497f08be7cab6"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "c9a11dc85d5dfb4149107a0172df5e2c1a314415dc9ea54c450515c0304b3554"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "1ad2719a33edd7eb5f1e7cef28fc00ddd863ebffedad2bdff13b91b47220f8b3"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "1ad2719a33edd7eb5f1e7cef28fc00ddd863ebffedad2bdff13b91b47220f8b3"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "b91213f9b1682997dda668f7ddab5f48eb76e6e154a16afef69d42c223a7baec"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "b91213f9b1682997dda668f7ddab5f48eb76e6e154a16afef69d42c223a7baec"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "b91213f9b1682997dda668f7ddab5f48eb76e6e154a16afef69d42c223a7baec"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "b91213f9b1682997dda668f7ddab5f48eb76e6e154a16afef69d42c223a7baec"
+        }
+      }
+    },
+    {
+      "id": "heapsort_1",
+      "family": "heapsort",
+      "counts": {
+        "O3": 168,
+        "Oz": 143,
+        "fixed": 144,
+        "random": 158,
+        "sl_raw": 144,
+        "sl_guarded": 144,
+        "rl_raw": 142,
+        "rl_guarded": 142,
+        "hybrid_raw": 142,
+        "hybrid_guarded": 142,
+        "fixed_checkpoint_guarded": 144,
+        "random_checkpoint_guarded": 158
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            327,
+            181,
+            180,
+            163,
+            144
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "925757d15aab67f33f590cbbbd2002b7afbfe63d7873b5b0d486e4e31b62c34b",
+          "executable_sha256": "e52e97b54e12ee31806e097d3cbbf0d7ef817b4ec43473702b68fcc6d61ad6cf"
+        },
+        "random": {
+          "checkpoint_counts": [
+            327,
+            363,
+            266,
+            285,
+            158
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "f252262f2041121552b3d8376fcf350d32ecae85d632264cdbcd0ac11354954c",
+          "executable_sha256": "705c025dda43d484a4c4a4fe7614519e2b57ff45872aff3860d309abbcaf21b7"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "dbc0e40b44fa8ad651aee3a864c8bc1ea8001e4227dcfb42b83451ff3639a1fa"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "df2dd60ab333f5ead0d1fc4a9ee4d2938de5a389fe031534350bb0f6c4641460"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "e52e97b54e12ee31806e097d3cbbf0d7ef817b4ec43473702b68fcc6d61ad6cf"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "705c025dda43d484a4c4a4fe7614519e2b57ff45872aff3860d309abbcaf21b7"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "533364e1463e9a9db78ffe913bf06a9868d516f1e3fa73d7fce9d0ed6b4ace51"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "533364e1463e9a9db78ffe913bf06a9868d516f1e3fa73d7fce9d0ed6b4ace51"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4e2d7239ba44347b05e8134739ff9cd8344fb0f489fcf40ccc62552aa619a8f4"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4e2d7239ba44347b05e8134739ff9cd8344fb0f489fcf40ccc62552aa619a8f4"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4e2d7239ba44347b05e8134739ff9cd8344fb0f489fcf40ccc62552aa619a8f4"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4e2d7239ba44347b05e8134739ff9cd8344fb0f489fcf40ccc62552aa619a8f4"
+        }
+      }
+    },
+    {
+      "id": "floyd_warshall_0",
+      "family": "floyd_warshall",
+      "counts": {
+        "O3": 425,
+        "Oz": 185,
+        "fixed": 99,
+        "random": 320,
+        "sl_raw": 99,
+        "sl_guarded": 99,
+        "rl_raw": 99,
+        "rl_guarded": 99,
+        "hybrid_raw": 99,
+        "hybrid_guarded": 99,
+        "fixed_checkpoint_guarded": 99,
+        "random_checkpoint_guarded": 132
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            263,
+            139,
+            132,
+            107,
+            99
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "2edeab60b48f3c0884502140241747cae7a8375a67e422801c106c764a28b4de",
+          "executable_sha256": "992a71b6ef5d026e384bfad86e949c0e04c3a39ce49d27dc72b69dffdccc7ea3"
+        },
+        "random": {
+          "checkpoint_counts": [
+            263,
+            139,
+            132,
+            162,
+            320
+          ],
+          "selected_step": 2,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "12265062b5bdcaf9340e213bfb51efa10df83e93df0394496eaf15a8ca35d2ae",
+          "executable_sha256": "0ba2282eb46fdb642902cf0038a911bc82ea89a9423a625d15ebcc69e32ed7fe"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "f338b8aec040075b01f4756cf70f00a462f5136b2c3ce88c2f9704c2d572c409"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "68eedb6e86b59153009eb9f5bb88442de4493afb3881eab45cadae366783e052"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "992a71b6ef5d026e384bfad86e949c0e04c3a39ce49d27dc72b69dffdccc7ea3"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "c9c00c08d12468e8cfd9b4223c84321f389ccd7161fbddde770614cdc8a08e98"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "992a71b6ef5d026e384bfad86e949c0e04c3a39ce49d27dc72b69dffdccc7ea3"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "992a71b6ef5d026e384bfad86e949c0e04c3a39ce49d27dc72b69dffdccc7ea3"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "992a71b6ef5d026e384bfad86e949c0e04c3a39ce49d27dc72b69dffdccc7ea3"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "992a71b6ef5d026e384bfad86e949c0e04c3a39ce49d27dc72b69dffdccc7ea3"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "992a71b6ef5d026e384bfad86e949c0e04c3a39ce49d27dc72b69dffdccc7ea3"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "992a71b6ef5d026e384bfad86e949c0e04c3a39ce49d27dc72b69dffdccc7ea3"
+        }
+      }
+    },
+    {
+      "id": "floyd_warshall_1",
+      "family": "floyd_warshall",
+      "counts": {
+        "O3": 425,
+        "Oz": 185,
+        "fixed": 99,
+        "random": 287,
+        "sl_raw": 99,
+        "sl_guarded": 99,
+        "rl_raw": 99,
+        "rl_guarded": 99,
+        "hybrid_raw": 99,
+        "hybrid_guarded": 99,
+        "fixed_checkpoint_guarded": 99,
+        "random_checkpoint_guarded": 115
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            263,
+            139,
+            132,
+            107,
+            99
+          ],
+          "selected_step": 4,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "ec0856f93afbd0c119160c9fbe8d8dc2f71e0c612465230fc4c5111ef0ae31d5",
+          "executable_sha256": "146953dd667b67ee18d6ba8c20b310f9e6575700b264de317e6088bf7a9e981e"
+        },
+        "random": {
+          "checkpoint_counts": [
+            263,
+            139,
+            140,
+            115,
+            287
+          ],
+          "selected_step": 3,
+          "selected_kind": "learned_checkpoint",
+          "bitcode_sha256": "249fad9b3f8babc739c2e2926d774113e5a9ca20f39b1fbed93e0346c0ce7c4b",
+          "executable_sha256": "9c46aa8c9b9e3e5584ea182e10465caf0eb2c62aff3b615504d6004e00d2d618"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "1fef2904da077a1e7cdc99b07016cb604e815e9dc68676ab3fedee338ce37144"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "bed0f307c73b90c0b4af4331a49892a8c73c1ce07153b9e26441ea650360940b"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "146953dd667b67ee18d6ba8c20b310f9e6575700b264de317e6088bf7a9e981e"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "98fe7590d6d66d0edf968829cf3e0859a240a6ac7474beeb66bf57d4c865241d"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "146953dd667b67ee18d6ba8c20b310f9e6575700b264de317e6088bf7a9e981e"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "146953dd667b67ee18d6ba8c20b310f9e6575700b264de317e6088bf7a9e981e"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "146953dd667b67ee18d6ba8c20b310f9e6575700b264de317e6088bf7a9e981e"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "146953dd667b67ee18d6ba8c20b310f9e6575700b264de317e6088bf7a9e981e"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "146953dd667b67ee18d6ba8c20b310f9e6575700b264de317e6088bf7a9e981e"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "146953dd667b67ee18d6ba8c20b310f9e6575700b264de317e6088bf7a9e981e"
+        }
+      }
+    },
+    {
+      "id": "integer_sqrt_0",
+      "family": "integer_sqrt",
+      "counts": {
+        "O3": 45,
+        "Oz": 42,
+        "fixed": 55,
+        "random": 60,
+        "sl_raw": 58,
+        "sl_guarded": 45,
+        "rl_raw": 58,
+        "rl_guarded": 45,
+        "hybrid_raw": 58,
+        "hybrid_guarded": 45,
+        "fixed_checkpoint_guarded": 45,
+        "random_checkpoint_guarded": 45
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            130,
+            62,
+            61,
+            57,
+            55
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "9301ace0f58d89731be4f8c9447629306c7dd9b12d99be02569378d665b842e8",
+          "executable_sha256": "d17fc6c75708b42a6255e75e8226b25306acae44c36c3c0cf582724b7d093b72"
+        },
+        "random": {
+          "checkpoint_counts": [
+            130,
+            102,
+            57,
+            60,
+            60
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "9301ace0f58d89731be4f8c9447629306c7dd9b12d99be02569378d665b842e8",
+          "executable_sha256": "d17fc6c75708b42a6255e75e8226b25306acae44c36c3c0cf582724b7d093b72"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "d17fc6c75708b42a6255e75e8226b25306acae44c36c3c0cf582724b7d093b72"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "11b6fbeb8d0b7d01de5f42877437369cdb4d78434e8277ef1643c56eb174651e"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "645ba325e67b198d64430cba39a5ee6701894a3df2cf16ff454b9ed92a16b158"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "871a263e66350df719196739817ddd7dd6af6b50c37740be3dd324ed94ab33f0"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "35a857bafc62cb6df3f26ee0820c44f101474113f5bc54e678499a840e0cfec0"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "d17fc6c75708b42a6255e75e8226b25306acae44c36c3c0cf582724b7d093b72"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "35a857bafc62cb6df3f26ee0820c44f101474113f5bc54e678499a840e0cfec0"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "d17fc6c75708b42a6255e75e8226b25306acae44c36c3c0cf582724b7d093b72"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "35a857bafc62cb6df3f26ee0820c44f101474113f5bc54e678499a840e0cfec0"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "d17fc6c75708b42a6255e75e8226b25306acae44c36c3c0cf582724b7d093b72"
+        }
+      }
+    },
+    {
+      "id": "integer_sqrt_1",
+      "family": "integer_sqrt",
+      "counts": {
+        "O3": 45,
+        "Oz": 42,
+        "fixed": 55,
+        "random": 65,
+        "sl_raw": 58,
+        "sl_guarded": 45,
+        "rl_raw": 58,
+        "rl_guarded": 45,
+        "hybrid_raw": 58,
+        "hybrid_guarded": 45,
+        "fixed_checkpoint_guarded": 45,
+        "random_checkpoint_guarded": 45
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            130,
+            62,
+            61,
+            57,
+            55
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "d1527b309040bb1ba342bd723359c1d527b10719cefcacdbcb824464c98b0d6d",
+          "executable_sha256": "f99a51f5c8dc43f47e66699b64ec08587efec85bd4882263d7d3de79febdfdec"
+        },
+        "random": {
+          "checkpoint_counts": [
+            130,
+            130,
+            130,
+            62,
+            65
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "d1527b309040bb1ba342bd723359c1d527b10719cefcacdbcb824464c98b0d6d",
+          "executable_sha256": "f99a51f5c8dc43f47e66699b64ec08587efec85bd4882263d7d3de79febdfdec"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "f99a51f5c8dc43f47e66699b64ec08587efec85bd4882263d7d3de79febdfdec"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "e186add18b0102dcb9cc011dfbc5b8147a58d928c5a58ec68055fc506731b319"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "37b943c80c8cbd28589225d1b6e92c486708ed364c53f24e4f784c16daab5a8c"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "707ba94908c67114e044bb8ca317cc98917334d8b7c1b868435a3232392d2d09"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "3e8abf009007b606841b3fd995f5951cc9ca6e5c79e6a5318561cd24615af413"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "f99a51f5c8dc43f47e66699b64ec08587efec85bd4882263d7d3de79febdfdec"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "3e8abf009007b606841b3fd995f5951cc9ca6e5c79e6a5318561cd24615af413"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "f99a51f5c8dc43f47e66699b64ec08587efec85bd4882263d7d3de79febdfdec"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "3e8abf009007b606841b3fd995f5951cc9ca6e5c79e6a5318561cd24615af413"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "f99a51f5c8dc43f47e66699b64ec08587efec85bd4882263d7d3de79febdfdec"
+        }
+      }
+    },
+    {
+      "id": "rational_bezier_0",
+      "family": "rational_bezier",
+      "counts": {
+        "O3": 40,
+        "Oz": 39,
+        "fixed": 78,
+        "random": 143,
+        "sl_raw": 78,
+        "sl_guarded": 40,
+        "rl_raw": 78,
+        "rl_guarded": 40,
+        "hybrid_raw": 78,
+        "hybrid_guarded": 40,
+        "fixed_checkpoint_guarded": 40,
+        "random_checkpoint_guarded": 40
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            180,
+            97,
+            96,
+            87,
+            78
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "a6071448781afe26cde6ad03ef1b714d578e47d0ab0101b62227d8677a8805ac",
+          "executable_sha256": "566055b2ac13aade30f7f5528c3c3357f7695de10e7efc3ac103f80589657868"
+        },
+        "random": {
+          "checkpoint_counts": [
+            180,
+            180,
+            173,
+            143,
+            143
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "a6071448781afe26cde6ad03ef1b714d578e47d0ab0101b62227d8677a8805ac",
+          "executable_sha256": "566055b2ac13aade30f7f5528c3c3357f7695de10e7efc3ac103f80589657868"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "566055b2ac13aade30f7f5528c3c3357f7695de10e7efc3ac103f80589657868"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "ea300efd4ed5a7c9fae7adf11aead713d86cd25cf4833788e224e17327bc6725"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "121cb7091de36de035baedafbfffb75b42b8549bee889aaa8a1dcff3d079cd82"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "abc91d7bc5bc1e79472f5942801953835120342e60bb43eecaf2d27f5f239664"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "58c04d1f2075b850b7399874723d1d2c56cb0eb462b8080a89d2dad2092afb0a"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "566055b2ac13aade30f7f5528c3c3357f7695de10e7efc3ac103f80589657868"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4ca8e3647873fbab24c1750e83a225c78307075b9ed0cce4455a0cf3caabab49"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "566055b2ac13aade30f7f5528c3c3357f7695de10e7efc3ac103f80589657868"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4ca8e3647873fbab24c1750e83a225c78307075b9ed0cce4455a0cf3caabab49"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "566055b2ac13aade30f7f5528c3c3357f7695de10e7efc3ac103f80589657868"
+        }
+      }
+    },
+    {
+      "id": "rational_bezier_1",
+      "family": "rational_bezier",
+      "counts": {
+        "O3": 40,
+        "Oz": 39,
+        "fixed": 78,
+        "random": 99,
+        "sl_raw": 78,
+        "sl_guarded": 40,
+        "rl_raw": 78,
+        "rl_guarded": 40,
+        "hybrid_raw": 78,
+        "hybrid_guarded": 40,
+        "fixed_checkpoint_guarded": 40,
+        "random_checkpoint_guarded": 40
+      },
+      "baseline_checkpoints": {
+        "fixed": {
+          "checkpoint_counts": [
+            180,
+            97,
+            96,
+            87,
+            78
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "7fe13320611810e59d79b6773b6f8378e05ed078037a0f2b0158efea1e522381",
+          "executable_sha256": "2f1049fe0cd65700f301fa72fe4fd38e840603dbdd079605c6723b912b7d9da6"
+        },
+        "random": {
+          "checkpoint_counts": [
+            180,
+            180,
+            97,
+            99,
+            99
+          ],
+          "selected_step": 0,
+          "selected_kind": "O3",
+          "bitcode_sha256": "7fe13320611810e59d79b6773b6f8378e05ed078037a0f2b0158efea1e522381",
+          "executable_sha256": "2f1049fe0cd65700f301fa72fe4fd38e840603dbdd079605c6723b912b7d9da6"
+        }
+      },
+      "additional_input_checks": {
+        "fixed_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "random_checkpoint_guarded": {
+          "0": true,
+          "2": true,
+          "7": true,
+          "11": true,
+          "31": true
+        },
+        "O3": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "2f1049fe0cd65700f301fa72fe4fd38e840603dbdd079605c6723b912b7d9da6"
+        },
+        "Oz": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "a93e28e30f482e02f828d4c224531d44aedf91c9e9ad3ed58008641e6ef8a887"
+        },
+        "fixed": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "4e7d07e2cdd99e2cdfd0483a92034e56e6f9ff90196b2d2429dc2d7de3bf0372"
+        },
+        "random": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "b2fa93208160463f5c10937b8a4c8e725729258d6d44b1ace66be2d4cc51ebc5"
+        },
+        "sl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "636d807b9ab9f0b8abb36ade0126d8b157299648c0989e5a2eea863d1bad1443"
+        },
+        "sl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "2f1049fe0cd65700f301fa72fe4fd38e840603dbdd079605c6723b912b7d9da6"
+        },
+        "rl_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "3521b2a41634b9361dec40bdb4cd33e3580058c8ad6efbb5d6bc0f97729e6e82"
+        },
+        "rl_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "2f1049fe0cd65700f301fa72fe4fd38e840603dbdd079605c6723b912b7d9da6"
+        },
+        "hybrid_raw": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "3521b2a41634b9361dec40bdb4cd33e3580058c8ad6efbb5d6bc0f97729e6e82"
+        },
+        "hybrid_guarded": {
+          "inputs": {
+            "0": true,
+            "2": true,
+            "7": true,
+            "11": true,
+            "31": true
+          },
+          "executable_sha256": "2f1049fe0cd65700f301fa72fe4fd38e840603dbdd079605c6723b912b7d9da6"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "fixed_checkpoint_guarded": {
+      "fewer": 8,
+      "equal": 4,
+      "more": 0,
+      "geomean_O3_over_candidate": 1.4194225645810858,
+      "family_balanced_geomean_O3_over_candidate": 1.419422564581086
+    },
+    "random_checkpoint_guarded": {
+      "fewer": 5,
+      "equal": 7,
+      "more": 0,
+      "geomean_O3_over_candidate": 1.2671634841919988,
+      "family_balanced_geomean_O3_over_candidate": 1.2671634841919988
+    }
+  },
+  "candidate_output_checks": 720,
+  "correctness_inputs": [
+    "0",
+    "2",
+    "7",
+    "11",
+    "31"
+  ],
+  "intervals": {
+    "hybrid_vs_O3": {
+      "numerator": "O3",
+      "denominator": "hybrid_guarded",
+      "ratio": 1.4147945735731027,
+      "interval95": [
+        1.0562245503707883,
+        2.2410600768064026
+      ],
+      "families": 6,
+      "seed": 20261029,
+      "draws": 20000,
+      "method": "Family-cluster percentile bootstrap",
+      "scope": "Exploratory, post-hoc, unadjusted interval from six authored families; not representative real-world sampling, runtime confidence, or confirmatory significance."
+    },
+    "hybrid_vs_fixed_equal_guard": {
+      "numerator": "fixed_checkpoint_guarded",
+      "denominator": "hybrid_guarded",
+      "ratio": 0.9967395255482999,
+      "interval95": [
+        0.9816498172140429,
+        1.0087613899578887
+      ],
+      "families": 6,
+      "seed": 20261029,
+      "draws": 20000,
+      "method": "Family-cluster percentile bootstrap",
+      "scope": "Exploratory, post-hoc, unadjusted interval from six authored families; not representative real-world sampling, runtime confidence, or confirmatory significance."
+    }
+  },
+  "runtime_evaluated": false,
+  "scope": "Post-hoc audit on the same six authored families. Equal checkpoint guards isolate deterministic selection from learning. Additional input checks are not semantic proof. Intervals are exploratory family-cluster estimates, not confirmatory runtime or real-world evidence."
+}

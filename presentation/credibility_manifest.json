@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+  "artifacts": {
+    "model_validation.json": "6d98fff02bb1a360e116dc220878db769c35f230e26ac5f5b5f22762994d4a52",
+    "training_support.json": "25095dfdb582e39c70dde1b8cd5a300278774cd589adf21ca524eeab6f2da216",
+    "validation_declaration.json": "24a9457225fea4f886e5670629ed0428f5e767c13deea901314aed0d8676b4e4",
+    "checkpoint_baseline_audit.json": "acc32964464774d19190648fbc60b422c01c53cbd42ad8596c9f1a43149630be",
+    "checkpoint_audit_declaration.json": "b498d277e4c2f1c28d619beffc4a39f9c8add46cc7f80d4c5837d072b7f3e471",
+    "weights_audit.json": "65ce125fddb2781fb9d71ba51e3e2448ae2a539552e3c34671affbfe2f2f5e4f"
+  },
+  "scope": "Consistency manifest for post-hoc diagnostic artifacts; not a digital signature or independent validation."
+}

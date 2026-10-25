@@ -1,0 +1,12 @@
+{
+  "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+  "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+  "folds": 4,
+  "seed": 20261028,
+  "hyperparameter_selection": false,
+  "scope": "Training-only diagnostic. Frozen test programs are not used.",
+  "implementation_sha256": {
+    "scripts/validate_count_model.py": "23026645e6743641cc4079afe1ee969d5387430c4213f3f16c37302567e0ea6a",
+    "src/rl/validation.py": "d57567b369a5fddd3053d2afe4c3ccf609baea4cbdd397047c06e139a62af943"
+  }
+}

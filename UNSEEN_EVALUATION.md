@@ -87,3 +87,12 @@ python scripts/check_generalization_browser.py --url http://127.0.0.1:8000/
 
 This runs the six already-evaluated demos and a trusted CRC native comparison.
 It verifies UI/export consistency, not a fresh generalization or timing study.
+
+## Subsequent post-hoc audit
+
+The original model, counts and report above remain frozen.
+[CREDIBILITY.md](CREDIBILITY.md) adds equal-checkpoint fixed/random controls,
+720 additional input checks, exploratory family-cluster intervals and separate
+training-family SL validation. It does not create a new unseen-program test or
+change the trained weights. The newer random-checkpoint guard achieves 21.08%
+count reduction; the 8.31% terminal-only derived control above remains historical.

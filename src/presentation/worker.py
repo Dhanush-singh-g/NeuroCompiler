@@ -23,6 +23,7 @@ from src.presentation.model import predict, MODEL_PATH
 from src.presentation.summary import comparison_summary
 from src.presentation.four_way import four_way_summary
 from src.hybrid.sequential import rollout, MODEL_PATH as SEQUENTIAL_MODEL_PATH
+from src.hybrid.support import attach_support
 from src.rl.llvm_environment import ACTIONS, FEATURE_NAMES as SEQUENTIAL_FEATURE_NAMES
 from src.features.transform import parse_ir, summaries, METRICS
 
@@ -117,6 +118,7 @@ def analyze(root, request):
         progress(root,'predict',f'Applying trained {mode} instruction-count policy',65)
         sequential,final_bc=rollout(tools,initial,root/'sequential_episode',mode,request['toolchain_sha256'],
             baseline={'instructions':decision['metrics']['O3']['instructions'],'path':root/'O3/program.bc','step':0})
+        attach_support(sequential,tools,root/'sequential_episode',root/'support_diagnostics')
         build('LearnedPolicy',[],CODEGEN,input_bc=final_bc)
         artifacts['LearnedPolicy']['passes']=(MENU['O3'] if sequential['selection']['applied']=='O3' else
             [ACTIONS[action] for action in sequential['selected_actions']])

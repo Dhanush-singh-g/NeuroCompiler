@@ -19,6 +19,7 @@ from src.presentation.model import ROOT, load_model
 from src.presentation.worker import save
 from src.presentation.scorecard import session_scorecard
 from src.hybrid.sequential import load_agent
+from src.rl.live_evidence import audit_live
 
 ASSETS = {'index.html': 'text/html', 'app.js': 'application/javascript', 'style.css': 'text/css', 'favicon.svg':'image/svg+xml'}
 RESEARCH_ASSETS = {'index.html', 'app.js', 'style.css', 'data.json', 'results.js',
@@ -90,6 +91,10 @@ def markdown_report(result):
     if decision.get('sequential'):
         lines=lines[:-4]
         seq=decision['sequential']
+        if seq.get('input_support'):
+            support=seq['input_support']
+            lines += ['## Model input ranges','',f"Status: {support['status']}; outside-range steps: {support['outside_steps']}/{support['evaluated_steps']}.",
+                      'This is an advisory training-feature range check, not calibrated confidence. Within-range inputs can still be unfamiliar. The check does not change pass selection.','']
         if seq.get('selection'):
             lines += ['## Static instruction-count guard','',
                       f"Raw learned terminal count: {seq['policy_final_instructions']}. Best learned checkpoint: {seq['best_policy_instructions']}.",
@@ -166,6 +171,7 @@ def markdown_report(result):
 
 class Application:
     def __init__(self, config, runs=None):
+        self.evidence=audit_live()
         self.config = config
         self.runs = Path(runs or ROOT/'.presentation/runs')
         self.runs.mkdir(parents=True, exist_ok=True)
@@ -314,6 +320,11 @@ class Handler(BaseHTTPRequestHandler):
                                            'limitations','historical_cv','source_model_sha256')},
                                   'sequential_model':{k:load_agent()[1][k] for k in ('objective','training_rows','training_programs','limitations','algorithm','feature_names','horizon')},
                                   'examples':json.loads((ROOT/'presentation/examples.json').read_text())})
+        if path == '/api/evidence':
+            try:
+                return self.send(200,audit_live())
+            except (ValueError,KeyError,OSError) as error:
+                return self.send(409,{'error':'Evidence files are inconsistent. Update all presentation artifacts together. '+str(error)})
         if path == '/api/generalization':
             report=json.loads((ROOT/'presentation/generalization_results.json').read_text())
             keys=('objective','runtime_evaluated','frozen','programs','independent_families',
@@ -417,6 +428,7 @@ def main():
         load_model()
         load_agent()
         if args.check:
+            audit_live()
             with __import__('tempfile').TemporaryDirectory() as scratch:
                 root = Path(scratch)
                 request = {**config, 'source':'#include <stdio.h>\nint main(void){puts("ready");return 0;}\n',

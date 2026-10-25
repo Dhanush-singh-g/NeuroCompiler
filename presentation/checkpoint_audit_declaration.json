@@ -1,0 +1,19 @@
+{
+  "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+  "source_report_sha256": "cb51a202ddae20ce757872d7a503c62313ba28d165447a2e3d49743e3b6035fb",
+  "correctness_inputs": [
+    "0",
+    "2",
+    "7",
+    "11",
+    "31"
+  ],
+  "checkpoint_rule": "All five states (initial and four transforms) plus O3, O3 wins ties.",
+  "model_or_hyperparameter_changes": false,
+  "implementation_sha256": {
+    "scripts/audit_checkpoint_baselines.py": "e7562f6e0d0865f8ad881ec9a41adc680d1c587711907583f6f4b7cd41307df2",
+    "src/rl/validation.py": "d57567b369a5fddd3053d2afe4c3ccf609baea4cbdd397047c06e139a62af943",
+    "src/rl/evidence.py": "6fdf670401ba8db6d68bb042f346a7a10ae3c99dcbc48502bb3fee2b34a1a11d"
+  },
+  "scope": "Post-hoc audit of already-opened examples; no new unseen-program or runtime study."
+}
