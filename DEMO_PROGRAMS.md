@@ -331,6 +331,12 @@ int main(void) {
 
 ## Scope and verification
 
+**25 October four-way update:** the seven working examples also pass O1 and O2
+comparison baselines. O0 plus the six built pipelines were each executed twice
+per example: **98 matching native output checks**. The web app now displays O1,
+O2, O3, and the frozen NeuroCompiler choice. Four entries can share identical
+executables. These additional checks validate output, not a learned speedup.
+
 The seven working examples were compiled and executed on 22 October 2026 using the app’s pinned x86_64 Linux LLVM10 toolchain. Each was executed twice under the O0 reference and each of the four app pipelines: **70 native executions**, all with matching output. These were functional output checks; no new formal performance study or model training was performed. The three diagnostic behaviors were checked separately.
 
 The first five entries in the built-in example picker already cover sieve, histogram, integer mixing, matrix arithmetic, and simple stdin. The Fibonacci and sorting programs are additional copy-and-paste examples in this document; this change does not add new picker entries.

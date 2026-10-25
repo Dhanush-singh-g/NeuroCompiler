@@ -64,3 +64,16 @@ class ScorecardTests(unittest.TestCase):
         total=session_scorecard([result(choice='different'),measured],[])['totals']
         self.assertEqual(total['wins'],0)
         self.assertEqual(total['inconclusive'],1)
+
+    def test_shared_four_way_winner_is_not_an_individual_nc_win(self):
+        measured=result('comparison',qualified=True)
+        measured['measurement']['four_way']={'status':'reliable_winner',
+            'winner_options':['O3','NeuroCompiler'],'controls_passed':True,'complete_pair_coverage':True}
+        total=session_scorecard([result(),measured],[])['totals']
+        self.assertEqual(total['best_shared'],1)
+        self.assertEqual(total['best_NeuroCompiler'],0)
+        self.assertEqual(total['wins'],0)
+        measured['measurement']['four_way']['controls_passed']=False
+        total=session_scorecard([result(),measured],[])['totals']
+        self.assertEqual(total['best_shared'],0)
+        self.assertEqual(total['four_way_inconclusive'],1)

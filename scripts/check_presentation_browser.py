@@ -54,15 +54,20 @@ def main():
         expect(page.locator('#ir-candidate')).to_contain_text('define')
         page.locator('#ir-choice').select_option('mem2reg_loop_rotate_licm_O3')
         expect(page.locator('#ir-title')).to_contain_text('Loop preparation')
+        page.locator('#ir-choice').select_option('O1')
+        expect(page.locator('#ir-title')).to_contain_text('O1')
+        expect(page.locator('#ir-candidate')).to_contain_text('define')
         page.locator('[data-tab="benchmark"]').click()
         expect(page.locator('#compare')).to_be_disabled()
         page.locator('#trusted').check()
         expect(page.locator('#compare')).to_be_enabled()
         page.locator('#compare').click()
         expect(page.locator('#timing-table')).to_be_visible(timeout=120000)
-        expect(page.locator('#nc-summary')).to_contain_text('NeuroCompiler vs O3')
+        expect(page.locator('#nc-summary')).to_contain_text('O1 vs O2 vs O3 vs NeuroCompiler')
         expect(page.locator('#o3-runtime')).to_contain_text('ms')
         expect(page.locator('#nc-runtime')).to_contain_text('ms')
+        expect(page.locator('#o1-runtime')).to_contain_text('ms')
+        expect(page.locator('#o2-runtime')).to_contain_text('ms')
         assert page.locator('#o3-runtime').evaluate('e=>parseFloat(getComputedStyle(e).fontSize)')>=40
         expect(page.locator('#preferred-option')).to_be_visible()
         expect(page.locator('#timing-table tr')).to_have_count(4)
@@ -75,10 +80,13 @@ def main():
         assert result['decision']==analysis['decision']
         assert result['prediction_frozen_at'] < result['measurement_started_at']
         assert result['correctness']['passed']
+        assert result['measurement']['protocol']=='live-four-way-v3'
+        assert set(result['measurement']['four_way']['clocks']['cpu']['options'])=={'O1','O2','O3','NeuroCompiler'}
         assert len(result['measurement']['cells']['O3']['samples'])==12
         with page.expect_download() as downloaded:
             page.locator('#download-md').click()
         assert 'The model decision was frozen' in Path(downloaded.value.path()).read_text()
+        assert 'Direct head-to-head comparisons' in Path(downloaded.value.path()).read_text()
         page.screenshot(path=str(output/'comparison-desktop.png'),full_page=True)
         checks.append('Trusted native execution, unchanged pre-timing decision, output checks, both clocks, raw pairs, and Markdown export')
         page.reload(wait_until='networkidle')
@@ -109,10 +117,9 @@ def main():
         page.locator('#compare').click()
         expect(page.locator('#timing-table')).to_be_visible(timeout=30000)
         expect(page.locator('.correctness-card pre')).to_have_text('55\n')
-        expect(page.locator('#nc-summary')).to_contain_text('0.0% change')
-        expect(page.locator('#nc-summary')).to_contain_text('NeuroCompiler kept the O3 executable')
-        expect(page.locator('#nc-summary')).to_contain_text('Why the timing is inconclusive')
-        expect(page.locator('#preferred-option')).to_have_text('Same executable — no preference')
+        expect(page.locator('#nc-summary')).to_contain_text('Same executable as')
+        expect(page.locator('#nc-summary')).to_contain_text('How the four-way result is checked')
+        assert page.locator('#preferred-option').inner_text() in ['All four entries are the same executable','No reliable preference yet']
         expect(page.locator('#session-scorecard')).to_contain_text('Unchanged code / inconclusive differences')
         with page.expect_download() as downloaded:
             page.get_by_role('link',name='Session summary').click()

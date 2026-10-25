@@ -1,9 +1,55 @@
 # NeuroCompiler — run and present the live decision explorer
 
-This branch adds a working **C input → LLVM features → learned pipeline prediction
-→ output checks → native comparison** application. The existing research
+This branch provides a working **C input → LLVM features → frozen learned
+prediction → output checks → O1 / O2 / O3 / NeuroCompiler comparison** application. The existing research
 dashboard remains available through **Research evidence** in the navigation.
 The live app is separate from the frozen research experiments.
+
+## Current four-way demonstration (25 October 2026)
+
+Paste or upload one self-contained C program, set arguments/stdin, and select
+**Analyze & predict**. The app builds the existing model's four candidates and
+freezes its prediction **before** building the comparison-only O1/O2 baselines.
+No submitted program executes during analysis.
+
+In **Live comparison**, enable trusted execution and run. All six built
+pipelines must match the O0 reference twice on the supplied input. Four large
+cards then show O1, O2, O3, and NeuroCompiler's selected executable. CPU/WALL
+switches the observed geometric-mean times. Exact binary aliases share their
+measurement and are labelled; NeuroCompiler choosing O3 is not a learned gain.
+
+The native timer performs self-controls for each distinct executable and direct
+head-to-head comparisons between every pair. Each cell uses three blocks of four
+pairs with balanced starting order. Cell order is fixed-seed shuffled. An
+8000-replicate bootstrap adjusts interval tails across all cells and both clocks;
+3% controls, 10 ms minimum duration, 10% repeatability and 3% starting-order
+bounds are retained. Protocol: `live-four-way-v3`.
+
+**Fastest observed** is a point estimate and is always labelled as such. A
+**reliable demo preference** also needs self-controls and direct adjusted-interval
+speedup lower bounds above 1.03× against every distinct competitor on both clocks.
+Clock tradeoffs, close results, or failed/missing evidence produce no clear
+winner or an inconclusive result. All-identical entries are reported as code
+identity. This is exploratory demo evidence, not a proof of generalization.
+
+Baselines are explicit **LLVM10 `opt -O1`, `opt -O2`, `opt -O3` pipelines** from
+shared initial bitcode, with matching native codegen levels and LLVM passes
+disabled during that final codegen. NeuroCompiler keeps its original model menu
+and O3 codegen. These are reproducible LLVM pipeline baselines; do not claim
+byte-for-byte equivalence to every version of a bare `clang -O1/-O2/-O3` command.
+There is no fast-math or native-CPU flag. O1/O2 are comparison baselines, not
+newly trained model choices. The model coefficients/features are unchanged.
+
+The four-way scorecard counts individual reliable preferences or shared-executable
+preferences separately. Its older wins/losses explicitly mean NeuroCompiler
+versus O3. Known training, bundled-demo and unverified custom inputs stay separate.
+Markdown/JSON include all four runtimes, actual pipelines, controls, direct pairs,
+interval adjustment and source/model/compiler hashes. O1/O2 IR is available too.
+
+Use the update commands below, restart the server, refresh the browser, and run
+a fresh analysis. Earlier presentation protocols are historical and must not be
+pooled with this version. Only single-file deterministic C inputs are supported;
+arbitrary languages and multi-file projects remain outside this prototype.
 
 [Checked desktop screenshot](presentation/screenshots/decision.png) ·
 [Comparison summary screenshot](presentation/screenshots/comparison.png) ·
@@ -56,7 +102,7 @@ Windows-on-ARM are not supported by the pinned compiler package.
    training dataset is needed. Allow approximately 500 MB for setup and local
    experiment artifacts. Python 3.10–3.12 is supported by this setup.
 
-   Setup ends with a real C compilation through all four pipelines, feature
+   Setup ends with a real C compilation through all six built pipelines, feature
    extraction and model prediction. It does not execute submitted programs.
 
 5. Start the app:
@@ -106,7 +152,7 @@ To choose one explicitly, run `NEUROCOMPILER_PYTHON=/usr/bin/python3 bash script
 | 0:00–0:40 | Introduce the problem and four candidate pass pipelines. | A fixed compiler optimization order does not have to suit every program. This project explores learning a program-specific choice. |
 | 0:40–1:40 | Choose **Prime sieve / training example**, then **Analyze & predict**. | The model extracts 156 static fields per alternative. Its prediction is made without executing the program. This familiar training example is not an unseen-program evaluation. |
 | 1:40–2:20 | Show scores and **Inside the prediction**. | This is an actual frozen Ridge regressor; contributions explain its arithmetic, not the physical cause of speed. Approved deployment still uses O3. |
-| 2:20–3:20 | Open **Live comparison**, confirm trusted code and run. | O0 and all pipelines must print matching output twice. Balanced paired CPU/wall measurements and an O3 self-control follow. Retain an inconclusive result honestly. |
+| 2:20–3:20 | Open **Live comparison**, confirm trusted code and run. | O0 and all pipelines must print matching output twice. Balanced CPU/wall self-controls and all direct head-to-head comparisons follow. Retain an inconclusive result honestly. |
 | 3:20–4:00 | Open **LLVM IR**, change the pipeline, inspect highlighted text. | The alternatives execute real LLVM passes. Similar/identical code is an expected result; static instruction counts are not runtime labels. |
 | 4:00–4:40 | Choose **Your first C input**, inspect its stdin, and analyze/run. | It reads 21 and 34 and prints 55. The application accepts program input. Such a short program should not produce a credible speedup claim. |
 | 4:40–5:00 | Download the report and open **Research evidence**. | Separate a working application, training-only headroom, and the still-unproven objective of learned generalization. |
@@ -123,14 +169,14 @@ evidence; do not present a recording as live execution.
 
 ## Read the runtime cards, preference, and session scorecard
 
-After **Run live comparison**, two large cards show **O3 baseline** and
+After **Run live comparison**, four large cards show **O1**, **O2**, **O3**, and
 **NeuroCompiler choice** program runtimes in milliseconds. CPU/WALL changes both
 cards; these are paired geometric-mean executable times, not model inference or
-compilation time. Other pipelines have larger median runtimes in the table.
+compilation time. The table repeats all four geometric-mean runtimes and observed ratios.
 
-The large **Demo preference** banner compares NeuroCompiler's choice with O3.
-It names a preferred option only for qualified faster/slower results on both
-clocks. Identical code has no preference; failed checks remain inconclusive.
+The large **Demo preference** banner compares all four entries.
+It names a preferred executable only when direct comparisons against every
+distinct competitor qualify on both clocks. Identical code has no preference; failed checks remain inconclusive.
 A lower observed number alone never selects a winner. The post-measurement
 fastest qualified menu sample remains separate from the learned prediction.
 
@@ -184,8 +230,8 @@ The later candidate timing table is explicitly post-prediction exploration.
 | Predict | Exact portable JSON export of `sl_transform_policy_bundle.joblib`'s `raw_ridge1_floor0` model. Standardization, linear coefficients, intercept, margin, threshold, and O3-alias handling preserve the original decision rule. No pickle loading in the live app. |
 | Explain | Largest standardized-feature × coefficient contributions. Remaining fields/intercept also contribute. Six-standard-deviation flags are extrapolation warnings, not calibrated confidence. |
 | Check | Two successful executions of O0 and every candidate must have byte-identical stdout on the supplied input. A mismatch blocks timing. This does not prove semantic correctness for every possible input. |
-| Measure | Protocol `live-native-process-v2`: a small C helper measures fork/exec/wait4, excluding Python launch and Python pre-execution setup. Twelve baseline/candidate pairs per distinct binary, three blocks, fixed-seed shuffled order balanced within each block. Separate child CPU service time and process wall time include executable startup. CPU affinity is set to one available logical CPU; raw samples include the CPU identifier. Every completed cell retains its samples. |
-| Interpret | Both clocks require at least 10 ms median duration per side, at most 10% within-side duration CV, and at most 3% pooled/every-block starting-order difference. The O3 null also needs its 95% paired-bootstrap interval and every block within reciprocal 3%. Failure means inconclusive. Passing controls still do not make this a formal research evaluation. |
+| Measure | Protocol `live-four-way-v3`: a small C helper measures fork/exec/wait4, excluding Python launch and Python pre-execution setup. Twelve pairs per self-control and every direct comparison, three blocks, fixed-seed shuffled cell order and starting order balanced within each block. Separate child CPU service time and process wall time include executable startup. CPU affinity is set to one available logical CPU; raw samples include the CPU identifier. Every completed cell retains its samples. |
+| Interpret | Both clocks require at least 10 ms median duration per side, at most 10% within-side duration CV, and at most 3% pooled/every-block starting-order difference. Every executable self-control also needs its multiplicity-adjusted bootstrap interval and every block within reciprocal 3%. Failure means inconclusive. Passing controls still do not make this a formal research evaluation. |
 | Inspect/export | Side-by-side IR with line-set highlighting, metrics, downloadable LLVM10 bitcode for the model choice and approved O3, Markdown summary, and complete JSON containing input, features, decisions, attributions, artifact hashes, and raw samples. Bitcode hashes are checked again at download. |
 
 The four alternatives are **O3**, **mem2reg → loop-rotate → LICM → O3**,
@@ -280,7 +326,7 @@ From the installed environment:
 
 ```bash
 .presentation/venv/bin/python scripts/serve_presentation.py --check
-.presentation/venv/bin/python -m unittest tests.test_presentation tests.test_dashboard tests.test_workspace_archive
+.presentation/venv/bin/python -m unittest tests.test_presentation tests.test_presentation_four_way tests.test_presentation_scorecard tests.test_dashboard tests.test_workspace_archive
 ```
 
 The live integration tests run real compilers and small trusted programs, with

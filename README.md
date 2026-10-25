@@ -4,7 +4,7 @@
 Windows/WSL2 setup and five-minute demonstration. The new decision explorer
 accepts C programs, extracts static features, shows an existing experimental
 model's LLVM pipeline prediction, and optionally checks output and compares
-native runs against O3. Start it with `bash scripts/start_presentation.sh` after
+native runs in a four-way **O1 / O2 / O3 / NeuroCompiler** comparison. Start it with `bash scripts/start_presentation.sh` after
 setup. The approved policy remains O3; this feature does not establish learned
 generalization or alter the preserved research studies.
 

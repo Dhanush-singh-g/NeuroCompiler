@@ -4,6 +4,7 @@ Resource limits and process-group cancellation bound accidents. This is NOT a
 security sandbox: use only your own trusted programs on a local machine.
 """
 import hashlib
+import itertools
 import json
 import math
 import os
@@ -20,6 +21,8 @@ import numpy as np
 from src.benchmarks.compact import MENU, CODEGEN
 from src.presentation.model import predict, MODEL_PATH
 from src.presentation.summary import comparison_summary
+from src.presentation.four_way import four_way_summary
+from src.features.transform import parse_ir, summaries, METRICS
 
 ROOT = Path(__file__).resolve().parents[2]
 PAIRS, BLOCKS = 12, 3
@@ -83,8 +86,7 @@ def analyze(root, request):
     command(['gcc', '-std=c11', '-O2', '-Wall', '-Wextra', ROOT/'src/presentation/native_runner.c',
              '-o', root/'native-runner'], root)
     irs, sizes, aliases, artifacts = {}, {}, {}, {}
-    for index, (choice, stages) in enumerate(MENU.items()):
-        progress(root, 'pipelines', f'Building pipeline {index+1} of {len(MENU)}', 22 + index*12)
+    def build(choice, stages, codegen):
         directory = root / choice
         directory.mkdir()
         current = initial
@@ -94,29 +96,43 @@ def analyze(root, request):
             current = output
         final = directory / 'program.bc'
         final.write_bytes(current.read_bytes())
-        command([tools/'clang', final, *CODEGEN, '-lm', '-o', directory/'program'], root)
+        command([tools/'clang', final, *codegen, '-lm', '-o', directory/'program'], root)
         ir = command([tools/'llvm-dis', final, '-o', '-'], root)
         (directory/'program.ll').write_text(ir)
         irs[choice] = ir
         sizes[choice] = (directory/'program').stat().st_size
-        artifact = {'elf_sha256': digest((directory/'program').read_bytes()),
-                    'bitcode_sha256': digest(final.read_bytes()), 'executable_bytes': sizes[choice],
-                    'ir_bytes': len(ir.encode()), 'passes': stages}
-        artifacts[choice] = artifact
-        aliases[choice] = next(c for c, a in artifacts.items() if a['elf_sha256'] == artifact['elf_sha256'])
-    progress(root, 'predict', 'Extracting features and freezing the model decision', 85)
-    decision = predict(irs, sizes, aliases, len(request['stdin'].encode()), request['iterations'])
+        artifacts[choice] = {'elf_sha256': digest((directory/'program').read_bytes()),
+                            'bitcode_sha256': digest(final.read_bytes()), 'executable_bytes': sizes[choice],
+                            'ir_bytes': len(ir.encode()), 'passes': stages, 'codegen':codegen}
+        aliases[choice] = next(c for c,a in artifacts.items() if a['elf_sha256']==artifacts[choice]['elf_sha256'])
+    for index,(choice,stages) in enumerate(MENU.items()):
+        progress(root,'pipelines',f'Building model candidate {index+1} of 4',20+index*10)
+        build(choice,stages,CODEGEN)
+    progress(root,'predict','Freezing the model decision before baseline comparison',65)
+    decision = predict(irs, sizes, dict(aliases), len(request['stdin'].encode()), request['iterations'])
+    prediction_frozen = now()
+    for index,choice in enumerate(('O1','O2')):
+        progress(root,'baselines',f'Building {choice} comparison baseline; prediction already frozen',75+index*10)
+        build(choice,[[f'-{choice}']],[f'-{choice}','-Xclang','-disable-llvm-passes'])
+    comparison_metrics = dict(decision['metrics'])
+    for choice in ('O1','O2'):
+        totals,indirect = summaries(parse_ir(irs[choice]))
+        comparison_metrics[choice] = {**dict(zip(METRICS,map(int,totals[0]))),
+                                      'indirect_reachability':bool(indirect)}
     result = {
         'schema': 1, 'kind': 'analysis', 'id': root.name, 'created_at': now(),
         'source_sha256': digest(source.read_bytes()), 'source_bytes': source.stat().st_size,
         'arguments': request['arguments'], 'stdin_bytes': len(request['stdin'].encode()),
         'iterations_descriptor': request['iterations'], 'decision': decision,
-        'prediction_frozen_at': now(), 'native_execution': False, 'artifacts': artifacts,
+        'prediction_frozen_at': prediction_frozen, 'native_execution': False, 'artifacts': artifacts,
+        'comparison_baselines_built_at': now(),
         'compiler': request['compiler'], 'toolchain_sha256': request['toolchain_sha256'],
         'host': {'system': platform.system(), 'machine': platform.machine(),
                  'cpu': platform.processor(), 'platform': platform.platform()},
         'measurement': None,
         'input': {k: request[k] for k in ('source', 'arguments', 'stdin', 'iterations')},
+        'comparison_options': {'O1':'O1','O2':'O2','O3':'O3','NeuroCompiler':decision['choice']},
+        'artifact_aliases':aliases, 'comparison_metrics':comparison_metrics,
         'reference_sha256': digest((root/'reference').read_bytes()),
         'runner_sha256': digest((root/'native-runner').read_bytes()),
         'runner_source_sha256': digest((ROOT/'src/presentation/native_runner.c').read_bytes()),
@@ -159,12 +175,12 @@ def execute(executable, request, work):
                     'stdout_bytes': len(stdout), 'stdout_preview': stdout.decode(errors='replace')[:2000]}
 
 
-def pair_summary(samples, control=False):
+def pair_summary(samples, control=False, family_size=1):
     clocks = {}
     for clock in ('cpu', 'wall'):
         ratios = np.array([math.log(s['baseline'][clock]/s['candidate'][clock]) for s in samples])
-        boot = np.random.default_rng(20261022).choice(ratios, size=(2000, len(ratios)), replace=True).mean(axis=1)
-        interval = np.exp(np.quantile(boot, [.025, .975])).tolist()
+        boot = np.random.default_rng(20261022).choice(ratios, size=(8000, len(ratios)), replace=True).mean(axis=1)
+        interval = np.exp(np.quantile(boot, [.025/family_size, 1-.025/family_size])).tolist()
         blocks = [float(np.exp(np.mean([r for r,s in zip(ratios,samples) if s['block'] == b]))) for b in range(BLOCKS)]
         order_differences = []
         for block in [None, *range(BLOCKS)]:
@@ -204,7 +220,7 @@ def compare(root, request):
         raise JobError('Timing helper changed after prediction; analyze again.')
     if any(original[k] != result['input'][k] for k in ('source','arguments','stdin','iterations')):
         raise JobError('Input changed after prediction; analyze again.')
-    executables = {c: analysis_root/c/'program' for c in MENU}
+    executables = {c: analysis_root/c/'program' for c in result['artifacts']}
     for c, path in executables.items():
         if digest(path.read_bytes()) != result['artifacts'][c]['elf_sha256']:
             raise JobError('Compiled artifact changed after prediction; analyze again.')
@@ -225,49 +241,70 @@ def compare(root, request):
     if not result['correctness']['passed']:
         result['measurement'] = {'status': 'blocked', 'reason': 'Output mismatch or nondeterministic program; no timings collected.'}
         return result
-    canonical = [c for c in MENU if result['decision']['aliases'][c] == c and c != 'O3']
-    cells = {}
-    for cell_index, choice in enumerate(['O3', *canonical]):
+    options = result['comparison_options']
+    aliases = result['artifact_aliases']
+    canonical = list(dict.fromkeys(['O3', *[aliases[c] for c in options.values()]]))
+    combinations = list(itertools.combinations(canonical,2))
+    family_size = 2*(len(canonical)+len(combinations))
+    controls, pairs, cells = {}, [], {}
+    tasks = [(c,c,True) for c in canonical]+[(a,b,False) for a,b in combinations]
+    # Fixed shuffled cell order, independently balanced starting order per block.
+    order = np.random.default_rng(20261025).permutation(len(tasks))
+    for cell_index,position in enumerate(order):
+        left,right,is_control = tasks[position]
         samples = []
-        progress(root, 'measure', f'Measuring {choice}: balanced paired runs', 25+int(65*cell_index/(1+len(canonical))))
+        progress(root,'measure',f'Four-way comparison: cell {cell_index+1} of {len(tasks)} ({left} / {right})',25+int(65*cell_index/len(tasks)))
         for index in range(PAIRS):
             first = PAIR_ORDER[index]
             pair = {}
-            for side in (['candidate', 'baseline'] if first else ['baseline', 'candidate']):
-                actual = choice if side == 'candidate' else 'O3'
-                invocation = execute(executables[actual], original, root)
+            for side in (['candidate','baseline'] if first else ['baseline','candidate']):
+                actual = right if side=='candidate' else left
+                invocation = execute(executables[actual],original,root)
                 if invocation['stdout_sha256'] != expected:
                     raise JobError('Output changed during measurement. Timings are invalid.')
-                pair[side] = {field: invocation[field] for field in ('cpu', 'wall', 'cpu_id')}
-            samples.append({'block': index//4, 'candidate_first': first, **pair})
-        cells[choice] = pair_summary(samples, control=choice == 'O3')
-    for choice in MENU:
-        if choice not in cells:
-            canonical_choice = result['decision']['aliases'][choice]
-            cells[choice] = {'alias_of': canonical_choice, **cells[canonical_choice]}
-    for choice, cell in cells.items():
-        qualified = cells['O3']['qualified'] and cell['qualified']
-        if choice == 'O3' or result['decision']['aliases'][choice] == 'O3':
+                pair[side] = {field:invocation[field] for field in ('cpu','wall','cpu_id')}
+            samples.append({'block':index//4,'candidate_first':first,**pair})
+        cell = pair_summary(samples,control=is_control,family_size=family_size)
+        if is_control:
+            controls[left] = cell
+        else:
+            pairs.append({'left':left,'right':right,'cell':cell})
+    cells['O3'] = controls['O3']
+    for pair in pairs:
+        if pair['left']=='O3':
+            cells[pair['right']] = pair['cell']
+    for artifact in options.values():
+        if artifact not in cells:
+            cells[artifact] = {'alias_of':aliases[artifact],**cells[aliases[artifact]]}
+    for choice,cell in cells.items():
+        canonical_choice = aliases[choice]
+        qualified = controls['O3']['qualified'] and controls[canonical_choice]['qualified'] and cell['qualified']
+        # Joint qualification includes the candidate's identical-code self-control.
+        cell['qualified'] = qualified
+        if canonical_choice=='O3':
             cell['verdict'] = 'same_binary' if qualified else 'inconclusive'
         elif not qualified:
             cell['verdict'] = 'inconclusive'
-        elif all(c['interval'][0] > 1.03 for c in cell['clocks'].values()):
+        elif all(c['interval'][0]>1.03 for c in cell['clocks'].values()):
             cell['verdict'] = 'faster_in_demo'
-        elif all(c['interval'][1] < 1/1.03 for c in cell['clocks'].values()):
+        elif all(c['interval'][1]<1/1.03 for c in cell['clocks'].values()):
             cell['verdict'] = 'slower_in_demo'
         else:
             cell['verdict'] = 'no_clear_difference'
     result['measurement'] = {
-        'protocol': 'live-native-process-v2',
+        'protocol': 'live-four-way-v3',
         'status': 'completed', 'cells': cells, 'self_control_passed': cells['O3']['qualified'],
+        'self_controls':controls, 'head_to_head':pairs, 'display_options':options,
+        'interval_family_size':family_size, 'bootstrap_replicates':8000,
         'pairs_per_distinct_cell': PAIRS, 'blocks': BLOCKS,
         'candidate_first_schedule': PAIR_ORDER,
         'timer': 'Native fork/exec/wait4 process wall and child CPU time, including executable startup. Python launch/setup is excluded. Not library API time.',
-        'quality_rule': 'Both clocks: >=10 ms median, <=10% duration CV, <=3% pooled/every-block starting-order difference. O3 null: 95% paired-bootstrap interval and every block within reciprocal 3%.',
-        'interval_scope': 'Exploratory paired bootstrap of 12 pairs; does not capture cross-machine or full systematic uncertainty.',
+        'quality_rule': 'Both clocks: >=10 ms median, <=10% duration CV, <=3% pooled/every-block starting-order difference. Every executable self-control: multiplicity-adjusted bootstrap interval and every block within reciprocal 3%.',
+        'interval_scope': 'Exploratory 8000-replicate bootstrap of 12 pairs, Bonferroni tail adjustment across all cells and both clocks. Does not capture full systematic or cross-machine uncertainty.',
         'scope': 'Presentation experiment only. Not the frozen research protocol, new training data, or proof of learned generalization. All samples retained.',
     }
     result['measurement']['summary'] = comparison_summary(result['decision'], cells)
+    result['measurement']['four_way'] = four_way_summary(options,aliases,controls,pairs)
     return result
 
 

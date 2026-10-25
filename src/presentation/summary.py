@@ -5,7 +5,7 @@ def decision_diagnostics(scores, aliases, choice):
     distinct = [c for c in scores if c != 'O3' and aliases[c] == c]
     if not distinct:
         code = 'identical_menu'
-        reason = 'All four pipelines produced the same executable. This menu offers no different code for NeuroCompiler to select.'
+        reason = 'All four model candidate pipelines produced the same executable. Their menu offers no different code for NeuroCompiler to select.'
     elif choice == 'O3':
         code = 'baseline_preferred'
         reason = 'Different executables exist, but the model does not predict enough benefit to switch from O3.'

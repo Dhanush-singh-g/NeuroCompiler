@@ -11,6 +11,10 @@ def session_scorecard(results, examples):
     groups = {name: {'inputs': 0, 'kept_o3': 0, 'changed_choice': 0,
                      'tested': 0, **dict.fromkeys(OUTCOMES, 0), 'unqualified_timings': 0}
               for name in ('training_example', 'bundled_demo', 'custom')}
+    ranking_keys = ('best_O1','best_O2','best_O3','best_NeuroCompiler','best_shared',
+                    'four_way_inconclusive','four_way_no_clear','four_way_identical')
+    for group in groups.values():
+        group.update(dict.fromkeys(ranking_keys,0))
     analyses, comparisons = {}, {}
     sources = set()
     for result in results:
@@ -34,6 +38,16 @@ def session_scorecard(results, examples):
         if measurement['status'] == 'blocked':
             group['blocked'] += 1
             continue
+        ranking = measurement.get('four_way')
+        if ranking:
+            if (ranking['status'] == 'reliable_winner' and ranking.get('controls_passed')
+                    and ranking.get('complete_pair_coverage') and ranking['winner_options']):
+                names = ranking['winner_options']
+                group['best_'+names[0] if len(names)==1 else 'best_shared'] += 1
+            else:
+                key = {'reliable_winner':'four_way_inconclusive','inconclusive':'four_way_inconclusive','no_clear_winner':'four_way_no_clear',
+                       'identical':'four_way_identical'}[ranking['status']]
+                group[key] += 1
         clocks = measurement['summary']['clocks']
         qualified = all(clocks[c]['qualified'] for c in ('cpu', 'wall'))
         statuses = {clocks[c]['status'] for c in ('cpu', 'wall')}

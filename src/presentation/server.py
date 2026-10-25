@@ -89,10 +89,34 @@ def markdown_report(result):
     lines += ['', 'Scores are model outputs, not confidence estimates or measured speedups.', '']
     measurement = result.get('measurement')
     if measurement and measurement['status'] == 'completed':
+        ranking = measurement.get('four_way')
+        if ranking:
+            lines += ['## O1 / O2 / O3 / NeuroCompiler', '',
+                      f"Four-way status: **{ranking['status']}**.",
+                      'Reliable demo preference: '+(' / '.join(ranking['winner_options']) or 'None')+'.','',
+                      '| Entry | Actual pipeline | CPU time (ms) | Wall time (ms) |',
+                      '| --- | --- | ---: | ---: |']
+            for label,entry in ranking['clocks']['cpu']['options'].items():
+                wall=ranking['clocks']['wall']['options'][label]
+                lines.append(f"| {label} | {entry['artifact']} | {entry['runtime_ms']:.3f} | {wall['runtime_ms']:.3f} |")
+            lines += ['', 'Times are pooled geometric means with equal observations per distinct executable. Identical entries share measurements. Inference/compilation overhead is excluded.',
+                      '', ranking['scope'], '', f"Interval family size: {measurement['interval_family_size']}; bootstrap replicates: {measurement['bootstrap_replicates']}.", '']
+            lines += ['### Executable self-controls', '', '| Executable | Both clocks qualified | CPU interval | Wall interval |', '| --- | --- | --- | --- |']
+            for artifact,cell in measurement['self_controls'].items():
+                intervals=[f"[{cell['clocks'][c]['interval'][0]:.4f}, {cell['clocks'][c]['interval'][1]:.4f}]" for c in ('cpu','wall')]
+                lines.append(f"| {artifact} | {cell['qualified']} | {intervals[0]} | {intervals[1]} |")
+            lines += ['', '### Direct head-to-head comparisons', '', '| Left / right executable | CPU left/right ratio [adjusted interval] | Wall left/right ratio [adjusted interval] | Qualified |', '| --- | --- | --- | --- |']
+            for pair in measurement['head_to_head']:
+                values=[]
+                for c in ('cpu','wall'):
+                    stat=pair['cell']['clocks'][c]
+                    values.append(f"{stat['speedup']:.4f} [{stat['interval'][0]:.4f}, {stat['interval'][1]:.4f}]")
+                lines.append(f"| {pair['left']} / {pair['right']} | {values[0]} | {values[1]} | {pair['cell']['qualified']} |")
+            lines.append('')
         lines += ['## Live comparison', '',
                   f"O3 self-control passed: {measurement['self_control_passed']}", '',
                   'The table retains raw paired ratios. The O3 row is an identical-code null control, not a learned gain/loss. For the unchanged O3 executable the comparison reference is 1 by definition.', '',
-                  '| Pipeline | CPU ratio [95% interval] | Wall ratio [95% interval] | Interpretation |',
+                  '| Pipeline | CPU ratio [bootstrap interval] | Wall ratio [bootstrap interval] | Interpretation |',
                   '| --- | --- | --- | --- |']
         for choice, cell in measurement['cells'].items():
             values = []
@@ -277,7 +301,8 @@ class Handler(BaseHTTPRequestHandler):
                                            'limitations','historical_cv','source_model_sha256')},
                                   'examples':json.loads((ROOT/'presentation/examples.json').read_text())})
         if path == '/api/health':
-            return self.send(200, {'status':'ready','compiler':self.app.config['compiler'],'approved_policy':'O3','live':True})
+            return self.send(200, {'status':'ready','compiler':self.app.config['compiler'],'approved_policy':'O3','live':True,
+                                   'comparison_entries':['O1','O2','O3','NeuroCompiler']})
         if path == '/api/jobs':
             with self.app.lock:
                 return self.send(200, {'jobs':[self.app.status(i) for i in reversed(self.app.jobs)]})
@@ -383,7 +408,7 @@ def main():
                 state = json.loads((root/'state.json').read_text())
                 if process.returncode or state['status'] != 'completed':
                     raise ValueError(state['message'])
-            print('Ready: LLVM10, C headers, four pipelines, 156 features and portable model prediction. No input executed.')
+            print('Ready: LLVM10, C headers, four model pipelines, O1/O2 baselines, 156 features and frozen prediction. No input executed.')
             return
         app = Application(config)
         server = ThreadingHTTPServer(('127.0.0.1', args.port), Handler)

@@ -1,4 +1,42 @@
-# Live application verification — 22 October 2026
+# Live application verification
+
+## O1 / O2 / O3 / NeuroCompiler — 25 October 2026
+
+The application now builds the original four model pipelines, freezes the learned
+decision, and then builds explicit O1/O2 comparison baselines. Display options
+are O1, O2, O3, and the model-selected artifact. Comparison-only baselines are
+never model inputs or new learned choices. Shared initial LLVM10 bitcode and
+matching baseline codegen levels are recorded; these are reproducible LLVM
+pipeline baselines, not a claim of equivalence to every Clang driver's defaults.
+
+`live-four-way-v3` measures a self-control for each distinct executable and all
+unordered direct pairs. Every cell retains 12 pairs/three blocks; cell order and
+balanced starting order are fixed-seed shuffled. Bootstrap replicates increase
+to 8000, with interval tails adjusted across all cells and both clocks. Existing
+duration/CV/order/control tolerances remain. Preference requires complete pair
+coverage, passed self-controls and direct lower bounds above 1.03× against every
+competitor on both clocks, plus a consistent observed ranking. Shared executable
+winners and all-identical entries are explicit; fastest observed is separate.
+
+**48 selected tests pass** across live application, four-way ranking, scorecard,
+dashboard and archive tests. Cases cover genuine O1/O2 artifacts, no O1/O2 model
+features, prediction frozen before baseline completion/execution, NC and O1
+ranking fixtures, close ties, failed controls, missing pairs, shared identities,
+CPU/wall tradeoffs, and avoiding an individual NC win for a shared O3 executable.
+Synthetic ranking fixtures are software tests, not native gain evidence.
+
+All seven positive programs in DEMO_PROGRAMS.md pass O0 plus all six built
+pipelines twice: **98 matching native output executions**. Five recent four-way
+analyses match the original frozen model's raw scores and choices to 1e-10.
+Desktop/mobile Playwright checks pass with zero browser errors/external requests,
+including four runtime cards, O1 IR inspection, updated Markdown/JSON exports,
+session counts, stdin/upload, stale-input invalidation and failure recovery.
+Screenshots are actual acceptance-run observations; timing remains inconclusive.
+
+No frozen research source, model coefficients, formal study data, or reserved
+workload changed. There was no model training or new generalization claim.
+
+The following sections describe earlier presentation versions.
 
 ## Large runtimes, preference, and session scorecard
 
@@ -89,7 +127,7 @@ documented in `PRESENTATION.md` and needs rehearsal on the presentation computer
 - **32 existing tests pass** across `tests.test_transform` and
   `tests.test_compact`, using the original research Python environment.
 - Portable-model scores/choices match the original frozen sklearn selector on
-  five checked live analyses, to1e-10 numerical tolerance.
+  five checked live analyses, to 1e-10 numerical tolerance.
 - Chromium/Playwright acceptance checks pass: desktop/mobile panels, code
   analysis, attribution, IR selection, trusted execution, matching output,
   CPU/wall display, Markdown/JSON downloads, refresh recovery, keyboard tab
