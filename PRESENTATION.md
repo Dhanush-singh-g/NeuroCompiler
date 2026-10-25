@@ -5,6 +5,19 @@ prediction → output checks → O1 / O2 / O3 / NeuroCompiler comparison** appli
 dashboard remains available through **Research evidence** in the navigation.
 The live app is separate from the frozen research experiments.
 
+## Clear standard vs learned runtime summary
+
+After analysis, the summary above the detail tabs shows **Standard LLVM -O3**
+and **NeuroCompiler** side by side. Each card identifies its pipeline, instruction
+count, and execution time. Before native execution, both times say **Not measured**.
+Click **Measure execution times**, confirm trusted code, and run the comparison.
+The same summary then shows measured milliseconds and the observed difference
+against -O3. It stays visible on every details tab, with a CPU/wall clock selector.
+Identical executables and inconclusive timing remain explicitly labelled.
+Model scores and action traces are in a collapsed details section. O1/O2 baselines,
+output checks, and the full measurement protocol remain under **Run & compare**.
+No reliability thresholds or learned weights were changed for this UI refinement.
+
 ## New SL / RL / hybrid modes (25 October 2026)
 
 The **Learning policy** dropdown now includes:

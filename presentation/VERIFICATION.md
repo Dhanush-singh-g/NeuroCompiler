@@ -1,5 +1,22 @@
 # Live application verification
 
+## Standard vs learned runtime summary — 25 October 2026
+
+The summary above all detail tabs presents standard LLVM -O3 and NeuroCompiler
+with large measured execution times, explicit method/pass labels, and static IR
+counts. Before execution it says Not measured. CPU/wall clocks update the summary
+and comparison table together. Technical model details are collapsed by default.
+
+The 54-test suite and updated legacy browser acceptance check pass. Additional
+real-browser checks for SL, RL, and hybrid match the displayed action sequence
+and counts to the downloaded analysis JSON. A hybrid native run verifies both
+CPU/wall summary times against exported four-way measurements, restored results
+after refresh, visibility across all tabs, mobile layout, and clearing old times
+when input changes. No page errors were observed. The actual diagnostic screenshot
+is [runtime-comparison.png](screenshots/runtime-comparison.png); it contains an
+inconclusive measurement, not evidence of a runtime improvement. Models, rewards,
+and timing reliability thresholds were unchanged.
+
 ## Trained sequential proxy modes — 25 October 2026
 
 The user accepted instruction count or execution time as an objective. This

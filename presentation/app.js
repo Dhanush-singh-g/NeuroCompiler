@@ -74,6 +74,7 @@ function restoreInput(result) {
 function markDirty() {
   dirty = true;
   analysis = latest = null;
+  $('runtime-overview').hidden = true;
   $('downloads').hidden = true;
   $('decision-empty').hidden = false;
   $('decision-content').hidden = true;
@@ -201,8 +202,41 @@ function renderSequentialDecision(result){
  $('ir-choice').innerHTML=Object.keys(result.artifacts).filter(c=>c!=='O3').map(c=>`<option value="${c}">${escape(pipeline(c))}</option>`).join('');$('ir-choice').value='LearnedPolicy';
 }
 
+function renderRuntimeOverview() {
+  const panel=$('runtime-overview');
+  if(!analysis || dirty){panel.hidden=true;return;}
+  panel.hidden=false;
+  const d=analysis.decision, seq=d.sequential;
+  const sequence=seq?seq.trace.map(t=>t.action).join(' → '):pipeline(d.choice);
+  const modes={sl:'Supervised learning',rl:'Reinforcement learning',hybrid:'Hybrid SL + RL'};
+  const method=seq?modes[seq.mode]:'Legacy supervised learning';
+  const result=latest?.analysis_id===analysis.id?latest:null;
+  const ranking=result?.measurement?.four_way;
+  const options=ranking?.clocks[clock]?.options;
+  const base=options?.O3, nc=options?.NeuroCompiler;
+  const measured=!!(base && nc);
+  const blocked=result?.measurement?.status==='blocked' || result?.correctness?.passed===false;
+  const same=measured && (nc.same_as.includes('O3') || nc.artifact===base.artifact);
+  const delta=measured?100*(nc.runtime_ms/base.runtime_ms-1):0;
+  const count=seq?seq.final_instructions:d.metrics[d.choice]?.instructions;
+  const status=blocked?'Runtime comparison blocked: output checks failed.':!measured?'Execution times have not been measured.':same?'Same executable as standard -O3; no learned runtime improvement.':`Observed NeuroCompiler runtime: ${Math.abs(delta).toFixed(1)}% ${delta<0?'less':'more'} time than standard -O3.`;
+  panel.innerHTML=`<div class="benchmark-heading"><div><span class="small-label">SAME PROGRAM · SAME INPUT</span><h3>Standard compiler vs NeuroCompiler</h3></div><label class="overview-clock">Execution-time clock<select id="overview-clock"><option value="cpu" ${clock==='cpu'?'selected':''}>CPU time</option><option value="wall" ${clock==='wall'?'selected':''}>Wall time</option></select></label></div><div class="runtime-showcase"><div class="runtime-card"><span class="small-label">STANDARD COMPILER / BASELINE</span><h4>LLVM -O3</h4><strong id="standard-runtime">${measured?base.runtime_ms.toFixed(2)+' <small>ms</small>':'<span class="not-measured">Not measured</span>'}</strong><span>Execution time · ${clock==='cpu'?'CPU':'wall clock'}</span><p>LLVM’s standard optimization pipeline.</p><span class="identity-note">${d.metrics.O3.instructions} LLVM IR instructions</span></div><div class="runtime-card neurocompiler-card"><span class="small-label">NEUROCOMPILER / LEARNED SELECTION</span><h4>${escape(method)}</h4><strong id="learned-runtime">${measured?nc.runtime_ms.toFixed(2)+' <small>ms</small>':'<span class="not-measured">Not measured</span>'}</strong><span>Execution time · ${clock==='cpu'?'CPU':'wall clock'}</span><p class="selected-sequence">Pass sequence: <strong>${escape(sequence)}</strong></p><span class="identity-note">${count??'Unknown'} LLVM IR instructions · ${seq?'trained for instruction count':'trained to estimate runtime'}</span></div></div><div class="overview-verdict"><strong>${escape(status)}</strong><p>${measured?'Observed times are measurements, not guaranteed gains. See Run & compare for output checks, timing reliability, and the O1/O2 baselines.':blocked?'Inspect Run & compare for the mismatched output. No timing winner is reported.':'Pass selection only compiles your program. Use Run & compare to check its output and measure both executables.'}</p>${measured?`<span class="badge amber">${ranking.status==='reliable_winner'?'FOUR-WAY RESULT AVAILABLE':ranking.status==='identical'?'IDENTICAL EXECUTABLES':ranking.status==='no_clear_winner'?'NO CLEAR FOUR-WAY WINNER':'TIMING INCONCLUSIVE'}</span>`:''}</div><p class="result-note">${seq?'Instruction count is the learning objective; runtime is measured separately. ':''}Times exclude model inference and compilation; native process startup is included. Lower time is better.</p><button id="overview-run" class="primary">${measured?'View full comparison →':'Measure execution times →'}</button>`;
+  $('overview-run').addEventListener('click',()=>{setTab('benchmark');$('panel-benchmark').scrollIntoView({behavior:'smooth',block:'start'});$('trusted').focus({preventScroll:true});});
+  $('overview-clock').addEventListener('change',event=>{
+    clock=event.target.value;
+    if(result?.measurement?.status==='completed'){renderBenchmark(result);drawChart();}
+    else renderRuntimeOverview();
+  });
+}
+function collapseDecisionDetails(){
+  const details=document.createElement('details');details.className='selection-details';
+  const summary=document.createElement('summary');summary.textContent='How NeuroCompiler selected these passes · model details';details.append(summary);
+  while($('decision-content').firstChild)details.append($('decision-content').firstChild);
+  $('decision-content').append(details);
+}
 function renderDecision(result) {
-  if(result.decision.sequential){renderSequentialDecision(result);return;}
+  renderRuntimeOverview();
+  if(result.decision.sequential){renderSequentialDecision(result);collapseDecisionDetails();return;}
   const d = result.decision, metrics = d.metrics.O3;
   const candidates = Object.keys(d.scores).filter(c => c !== 'O3');
   const best = candidates.reduce((a,b)=>d.scores[a]>d.scores[b]?a:b);
@@ -223,6 +257,7 @@ function renderDecision(result) {
   renderAttribution();
   $('ir-choice').innerHTML = Object.keys(result.artifacts).filter(c=>c!=='O3').map(c=>`<option value="${c}">${escape(pipeline(c))}</option>`).join('');
   $('ir-choice').value = d.choice === 'O3' ? best : d.choice;
+  collapseDecisionDetails();
 }
 function renderAttribution() {
   const choice = $('explanation-choice').value;
@@ -230,6 +265,7 @@ function renderAttribution() {
   $('attribution-content').innerHTML = `<div class="attribution-list">${explanation.top_contributions.map(item=>`<div class="contribution ${item.contribution<0?'negative':''}"><span>${escape(item.feature)}</span><strong>${signed(item.contribution)}</strong></div>`).join('')}</div><p>Raw log score ${signed(explanation.raw_score)}; intercept ${signed(explanation.intercept)}. Remaining features also contribute.${explanation.outside_training_scale_fields ? ` ${explanation.outside_training_scale_fields} fields exceed six training standard deviations; this is an extrapolation warning, not a calibrated uncertainty score.`:''}${analysis.decision.aliases[choice]==='O3' ? ' This binary matches O3, so the selection score is overridden to zero.':''}</p>`;
 }
 function renderBenchmark(result) {
+  renderRuntimeOverview();
   const m = result.measurement, correctness = result.correctness;
   if (m.status === 'blocked') {
     $('benchmark-content').innerHTML = `<div class="quality-banner"><strong>Comparison blocked.</strong> ${escape(m.reason)}</div><div class="table-scroll"><table><thead><tr><th>PIPELINE</th><th>MATCHES O0 OUTPUT</th><th>STDOUT PREVIEW</th></tr></thead><tbody>${Object.entries(correctness.checks).map(([c,v])=>`<tr><td>${escape(pipeline(c))}</td><td>${v.passed?'Passed':'Mismatch'}</td><td><code>${escape(v.stdout_preview||'(empty)')}</code></td></tr>`).join('')}</tbody></table></div><p class="result-note">${escape(correctness.scope)}</p>`;
@@ -246,6 +282,7 @@ function renderBenchmark(result) {
   renderTimingTable();
 }
 function renderTimingTable() {
+  renderRuntimeOverview();
   renderOutcome();
   if(latest.measurement.four_way){renderFourWayTable();return;}
   $('timing-table').innerHTML = Object.entries(latest.measurement.cells).map(([choice,cell])=>{
@@ -273,7 +310,7 @@ function fourWayWinners(){const r=latest.measurement.four_way;return r.status===
 function renderFourWayOutcome(){
   const ranking=latest.measurement.four_way, stats=ranking.clocks[clock], winner=fourWayWinners();
   const title=ranking.status==='identical'?'All four entries are the same executable':ranking.status==='reliable_winner'?(winner.length===1?`Prefer ${winner[0]} for this input`:`Shared preference: ${winner.join(' / ')} (same executable)`):ranking.status==='no_clear_winner'?'No clear winner':'No reliable preference yet';
-  $('nc-summary').innerHTML=`<div class="benchmark-heading"><h3>O1 vs O2 vs O3 vs NeuroCompiler</h3><span class="badge ${winner.length?'green':'amber'}">${winner.length?'HEAD-TO-HEAD DEMO RESULT':'OBSERVED TIMES / CHECK QUALITY'}</span></div><div class="preference-banner ${winner.length?'has-preference':''}"><span class="small-label">FOUR-WAY DEMO PREFERENCE / BOTH CLOCKS</span><strong id="preferred-option">${title}</strong><span>${ranking.status==='reliable_winner'?'The winning executable passed self-controls and direct adjusted-interval comparisons against every distinct competitor on both clocks.':'Observed numbers alone do not establish a winner. Identical entries share one executable and measurement.'}</span></div><div class="runtime-showcase four-way">${Object.entries(stats.options).map(([label,option])=>`<div class="runtime-card ${winner.includes(label)?'is-preferred':''}"><span class="small-label">${label==='NeuroCompiler'?'NEUROCOMPILER CHOICE':label+' BASELINE'}</span><strong id="${label==='NeuroCompiler'?'nc':label.toLowerCase()}-runtime">${option.runtime_ms.toFixed(2)} <small>ms</small></strong><span>${label==='NeuroCompiler'?escape(pipeline(option.artifact)):label} · ${clock.toUpperCase()}</span>${option.same_as.length?`<span class="identity-note">Same executable as ${escape(option.same_as.join(' / '))}</span>`:''}</div>`).join('')}</div><p class="result-note">Geometric-mean native executable times, with equal observations per distinct executable. Model inference and compilation are excluded. Identical entries reuse measurements. O1/O2 are comparison baselines; the current model selects from its original four pipelines.</p><div class="feature-strip"><div><strong>${escape(stats.fastest_observed_options.join(' / '))}</strong><span>Fastest observed on ${clock.toUpperCase()}; ${winner.length?'see the confirmed demo preference above':'not a reliable winner'}</span></div><div><strong>${stats.observed_nc_gap_percent.toFixed(1)}%</strong><span>Observed NeuroCompiler time gap to fastest point estimate; ${winner.length?'input-specific demo result':'unreliable until quality checks qualify'}</span></div></div><details class="input-details"><summary>How the four-way result is checked</summary><p class="muted">${escape(ranking.scope)}</p><p class="muted">${ranking.distinct_executables} distinct executable(s), ${ranking.head_to_head_cells} direct comparison cell(s). All executable self-controls passed: ${ranking.controls_passed}. All direct comparisons qualified: ${ranking.all_pairs_qualified}. A shared O3/NeuroCompiler winner is not a learned gain over O3.</p></details>`;
+  $('nc-summary').innerHTML=`<div class="benchmark-heading"><h3>O1 vs O2 vs O3 vs NeuroCompiler</h3><span class="badge ${winner.length?'green':'amber'}">${winner.length?'HEAD-TO-HEAD DEMO RESULT':'OBSERVED TIMES / CHECK QUALITY'}</span></div><div class="preference-banner ${winner.length?'has-preference':''}"><span class="small-label">FOUR-WAY DEMO PREFERENCE / BOTH CLOCKS</span><strong id="preferred-option">${title}</strong><span>${ranking.status==='reliable_winner'?'The winning executable passed self-controls and direct adjusted-interval comparisons against every distinct competitor on both clocks.':'Observed numbers alone do not establish a winner. Identical entries share one executable and measurement.'}</span></div><div class="runtime-showcase four-way">${Object.entries(stats.options).map(([label,option])=>`<div class="runtime-card ${winner.includes(label)?'is-preferred':''}"><span class="small-label">${label==='NeuroCompiler'?'NEUROCOMPILER CHOICE':label+' BASELINE'}</span><strong id="${label==='NeuroCompiler'?'nc':label.toLowerCase()}-runtime">${option.runtime_ms.toFixed(2)} <small>ms</small></strong><span>${label==='NeuroCompiler'?escape(pipeline(option.artifact)):label} · ${clock.toUpperCase()}</span>${option.same_as.length?`<span class="identity-note">Same executable as ${escape(option.same_as.join(' / '))}</span>`:''}</div>`).join('')}</div><p class="result-note">Geometric-mean native executable times, with equal observations per distinct executable. Model inference and compilation are excluded. Identical entries reuse measurements. O1/O2 are comparison baselines; NeuroCompiler uses the learning policy selected above.</p><div class="feature-strip"><div><strong>${escape(stats.fastest_observed_options.join(' / '))}</strong><span>Fastest observed on ${clock.toUpperCase()}; ${winner.length?'see the confirmed demo preference above':'not a reliable winner'}</span></div><div><strong>${stats.observed_nc_gap_percent.toFixed(1)}%</strong><span>Observed NeuroCompiler time gap to fastest point estimate; ${winner.length?'input-specific demo result':'unreliable until quality checks qualify'}</span></div></div><details class="input-details"><summary>How the four-way result is checked</summary><p class="muted">${escape(ranking.scope)}</p><p class="muted">${ranking.distinct_executables} distinct executable(s), ${ranking.head_to_head_cells} direct comparison cell(s). All executable self-controls passed: ${ranking.controls_passed}. All direct comparisons qualified: ${ranking.all_pairs_qualified}. A shared O3/NeuroCompiler winner is not a learned gain over O3.</p></details>`;
   const caption=$('timing-chart')?.parentElement.nextElementSibling;
   if(caption)caption.textContent='OBSERVED GEOMETRIC-MEAN RUNTIME · LOWER IS FASTER · PREFERENCE REQUIRES HEAD-TO-HEAD CHECKS';
 }

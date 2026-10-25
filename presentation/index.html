@@ -21,7 +21,7 @@
     <div class="hero-aside"><span class="small-label">INSIDE THE SELECTOR</span><div class="hero-stats"><div><strong id="feature-width">156</strong><span>policy input fields</span></div><div><strong>04</strong><span>comparison entries</span></div></div><p><span class="badge amber">EXPERIMENTAL</span> Predictions are exploratory.<br>The approved policy remains <code>-O3</code>.</p></div>
   </section>
   <section class="workspace" id="workspace" aria-label="Live compiler workspace">
-    <div class="section-line"><h2><span>01</span> Program workspace</h2><span class="small-label">C SOURCE → STATIC FEATURES → SUPERVISED PREDICTION</span></div>
+    <div class="section-line"><h2><span>01</span> Program workspace</h2><span class="small-label">C SOURCE → LEARNED PASS SELECTION → MEASURED COMPARISON</span></div>
     <div class="work-grid">
       <section class="editor-card" aria-label="Program input">
         <div class="card-toolbar"><div class="file-label"><span class="file-icon">C</span><span id="filename">main.c</span></div><div class="editor-actions"><label class="upload" for="upload">↑ Open .c file</label><input type="file" id="upload" accept=".c,text/x-c" hidden><button id="reset" class="text-button">Reset</button></div></div>
@@ -45,7 +45,8 @@
   </section>
   <section class="results-section" aria-labelledby="results-heading">
     <div class="section-line"><h2 id="results-heading"><span>02</span> Decision & evidence</h2><div class="downloads" id="downloads" hidden><a id="download-md" download>↓ Report .md</a><a id="download-json" download>↓ Raw data .json</a></div></div>
-    <div class="result-tabs" role="tablist" aria-label="Experiment details"><button id="tab-decision" data-tab="decision" role="tab" aria-selected="true" aria-controls="panel-decision">Model decision</button><button id="tab-benchmark" data-tab="benchmark" role="tab" aria-selected="false" aria-controls="panel-benchmark">Live comparison</button><button id="tab-ir" data-tab="ir" role="tab" aria-selected="false" aria-controls="panel-ir">LLVM IR</button><button id="tab-scope" data-tab="scope" role="tab" aria-selected="false" aria-controls="panel-scope">Model & scope</button></div>
+    <div id="runtime-overview" class="runtime-overview" hidden aria-live="polite"></div>
+    <div class="result-tabs" role="tablist" aria-label="Experiment details"><button id="tab-decision" data-tab="decision" role="tab" aria-selected="true" aria-controls="panel-decision">Pass selection & details</button><button id="tab-benchmark" data-tab="benchmark" role="tab" aria-selected="false" aria-controls="panel-benchmark">Run & compare</button><button id="tab-ir" data-tab="ir" role="tab" aria-selected="false" aria-controls="panel-ir">LLVM IR</button><button id="tab-scope" data-tab="scope" role="tab" aria-selected="false" aria-controls="panel-scope">Model & scope</button></div>
     <div id="panel-decision" class="tab-panel" role="tabpanel" aria-labelledby="tab-decision"><div class="empty-state" id="decision-empty"><span class="empty-mark">⌁</span><h3>A decision starts with your code.</h3><p>Choose an example or paste a program, then select Analyze & predict.<br>Your features, pipeline scores, and model explanation will appear here.</p></div><div id="decision-content" hidden></div></div>
     <div id="panel-benchmark" class="tab-panel" role="tabpanel" aria-labelledby="tab-benchmark" hidden>
       <div class="comparison-intro"><div><h3>A prediction is a hypothesis. Measure it.</h3><p>Check outputs against O0, then compare O1, O2, O3, and the frozen NeuroCompiler choice head to head. CPU and wall clocks stay separate.</p></div><span class="badge amber">LOCAL EXECUTION</span></div>

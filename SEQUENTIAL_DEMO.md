@@ -14,13 +14,18 @@ Open your normal Windows browser at `http://localhost:8000` and refresh.
 1. Choose **Prime sieve / training example**.
 2. Set arguments `1600`, stdin blank, iterations descriptor `1600`.
 3. Under **Learning policy**, select **Hybrid SL + RL · instruction-count objective**.
-4. Click **Analyze & predict**. Inspect the selected actions, per-step IR counts,
-   supervised immediate estimates, RL Q estimates and the SL-shortlisted actions.
-5. Compare initial, selected and O3 IR counts, then the four-way static count
-   table. This is LLVM instruction count, not machine instructions or speed.
-6. Open Live comparison, confirm trusted code, and run. Expected stdout is
+4. Click **Analyze & predict**. The main summary compares **Standard LLVM -O3**
+   against **NeuroCompiler**, showing its learning method and selected pass sequence.
+   Execution times say **Not measured** until you run the program.
+5. Expand **How NeuroCompiler selected these passes** for per-step instruction
+   counts, SL estimates, Q estimates, and shortlisted actions. These static counts
+   are not machine instructions or speed.
+6. Click **Measure execution times**, confirm trusted code, and run the comparison. Expected stdout is
    `25765905600`. Runtime preference still requires native controls; smaller IR
-   does not automatically win the runtime comparison.
+   does not automatically win the runtime comparison. The main summary now shows
+   both execution times in milliseconds and the observed difference vs -O3.
+   Switch CPU/wall clocks with the labelled selector; inference and compilation
+   are excluded. O1/O2 and reliability details remain under **Run & compare**.
 7. Repeat with **SL · instruction-count objective** and **RL · instruction-count
    objective**. The old runtime-estimate model remains under **Legacy SL**.
 
