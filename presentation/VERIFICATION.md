@@ -1,5 +1,30 @@
 # Live application verification
 
+## Expanded family-disjoint count study — 25 October 2026
+
+Forty authored synthetic training programs from 24 families produce 3,832
+transitions. Every probed training transform passes two native inputs against
+agreeing GCC/Clang O0 references. A single model/split/declaration is frozen
+before compiling twelve reserved programs from six other algorithm families.
+All 240 held-out candidate-output checks pass. Raw SL/RL/hybrid policies each
+reduce counts on eight and increase counts on four. The explicit static
+checkpoint/O3 guard reduces counts on eight and selects O3 on four. Fixed-pass
+controls remain competitive; no RL-specific, runtime or real-world advantage is
+claimed. Full numbers and derived guarded-baseline controls are in
+[UNSEEN_EVALUATION.md](../UNSEEN_EVALUATION.md).
+
+**58 tests pass**, including dataset/model hash binding, family separation,
+checkpoint rollback, O3 tie preference and native correctness in all modes.
+The legacy browser regression passes. Separate browser checks confirm all six
+new demos match the frozen raw/guarded counts and model SHA, including real O3
+binary identity on both fallback families. Current modes, native CRC output,
+CPU/wall summary values, guard provenance in Markdown, reload and mobile layout
+are checked. A long-hash overflow in the new scope panel was fixed during browser
+verification. The results are visible under Model & scope; the screenshot
+[unseen-count-evaluation.png](screenshots/unseen-count-evaluation.png) records
+the actual baseline table. Historical verification entries below refer to the
+prior artifacts; original sequential files are retained in sequential_v1.
+
 ## Standard vs learned runtime summary — 25 October 2026
 
 The summary above all detail tabs presents standard LLVM -O3 and NeuroCompiler

@@ -115,16 +115,18 @@ def analyze(root, request):
     mode=request.get('policy_mode','legacy')
     if mode!='legacy':
         progress(root,'predict',f'Applying trained {mode} instruction-count policy',65)
-        sequential,final_bc=rollout(tools,initial,root/'sequential_episode',mode,request['toolchain_sha256'])
+        sequential,final_bc=rollout(tools,initial,root/'sequential_episode',mode,request['toolchain_sha256'],
+            baseline={'instructions':decision['metrics']['O3']['instructions'],'path':root/'O3/program.bc','step':0})
         build('LearnedPolicy',[],CODEGEN,input_bc=final_bc)
-        artifacts['LearnedPolicy']['passes']=[ACTIONS[t['action']] for t in sequential['trace'] if t['action']!='STOP']
+        artifacts['LearnedPolicy']['passes']=(MENU['O3'] if sequential['selection']['applied']=='O3' else
+            [ACTIONS[action] for action in sequential['selected_actions']])
         counts,_indirect=summaries(parse_ir(irs['LearnedPolicy']))
         decision['metrics']['LearnedPolicy']=dict(zip(METRICS,map(int,counts[0])))
         decision.update(choice='LearnedPolicy',policy=mode+'_instruction_count',mode=mode,sequential=sequential,
                         model_sha256=sequential['model_sha256'],model_source_sha256=sequential['model_sha256'],
                         scores={},explanations={},vectors={},feature_count=len(SEQUENTIAL_FEATURE_NAMES),aliases=dict(aliases),
-                        reason='A trained '+mode+' policy chose this pass sequence for instruction-count reduction before native execution.',
-                        diagnostics={'recommendation_notes':['Instruction-count objective, not runtime-trained. Small synthetic training corpus; unseen-program benefit is unproven.']})
+                        reason='A trained '+mode+' policy proposed passes; a static checkpoint/O3 guard selected the emitted artifact before native execution.',
+                        diagnostics={'recommendation_notes':['Instruction-count objective, not runtime-trained. Static checkpoint/O3 guard prevents count regressions, not runtime regressions. Synthetic evaluation is not real-world qualification.']})
     prediction_frozen = now()
     for index,choice in enumerate(('O1','O2')):
         progress(root,'baselines',f'Building {choice} comparison baseline; prediction already frozen',75+index*10)

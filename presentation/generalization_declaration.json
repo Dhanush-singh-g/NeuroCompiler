@@ -1,0 +1,130 @@
+{
+  "schema": 2,
+  "objective": "instruction_count",
+  "horizon": 4,
+  "episodes": 3,
+  "seed": 20261026,
+  "reward": "log((before+1)/(after+1)) - 0.001 per non-STOP action; STOP reward 0",
+  "actions": {
+    "STOP": [],
+    "mem2reg": [
+      "-mem2reg"
+    ],
+    "instcombine": [
+      "-instcombine"
+    ],
+    "simplifycfg": [
+      "-simplifycfg"
+    ],
+    "gvn": [
+      "-gvn"
+    ],
+    "licm": [
+      "-loop-simplify",
+      "-lcssa",
+      "-licm"
+    ],
+    "loop_unroll": [
+      "-loop-simplify",
+      "-loop-unroll"
+    ],
+    "vectorize": [
+      "-loop-simplify",
+      "-loop-vectorize"
+    ]
+  },
+  "feature_names": [
+    "log_module_instructions",
+    "log_module_blocks",
+    "log_module_edges",
+    "log_module_cyclic_blocks",
+    "log_module_cyclic_instructions",
+    "log_module_cyclic_regions",
+    "log_module_load",
+    "log_module_store",
+    "log_module_call",
+    "log_module_indirect_call",
+    "log_module_phi",
+    "log_module_branch",
+    "log_module_compare",
+    "log_module_integer",
+    "log_module_floating",
+    "log_module_divide",
+    "log_module_shift",
+    "log_module_gep",
+    "log_module_select",
+    "log_module_cast",
+    "log_module_vector",
+    "count_STOP",
+    "count_mem2reg",
+    "count_instcombine",
+    "count_simplifycfg",
+    "count_gvn",
+    "count_licm",
+    "count_loop_unroll",
+    "count_vectorize",
+    "remaining_steps"
+  ],
+  "toolchain": {
+    "clang": "d5ba08bb0056c28d93860f6651a00f10afd8b4fa2121c66cf6fba1fa89a93083",
+    "opt": "6f9aa489196ca2d5ca48a42fca014875369d3314265932f13fe6bf9c6f0c2bd2",
+    "llvm-dis": "766484cc3ee813694ef799dd63015838d76220f0ac77d97217123e21b3dd0353"
+  },
+  "split_sha256": "d7e6cdac10d67e85f0c47613b6ab607c23593887853bb23d0cac71e233f5e921",
+  "correctness_inputs": [
+    "1",
+    "3"
+  ],
+  "native_oracles": "GCC -O0 and Clang -O0 must agree; every probed transform matches both fixed inputs.",
+  "exploration": [
+    "seeded uniform non-STOP walk",
+    "greedy immediate-reward walk",
+    "fixed mem2reg/instcombine/simplifycfg/gvn walk"
+  ],
+  "learning": {
+    "gamma": 0.9,
+    "iterations": 20,
+    "ridge": 1.0,
+    "hybrid_top_k": 3
+  },
+  "evaluation_plan": {
+    "scope": "12 authored synthetic programs, six unseen algorithm families; two variants are not independent families.",
+    "modes": [
+      "sl",
+      "rl",
+      "hybrid"
+    ],
+    "baselines": [
+      "O3",
+      "Oz",
+      "fixed",
+      "random"
+    ],
+    "fixed": [
+      "mem2reg",
+      "instcombine",
+      "simplifycfg",
+      "gvn"
+    ],
+    "random_seed": 20261027,
+    "guard": "Minimum instruction count among raw policy checkpoints and O3; prefer O3 on a tie.",
+    "runtime": "Not evaluated by this count study. App runtime comparison is separate.",
+    "no_selection": "One frozen model; no test-based tuning or model selection."
+  },
+  "implementation_sha256": {
+    "scripts/train_generalization.py": "26306806b57f6dc92f8c296c4c50cec2a5c7edfabe3f06acd9852e0cedd46320",
+    "scripts/evaluate_generalization.py": "13e1b613d07eca0538a592dbf347a5ac8103a8ae5819434bcf1549bdb4741419",
+    "src/rl/corpus.py": "5aeda7ae44fe6f9d344711354d63a95c2a868dfec7ddb64afe009d4f43d16c1c",
+    "src/rl/offline.py": "22490d7665f33190b6f67b3a44a736e0a42a98603eeb6ac59413b96486c41e0c",
+    "src/rl/llvm_environment.py": "6a42e953e4ae89ac4b734fc161106cebb2aa6704b3ddca340781bcc8ca282fa6",
+    "src/hybrid/sequential.py": "78fa68428f76d227e8ae23f229e1e996e0b23f1b02720c7746ae04e14e2afdf0"
+  },
+  "gcc_version": "gcc (Debian 14.2.0-19) 14.2.0",
+  "frontend": [
+    "-O1",
+    "-Xclang",
+    "-disable-llvm-passes",
+    "-emit-llvm"
+  ],
+  "scope": "Synthetic count-proxy expansion; old research reservations and runtime labels are untouched."
+}

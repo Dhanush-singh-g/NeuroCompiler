@@ -43,5 +43,59 @@
     "iterations": 0,
     "stdin": "21 34\n",
     "source": "#include <stdio.h>\n\nint main(void) {\n    long a, b;\n    if (scanf(\"%ld %ld\", &a, &b) != 2) return 1;\n    printf(\"%ld\\n\", a + b);\n    return 0;\n}\n"
+  },
+  {
+    "id": "evaluated_crc32",
+    "name": "Crc32 / evaluated unseen-family demo",
+    "description": "Synthetic family excluded from expanded SL/RL training. Already evaluated after the model was frozen; repeating this is a demonstration, not a fresh holdout test. Instruction-count reduction need not improve runtime.",
+    "arguments": "500",
+    "iterations": 500,
+    "stdin": "",
+    "source": "#define N 128\n#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\nstatic uint32_t random_word(uint32_t *s) { *s=*s*1664525u+1013904223u; return *s; }\nint main(int argc, char **argv) {\n  unsigned iterations=argc>1?(unsigned)strtoul(argv[1],0,10):1;\n  uint32_t state=1234567u; uint64_t checksum=0;\nfor(unsigned k=0;k<iterations;k++){uint32_t crc=~k;for(unsigned i=0;i<N;i++){crc^=random_word(&state)&255u;for(unsigned b=0;b<8;b++)crc=(crc>>1)^((0u-(crc&1u))&0xedb88320u);}checksum+=~crc;}\n printf(\"%llu\\n\",(unsigned long long)checksum); return 0; }\n"
+  },
+  {
+    "id": "evaluated_edit_distance",
+    "name": "Edit Distance / evaluated unseen-family demo",
+    "description": "Synthetic family excluded from expanded SL/RL training. Already evaluated after the model was frozen; repeating this is a demonstration, not a fresh holdout test. Instruction-count reduction need not improve runtime.",
+    "arguments": "500",
+    "iterations": 500,
+    "stdin": "",
+    "source": "#define N 128\n#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\nstatic uint32_t random_word(uint32_t *s) { *s=*s*1664525u+1013904223u; return *s; }\nint main(int argc, char **argv) {\n  unsigned iterations=argc>1?(unsigned)strtoul(argv[1],0,10):1;\n  uint32_t state=1234567u; uint64_t checksum=0;\nuint32_t a[48],b[48],prev[49],cur[49];for(unsigned i=0;i<48;i++){a[i]=random_word(&state)&7u;b[i]=random_word(&state)&7u;}for(unsigned k=0;k<iterations;k++){for(unsigned j=0;j<=48;j++)prev[j]=j;for(unsigned i=1;i<=48;i++){cur[0]=i;for(unsigned j=1;j<=48;j++){uint32_t x=prev[j]+1,y=cur[j-1]+1,z=prev[j-1]+(a[i-1]!=b[j-1]);cur[j]=x<y?(x<z?x:z):(y<z?y:z);}for(unsigned j=0;j<=48;j++)prev[j]=cur[j];}checksum+=prev[48];a[k%48]^=1u;}\n printf(\"%llu\\n\",(unsigned long long)checksum); return 0; }\n"
+  },
+  {
+    "id": "evaluated_heapsort",
+    "name": "Heapsort / evaluated unseen-family demo",
+    "description": "Synthetic family excluded from expanded SL/RL training. Already evaluated after the model was frozen; repeating this is a demonstration, not a fresh holdout test. Instruction-count reduction need not improve runtime.",
+    "arguments": "500",
+    "iterations": 500,
+    "stdin": "",
+    "source": "#define N 128\n#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\nstatic uint32_t random_word(uint32_t *s) { *s=*s*1664525u+1013904223u; return *s; }\nint main(int argc, char **argv) {\n  unsigned iterations=argc>1?(unsigned)strtoul(argv[1],0,10):1;\n  uint32_t state=1234567u; uint64_t checksum=0;\nuint32_t a[N];for(unsigned k=0;k<iterations;k++){for(unsigned i=0;i<N;i++)a[i]=random_word(&state);for(unsigned start=N/2;start>0;){unsigned root=--start;uint32_t v=a[root];while(root*2+1<N){unsigned child=root*2+1;if(child+1<N&&a[child]<a[child+1])child++;if(v>=a[child])break;a[root]=a[child];root=child;}a[root]=v;}for(unsigned end=N-1;end>0;end--){uint32_t v=a[end];a[end]=a[0];unsigned root=0;while(root*2+1<end){unsigned child=root*2+1;if(child+1<end&&a[child]<a[child+1])child++;if(v>=a[child])break;a[root]=a[child];root=child;}a[root]=v;}for(unsigned i=0;i<N;i++)checksum+=(uint64_t)a[i]*(i+1u);}\n printf(\"%llu\\n\",(unsigned long long)checksum); return 0; }\n"
+  },
+  {
+    "id": "evaluated_floyd_warshall",
+    "name": "Floyd Warshall / evaluated unseen-family demo",
+    "description": "Synthetic family excluded from expanded SL/RL training. Already evaluated after the model was frozen; repeating this is a demonstration, not a fresh holdout test. Instruction-count reduction need not improve runtime.",
+    "arguments": "500",
+    "iterations": 500,
+    "stdin": "",
+    "source": "#define N 128\n#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\nstatic uint32_t random_word(uint32_t *s) { *s=*s*1664525u+1013904223u; return *s; }\nint main(int argc, char **argv) {\n  unsigned iterations=argc>1?(unsigned)strtoul(argv[1],0,10):1;\n  uint32_t state=1234567u; uint64_t checksum=0;\nuint32_t d[24][24];for(unsigned k=0;k<iterations;k++){for(unsigned y=0;y<24;y++)for(unsigned x=0;x<24;x++)d[y][x]=x==y?0:1u+(random_word(&state)%1000u);for(unsigned m=0;m<24;m++)for(unsigned y=0;y<24;y++)for(unsigned x=0;x<24;x++){uint32_t v=d[y][m]+d[m][x];if(v<d[y][x])d[y][x]=v;}for(unsigned y=0;y<24;y++)for(unsigned x=0;x<24;x++)checksum+=d[y][x];}\n printf(\"%llu\\n\",(unsigned long long)checksum); return 0; }\n"
+  },
+  {
+    "id": "evaluated_integer_sqrt",
+    "name": "Integer Sqrt / evaluated unseen-family demo",
+    "description": "Synthetic family excluded from expanded SL/RL training. Already evaluated after the model was frozen; repeating this is a demonstration, not a fresh holdout test. Instruction-count reduction need not improve runtime.",
+    "arguments": "500",
+    "iterations": 500,
+    "stdin": "",
+    "source": "#define N 128\n#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\nstatic uint32_t random_word(uint32_t *s) { *s=*s*1664525u+1013904223u; return *s; }\nint main(int argc, char **argv) {\n  unsigned iterations=argc>1?(unsigned)strtoul(argv[1],0,10):1;\n  uint32_t state=1234567u; uint64_t checksum=0;\nfor(unsigned k=0;k<iterations*100u;k++){uint32_t x=random_word(&state),r=0,bit=1u<<30;while(bit>x)bit>>=2;while(bit){if(x>=r+bit){x-=r+bit;r=(r>>1)+bit;}else r>>=1;bit>>=2;}checksum+=r;}\n printf(\"%llu\\n\",(unsigned long long)checksum); return 0; }\n"
+  },
+  {
+    "id": "evaluated_rational_bezier",
+    "name": "Rational Bezier / evaluated unseen-family demo",
+    "description": "Synthetic family excluded from expanded SL/RL training. Already evaluated after the model was frozen; repeating this is a demonstration, not a fresh holdout test. Instruction-count reduction need not improve runtime.",
+    "arguments": "500",
+    "iterations": 500,
+    "stdin": "",
+    "source": "#define N 128\n#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\nstatic uint32_t random_word(uint32_t *s) { *s=*s*1664525u+1013904223u; return *s; }\nint main(int argc, char **argv) {\n  unsigned iterations=argc>1?(unsigned)strtoul(argv[1],0,10):1;\n  uint32_t state=1234567u; uint64_t checksum=0;\nuint32_t p[4];for(unsigned j=0;j<4;j++)p[j]=random_word(&state)&1023u;for(unsigned k=0;k<iterations;k++)for(unsigned t=0;t<64;t++){uint64_t u=64u-t;uint64_t x=u*u*u*p[0]+3u*u*t*p[1]+3u*u*t*t*p[2]+(uint64_t)t*t*t*p[3];checksum+=x>>18;} \n printf(\"%llu\\n\",(unsigned long long)checksum); return 0; }\n"
   }
 ]

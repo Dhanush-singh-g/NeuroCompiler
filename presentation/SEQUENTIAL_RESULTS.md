@@ -1,3 +1,8 @@
+> **Historical eight-program prototype.** The default artifact has been replaced
+> by the expanded model. These results apply to the preserved files in
+> `presentation/sequential_v1`, not the current default model. See
+> [the expanded unseen-family evaluation](../UNSEEN_EVALUATION.md).
+
 # SL / RL / hybrid prototype results
 
 Objective: LLVM IR instruction count. These are five familiar presentation inputs, not an independent held-out evaluation. All 90 O0/O3/selected output checks passed; runtime gains were not assessed.

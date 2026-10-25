@@ -1,3 +1,9 @@
+> **Expanded SL/RL demo:** 40 training programs, 3,832 native-checked
+> transitions, a frozen 12-program unseen-family count evaluation, and an
+> explicit static checkpoint/O3 guard are available on this presentation
+> branch. See [results and limitations](UNSEEN_EVALUATION.md). Count reduction
+> is not a runtime speedup, and an RL-specific advantage remains unproven.
+
 # NeuroCompiler
 
 **Live presentation branch:** [PRESENTATION.md](PRESENTATION.md) explains the

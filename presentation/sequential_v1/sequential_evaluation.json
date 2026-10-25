@@ -1,0 +1,250 @@
+{
+  "scope": "Five familiar presentation examples, not held-out scientific evaluation. Native output checks only; no timing or model selection.",
+  "native_checks": 90,
+  "rows": [
+    {
+      "example": "sieve",
+      "mode": "sl",
+      "initial": 168,
+      "selected": 63,
+      "O3": 101,
+      "actions": [
+        "mem2reg",
+        "simplifycfg",
+        "gvn",
+        "instcombine"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "sieve",
+      "mode": "rl",
+      "initial": 168,
+      "selected": 65,
+      "O3": 101,
+      "actions": [
+        "mem2reg",
+        "simplifycfg",
+        "simplifycfg",
+        "STOP"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "sieve",
+      "mode": "hybrid",
+      "initial": 168,
+      "selected": 65,
+      "O3": 101,
+      "actions": [
+        "mem2reg",
+        "simplifycfg",
+        "simplifycfg",
+        "STOP"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "histogram",
+      "mode": "sl",
+      "initial": 155,
+      "selected": 65,
+      "O3": 111,
+      "actions": [
+        "mem2reg",
+        "gvn",
+        "simplifycfg",
+        "instcombine"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "histogram",
+      "mode": "rl",
+      "initial": 155,
+      "selected": 65,
+      "O3": 111,
+      "actions": [
+        "mem2reg",
+        "simplifycfg",
+        "gvn",
+        "STOP"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "histogram",
+      "mode": "hybrid",
+      "initial": 155,
+      "selected": 65,
+      "O3": 111,
+      "actions": [
+        "mem2reg",
+        "simplifycfg",
+        "gvn",
+        "STOP"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "mix",
+      "mode": "sl",
+      "initial": 101,
+      "selected": 33,
+      "O3": 42,
+      "actions": [
+        "mem2reg",
+        "simplifycfg",
+        "simplifycfg",
+        "simplifycfg"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "mix",
+      "mode": "rl",
+      "initial": 101,
+      "selected": 33,
+      "O3": 42,
+      "actions": [
+        "mem2reg",
+        "simplifycfg",
+        "simplifycfg",
+        "STOP"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "mix",
+      "mode": "hybrid",
+      "initial": 101,
+      "selected": 33,
+      "O3": 42,
+      "actions": [
+        "mem2reg",
+        "simplifycfg",
+        "simplifycfg",
+        "STOP"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "matrix",
+      "mode": "sl",
+      "initial": 227,
+      "selected": 94,
+      "O3": 91,
+      "actions": [
+        "mem2reg",
+        "gvn",
+        "simplifycfg",
+        "simplifycfg"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "matrix",
+      "mode": "rl",
+      "initial": 227,
+      "selected": 94,
+      "O3": 91,
+      "actions": [
+        "mem2reg",
+        "gvn",
+        "simplifycfg",
+        "STOP"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "matrix",
+      "mode": "hybrid",
+      "initial": 227,
+      "selected": 94,
+      "O3": 91,
+      "actions": [
+        "mem2reg",
+        "gvn",
+        "simplifycfg",
+        "STOP"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "stdin",
+      "mode": "sl",
+      "initial": 28,
+      "selected": 20,
+      "O3": 18,
+      "actions": [
+        "mem2reg",
+        "mem2reg",
+        "mem2reg",
+        "simplifycfg"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "stdin",
+      "mode": "rl",
+      "initial": 28,
+      "selected": 20,
+      "O3": 18,
+      "actions": [
+        "mem2reg",
+        "mem2reg",
+        "simplifycfg",
+        "mem2reg"
+      ],
+      "correctness_passed": true
+    },
+    {
+      "example": "stdin",
+      "mode": "hybrid",
+      "initial": 28,
+      "selected": 20,
+      "O3": 18,
+      "actions": [
+        "mem2reg",
+        "mem2reg",
+        "simplifycfg",
+        "mem2reg"
+      ],
+      "correctness_passed": true
+    }
+  ],
+  "model_sha256": "7baef82fac8b78e30590268fb413978a0fe6ce6c674a27e007cf513893a041b2",
+  "training_dataset_sha256": "ebde3550747dfda94e649549f0b6f860f1de6a657872352a8271db69e6e5e876",
+  "inputs": {
+    "sieve": {
+      "source_sha256": "82933b0aa33c6468b2cd2318fc17a9193edf199edef5e5c7806365d130554cc2",
+      "arguments": "1600",
+      "stdin": "",
+      "iterations": 1600
+    },
+    "histogram": {
+      "source_sha256": "89848ea656eb9442e980fd6778d469812ce04265bc173d558daeb5e7dde10008",
+      "arguments": "1200",
+      "stdin": "",
+      "iterations": 1200
+    },
+    "mix": {
+      "source_sha256": "6d13ff301897aa34daea30d0aabe18229a1a14e25add203f26059e908f631e9a",
+      "arguments": "800",
+      "stdin": "",
+      "iterations": 800
+    },
+    "matrix": {
+      "source_sha256": "d8e0be53b266addc87de21cb9d1730f8f77b830b1ea19119ec7359d2413ff2c1",
+      "arguments": "240",
+      "stdin": "",
+      "iterations": 240
+    },
+    "stdin": {
+      "source_sha256": "a91febfb3dbe7517cb243cf9db176e46f111d70166a16dc31a141cb0d432e4a0",
+      "arguments": "",
+      "stdin": "21 34\n",
+      "iterations": 0
+    }
+  }
+}

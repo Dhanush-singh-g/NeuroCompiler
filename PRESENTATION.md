@@ -18,6 +18,11 @@ Model scores and action traces are in a collapsed details section. O1/O2 baselin
 output checks, and the full measurement protocol remain under **Run & compare**.
 No reliability thresholds or learned weights were changed for this UI refinement.
 
+Fresh sessions now default to **Hybrid SL + RL** with the explicit static
+checkpoint/O3 count guard. The **Model & scope** tab shows the unseen-family
+results including raw policies, regressions, and fixed/random/Oz controls.
+All six evaluated families are available in the example picker.
+
 ## New SL / RL / hybrid modes (25 October 2026)
 
 The **Learning policy** dropdown now includes:
@@ -35,9 +40,12 @@ selected/O3 counts, and the all-four static count comparison. Then run Live
 comparison to check output and measure native runtimes independently. IR-size
 reduction is not a promise of faster execution. All modes remain experimental.
 
-The new artifact is trained on 512 actual LLVM transitions from eight previously
-opened synthetic programs, not 512 independent programs. No real held-out
-compiler-policy generalization has been established. The legacy weights and
+The expanded artifact is trained on 3,832 native-checked LLVM transitions from
+40 synthetic programs across 24 families. A single frozen evaluation on 12
+programs from six other families yields lower counts on eight, with O3 guard
+fallback on four. Fixed-pass controls are competitive: an RL-specific benefit
+and real-world or runtime generalization have not been established. See
+[the full unseen-family evaluation](UNSEEN_EVALUATION.md). The legacy weights and
 formal research evidence are unchanged. Data/model/reproduction details and
 original-plan mapping are in [SL_RL_IMPLEMENTATION_PLAN.md](SL_RL_IMPLEMENTATION_PLAN.md).
 The raw transition dataset and portable coefficients are committed; normal setup
@@ -183,7 +191,11 @@ bash scripts/start_presentation.sh
 Setup now prefers a supported system Python even when Conda `(base)` is active.
 To choose one explicitly, run `NEUROCOMPILER_PYTHON=/usr/bin/python3 bash scripts/setup_presentation.sh`.
 
-## A five-minute presentation
+## A five-minute legacy runtime-model presentation
+
+Select **Legacy SL · runtime estimate** first for this older walkthrough.
+For the expanded hybrid and unseen-family count evaluation, follow
+[SEQUENTIAL_DEMO.md](SEQUENTIAL_DEMO.md) and [UNSEEN_EVALUATION.md](UNSEEN_EVALUATION.md).
 
 | Time | Action | What to explain |
 | --- | --- | --- |

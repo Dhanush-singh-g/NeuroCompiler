@@ -90,6 +90,11 @@ def markdown_report(result):
     if decision.get('sequential'):
         lines=lines[:-4]
         seq=decision['sequential']
+        if seq.get('selection'):
+            lines += ['## Static instruction-count guard','',
+                      f"Raw learned terminal count: {seq['policy_final_instructions']}. Best learned checkpoint: {seq['best_policy_instructions']}.",
+                      f"Emitted artifact: {seq['selection']['applied']}; selected actions: {', '.join(seq['selected_actions']) or '(none / O3 fallback)' }.",
+                      'The guard compares static counts against O3 and prefers O3 on ties. It is not learned and does not protect execution time.','']
         lines += ['## Sequential learning policy','',f"Mode: {seq['mode']}; objective: instruction_count. Training: {seq['training_rows']} transitions / {seq['training_programs']} synthetic programs.",f"IR instructions: {seq['initial_instructions']} initial -> {seq['final_instructions']} selected. O3: {decision['metrics']['O3']['instructions']}.",'', '| Action | Before IR count | After IR count | Q estimate |', '| --- | ---: | ---: | ---: |']
         for step in seq['trace']:lines.append(f"| {step['action']} | {step['before_instructions']} | {step['after_instructions']} | {step['q_score']:.5f} |")
     for choice, score in decision['scores'].items():
@@ -307,8 +312,13 @@ class Handler(BaseHTTPRequestHandler):
                                   'model': {k:model[k] for k in ('name','policy','approved_policy','deployment_qualified',
                                            'training_rows','real_training_programs','synthetic_training_programs',
                                            'limitations','historical_cv','source_model_sha256')},
-                                  'sequential_model':{k:load_agent()[1][k] for k in ('objective','training_rows','training_programs','limitations','algorithm')},
+                                  'sequential_model':{k:load_agent()[1][k] for k in ('objective','training_rows','training_programs','limitations','algorithm','feature_names','horizon')},
                                   'examples':json.loads((ROOT/'presentation/examples.json').read_text())})
+        if path == '/api/generalization':
+            report=json.loads((ROOT/'presentation/generalization_results.json').read_text())
+            keys=('objective','runtime_evaluated','frozen','programs','independent_families',
+                  'summary','derived_controls','all_output_checks_passed','scope')
+            return self.send(200,{k:report[k] for k in keys})
         if path == '/api/health':
             return self.send(200, {'status':'ready','compiler':self.app.config['compiler'],'approved_policy':'O3','live':True,
                                    'comparison_entries':['O1','O2','O3','NeuroCompiler']})
@@ -418,7 +428,7 @@ def main():
                 state = json.loads((root/'state.json').read_text())
                 if process.returncode or state['status'] != 'completed':
                     raise ValueError(state['message'])
-            print('Ready: LLVM10, C headers, four model pipelines, O1/O2 baselines, 156 features and frozen prediction. No input executed.')
+            print('Ready: LLVM10, C headers, legacy SL (156 fields), SL/RL/hybrid (30 fields), O1/O2/O3 baselines and static count guard. No input executed.')
             return
         app = Application(config)
         server = ThreadingHTTPServer(('127.0.0.1', args.port), Handler)

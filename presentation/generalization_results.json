@@ -1,0 +1,5745 @@
+{
+  "schema": 1,
+  "objective": "instruction_count",
+  "runtime_evaluated": false,
+  "frozen": {
+    "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+    "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+    "declaration_sha256": "1d3f452548f3ae18ba768c1a903ea189eea8109234c9a92a475df6b1c734a074",
+    "split_sha256": "d7e6cdac10d67e85f0c47613b6ab607c23593887853bb23d0cac71e233f5e921"
+  },
+  "programs": 12,
+  "independent_families": 6,
+  "results": [
+    {
+      "id": "crc32_0",
+      "family": "crc32",
+      "source_sha256": "9b2808d013560679422d472ce55ac4a345222a3c6ed4368752ba60fc3e7569f6",
+      "split": "test",
+      "counts": {
+        "O3": 74,
+        "Oz": 74,
+        "fixed": 53,
+        "random": 114,
+        "sl_raw": 55,
+        "sl_guarded": 55,
+        "rl_raw": 55,
+        "rl_guarded": 55,
+        "hybrid_raw": 55,
+        "hybrid_guarded": 55
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "loop_unroll",
+          "vectorize",
+          "instcombine",
+          "vectorize"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 132,
+              "after_instructions": 62,
+              "q_score": 1.0434294161562316,
+              "immediate_prediction": 0.792988912225397,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007666396035347134
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 55,
+              "q_score": 0.3165330583155902,
+              "immediate_prediction": 0.1499605559251564,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.008631001983303577
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": 0.11567626011247858,
+              "immediate_prediction": 0.074066920839417,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007936032023280859
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": -0.0004567612811913896,
+              "immediate_prediction": 0.06908494164294035,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0072244759649038315
+            }
+          ],
+          "initial_instructions": 132,
+          "final_instructions": 55,
+          "policy_final_instructions": 55,
+          "best_policy_instructions": 55,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg"
+          ],
+          "selection": {
+            "instructions": 55,
+            "actions": [
+              "mem2reg",
+              "simplifycfg"
+            ],
+            "step": 2,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 132,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 132,
+              "after_instructions": 62,
+              "q_score": 1.0434294161562316,
+              "immediate_prediction": 0.792988912225397,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006578641012310982
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 55,
+              "q_score": 0.3165330583155902,
+              "immediate_prediction": 0.1499605559251564,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007175008999183774
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": 0.15150708946448513,
+              "immediate_prediction": 0.06020213805167529,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006609925010707229
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": 0.08467970772669658,
+              "immediate_prediction": 0.08192900252268788,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.00762327597476542
+            }
+          ],
+          "initial_instructions": 132,
+          "final_instructions": 55,
+          "policy_final_instructions": 55,
+          "best_policy_instructions": 55,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg"
+          ],
+          "selection": {
+            "instructions": 55,
+            "actions": [
+              "mem2reg",
+              "simplifycfg"
+            ],
+            "step": 2,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 132,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 132,
+              "after_instructions": 62,
+              "q_score": 1.0434294161562316,
+              "immediate_prediction": 0.792988912225397,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006528179976157844
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 55,
+              "q_score": 0.3165330583155902,
+              "immediate_prediction": 0.1499605559251564,
+              "allowed_candidates": [
+                "simplifycfg",
+                "gvn",
+                "mem2reg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.010647577000781894
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": 0.15150708946448513,
+              "immediate_prediction": 0.06020213805167529,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.009906247025355697
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": 0.08467970772669658,
+              "immediate_prediction": 0.08192900252268788,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006545119045767933
+            }
+          ],
+          "initial_instructions": 132,
+          "final_instructions": 55,
+          "policy_final_instructions": 55,
+          "best_policy_instructions": 55,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg"
+          ],
+          "selection": {
+            "instructions": 55,
+            "actions": [
+              "mem2reg",
+              "simplifycfg"
+            ],
+            "step": 2,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 132,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "crc32_1",
+      "family": "crc32",
+      "source_sha256": "73d56628a193541f105f23eb00d1a79508e1a3b677819d078b9d73f52905545c",
+      "split": "test",
+      "counts": {
+        "O3": 74,
+        "Oz": 74,
+        "fixed": 53,
+        "random": 55,
+        "sl_raw": 55,
+        "sl_guarded": 55,
+        "rl_raw": 55,
+        "rl_guarded": 55,
+        "hybrid_raw": 55,
+        "hybrid_guarded": 55
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "licm",
+          "mem2reg",
+          "mem2reg",
+          "gvn"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 132,
+              "after_instructions": 62,
+              "q_score": 1.0434294161562316,
+              "immediate_prediction": 0.792988912225397,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006123289989773184
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 55,
+              "q_score": 0.3165330583155902,
+              "immediate_prediction": 0.1499605559251564,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007754643040243536
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": 0.11567626011247858,
+              "immediate_prediction": 0.074066920839417,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006141048041172326
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": -0.0004567612811913896,
+              "immediate_prediction": 0.06908494164294035,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006304280017502606
+            }
+          ],
+          "initial_instructions": 132,
+          "final_instructions": 55,
+          "policy_final_instructions": 55,
+          "best_policy_instructions": 55,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg"
+          ],
+          "selection": {
+            "instructions": 55,
+            "actions": [
+              "mem2reg",
+              "simplifycfg"
+            ],
+            "step": 2,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 132,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 132,
+              "after_instructions": 62,
+              "q_score": 1.0434294161562316,
+              "immediate_prediction": 0.792988912225397,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0062686780001968145
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 55,
+              "q_score": 0.3165330583155902,
+              "immediate_prediction": 0.1499605559251564,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.009457545005716383
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": 0.15150708946448513,
+              "immediate_prediction": 0.06020213805167529,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0077822720049880445
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": 0.08467970772669658,
+              "immediate_prediction": 0.08192900252268788,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006579393986612558
+            }
+          ],
+          "initial_instructions": 132,
+          "final_instructions": 55,
+          "policy_final_instructions": 55,
+          "best_policy_instructions": 55,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg"
+          ],
+          "selection": {
+            "instructions": 55,
+            "actions": [
+              "mem2reg",
+              "simplifycfg"
+            ],
+            "step": 2,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 132,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 132,
+              "after_instructions": 62,
+              "q_score": 1.0434294161562316,
+              "immediate_prediction": 0.792988912225397,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.011617748998105526
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 55,
+              "q_score": 0.3165330583155902,
+              "immediate_prediction": 0.1499605559251564,
+              "allowed_candidates": [
+                "simplifycfg",
+                "gvn",
+                "mem2reg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006760833959560841
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": 0.15150708946448513,
+              "immediate_prediction": 0.06020213805167529,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.008046654984354973
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 55,
+              "after_instructions": 55,
+              "q_score": 0.08467970772669658,
+              "immediate_prediction": 0.08192900252268788,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.008222147997003049
+            }
+          ],
+          "initial_instructions": 132,
+          "final_instructions": 55,
+          "policy_final_instructions": 55,
+          "best_policy_instructions": 55,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg"
+          ],
+          "selection": {
+            "instructions": 55,
+            "actions": [
+              "mem2reg",
+              "simplifycfg"
+            ],
+            "step": 2,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 132,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 55,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "edit_distance_0",
+      "family": "edit_distance",
+      "source_sha256": "923ce3c23ee612bd2bacd4c5782de8ebe3fa5b9ea7f39203a8ec8cd48656264c",
+      "split": "test",
+      "counts": {
+        "O3": 147,
+        "Oz": 160,
+        "fixed": 126,
+        "random": 146,
+        "sl_raw": 124,
+        "sl_guarded": 124,
+        "rl_raw": 126,
+        "rl_guarded": 126,
+        "hybrid_raw": 126,
+        "hybrid_guarded": 126
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "vectorize",
+          "simplifycfg",
+          "simplifycfg",
+          "mem2reg"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 292,
+              "after_instructions": 165,
+              "q_score": 0.832226883259928,
+              "immediate_prediction": 0.5865535849603764,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006651634001173079
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 165,
+              "after_instructions": 140,
+              "q_score": 0.2998174149531322,
+              "immediate_prediction": 0.14932762759975338,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.008728767978027463
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 140,
+              "after_instructions": 126,
+              "q_score": 0.14781096055879972,
+              "immediate_prediction": 0.074135562495937,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.008584107039496303
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 126,
+              "after_instructions": 124,
+              "q_score": 0.044587842931659016,
+              "immediate_prediction": 0.0671509843016007,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.00832645402988419
+            }
+          ],
+          "initial_instructions": 292,
+          "final_instructions": 124,
+          "policy_final_instructions": 124,
+          "best_policy_instructions": 124,
+          "selected_actions": [
+            "mem2reg",
+            "gvn",
+            "simplifycfg",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 124,
+            "actions": [
+              "mem2reg",
+              "gvn",
+              "simplifycfg",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 292,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 165,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 140,
+              "actions": [
+                "mem2reg",
+                "gvn"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 126,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 124,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "gvn",
+              "before_instructions": 292,
+              "after_instructions": 218,
+              "q_score": 0.8380013059988635,
+              "immediate_prediction": 0.2471363567405012,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.00826515897642821
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 218,
+              "after_instructions": 140,
+              "q_score": 0.613253771384927,
+              "immediate_prediction": 0.3960259228484936,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0071460449835285544
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 140,
+              "after_instructions": 126,
+              "q_score": 0.1855374447414223,
+              "immediate_prediction": 0.05893223935041161,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.00793749000877142
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 126,
+              "after_instructions": 126,
+              "q_score": 0.13268218065356163,
+              "immediate_prediction": 0.16302852949123203,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007057472947053611
+            }
+          ],
+          "initial_instructions": 292,
+          "final_instructions": 126,
+          "policy_final_instructions": 126,
+          "best_policy_instructions": 126,
+          "selected_actions": [
+            "gvn",
+            "instcombine",
+            "simplifycfg"
+          ],
+          "selection": {
+            "instructions": 126,
+            "actions": [
+              "gvn",
+              "instcombine",
+              "simplifycfg"
+            ],
+            "step": 3,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 292,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 218,
+              "actions": [
+                "gvn"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 140,
+              "actions": [
+                "gvn",
+                "instcombine"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 126,
+              "actions": [
+                "gvn",
+                "instcombine",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 126,
+              "actions": [
+                "gvn",
+                "instcombine",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "gvn",
+              "before_instructions": 292,
+              "after_instructions": 218,
+              "q_score": 0.8380013059988635,
+              "immediate_prediction": 0.2471363567405012,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.008022140013054013
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 218,
+              "after_instructions": 140,
+              "q_score": 0.613253771384927,
+              "immediate_prediction": 0.3960259228484936,
+              "allowed_candidates": [
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.008044568996410817
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 140,
+              "after_instructions": 126,
+              "q_score": 0.1855374447414223,
+              "immediate_prediction": 0.05893223935041161,
+              "allowed_candidates": [
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.010028729040641338
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 126,
+              "after_instructions": 126,
+              "q_score": 0.13268218065356163,
+              "immediate_prediction": 0.16302852949123203,
+              "allowed_candidates": [
+                "mem2reg",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.008112367009744048
+            }
+          ],
+          "initial_instructions": 292,
+          "final_instructions": 126,
+          "policy_final_instructions": 126,
+          "best_policy_instructions": 126,
+          "selected_actions": [
+            "gvn",
+            "instcombine",
+            "simplifycfg"
+          ],
+          "selection": {
+            "instructions": 126,
+            "actions": [
+              "gvn",
+              "instcombine",
+              "simplifycfg"
+            ],
+            "step": 3,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 292,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 218,
+              "actions": [
+                "gvn"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 140,
+              "actions": [
+                "gvn",
+                "instcombine"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 126,
+              "actions": [
+                "gvn",
+                "instcombine",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 126,
+              "actions": [
+                "gvn",
+                "instcombine",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "edit_distance_1",
+      "family": "edit_distance",
+      "source_sha256": "e571212dae66f490ec5b96897db65dd3a6f51b161acde8fe8de5ad35653c73cc",
+      "split": "test",
+      "counts": {
+        "O3": 147,
+        "Oz": 160,
+        "fixed": 126,
+        "random": 230,
+        "sl_raw": 124,
+        "sl_guarded": 124,
+        "rl_raw": 126,
+        "rl_guarded": 126,
+        "hybrid_raw": 126,
+        "hybrid_guarded": 126
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "licm",
+          "instcombine",
+          "loop_unroll",
+          "simplifycfg"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 292,
+              "after_instructions": 165,
+              "q_score": 0.832226883259928,
+              "immediate_prediction": 0.5865535849603764,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006615585007239133
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 165,
+              "after_instructions": 140,
+              "q_score": 0.2998174149531322,
+              "immediate_prediction": 0.14932762759975338,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006876700033899397
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 140,
+              "after_instructions": 126,
+              "q_score": 0.14781096055879972,
+              "immediate_prediction": 0.074135562495937,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.009545644978061318
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 126,
+              "after_instructions": 124,
+              "q_score": 0.044587842931659016,
+              "immediate_prediction": 0.0671509843016007,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007248123991303146
+            }
+          ],
+          "initial_instructions": 292,
+          "final_instructions": 124,
+          "policy_final_instructions": 124,
+          "best_policy_instructions": 124,
+          "selected_actions": [
+            "mem2reg",
+            "gvn",
+            "simplifycfg",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 124,
+            "actions": [
+              "mem2reg",
+              "gvn",
+              "simplifycfg",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 292,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 165,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 140,
+              "actions": [
+                "mem2reg",
+                "gvn"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 126,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 124,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "gvn",
+              "before_instructions": 292,
+              "after_instructions": 218,
+              "q_score": 0.8380013059988635,
+              "immediate_prediction": 0.2471363567405012,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.009094019012991339
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 218,
+              "after_instructions": 140,
+              "q_score": 0.613253771384927,
+              "immediate_prediction": 0.3960259228484936,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.00694286497309804
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 140,
+              "after_instructions": 126,
+              "q_score": 0.1855374447414223,
+              "immediate_prediction": 0.05893223935041161,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006988711014855653
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 126,
+              "after_instructions": 126,
+              "q_score": 0.13268218065356163,
+              "immediate_prediction": 0.16302852949123203,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.008062186010647565
+            }
+          ],
+          "initial_instructions": 292,
+          "final_instructions": 126,
+          "policy_final_instructions": 126,
+          "best_policy_instructions": 126,
+          "selected_actions": [
+            "gvn",
+            "instcombine",
+            "simplifycfg"
+          ],
+          "selection": {
+            "instructions": 126,
+            "actions": [
+              "gvn",
+              "instcombine",
+              "simplifycfg"
+            ],
+            "step": 3,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 292,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 218,
+              "actions": [
+                "gvn"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 140,
+              "actions": [
+                "gvn",
+                "instcombine"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 126,
+              "actions": [
+                "gvn",
+                "instcombine",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 126,
+              "actions": [
+                "gvn",
+                "instcombine",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "gvn",
+              "before_instructions": 292,
+              "after_instructions": 218,
+              "q_score": 0.8380013059988635,
+              "immediate_prediction": 0.2471363567405012,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.0074443049961701035
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 218,
+              "after_instructions": 140,
+              "q_score": 0.613253771384927,
+              "immediate_prediction": 0.3960259228484936,
+              "allowed_candidates": [
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.007175780949182808
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 140,
+              "after_instructions": 126,
+              "q_score": 0.1855374447414223,
+              "immediate_prediction": 0.05893223935041161,
+              "allowed_candidates": [
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.009272169030737132
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 126,
+              "after_instructions": 126,
+              "q_score": 0.13268218065356163,
+              "immediate_prediction": 0.16302852949123203,
+              "allowed_candidates": [
+                "mem2reg",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.011111145024187863
+            }
+          ],
+          "initial_instructions": 292,
+          "final_instructions": 126,
+          "policy_final_instructions": 126,
+          "best_policy_instructions": 126,
+          "selected_actions": [
+            "gvn",
+            "instcombine",
+            "simplifycfg"
+          ],
+          "selection": {
+            "instructions": 126,
+            "actions": [
+              "gvn",
+              "instcombine",
+              "simplifycfg"
+            ],
+            "step": 3,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 292,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 218,
+              "actions": [
+                "gvn"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 140,
+              "actions": [
+                "gvn",
+                "instcombine"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 126,
+              "actions": [
+                "gvn",
+                "instcombine",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 126,
+              "actions": [
+                "gvn",
+                "instcombine",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "heapsort_0",
+      "family": "heapsort",
+      "source_sha256": "04fb7b9f1efc89cd55af6eb4323ae71b021366ae65e7d7e16916f29cbc6d333d",
+      "split": "test",
+      "counts": {
+        "O3": 170,
+        "Oz": 147,
+        "fixed": 145,
+        "random": 266,
+        "sl_raw": 144,
+        "sl_guarded": 144,
+        "rl_raw": 142,
+        "rl_guarded": 142,
+        "hybrid_raw": 142,
+        "hybrid_guarded": 142
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "licm",
+          "instcombine",
+          "licm",
+          "instcombine"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 327,
+              "after_instructions": 181,
+              "q_score": 0.9195656347061836,
+              "immediate_prediction": 0.6441344479963488,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007108938007149845
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 181,
+              "after_instructions": 156,
+              "q_score": 0.33117997834011526,
+              "immediate_prediction": 0.1563530400035783,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007028474006801844
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 156,
+              "after_instructions": 146,
+              "q_score": 0.24041384455138112,
+              "immediate_prediction": 0.1043687808779724,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.010656227997969836
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 146,
+              "after_instructions": 144,
+              "q_score": 0.11688747455013368,
+              "immediate_prediction": 0.12277803615398797,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007581528043374419
+            }
+          ],
+          "initial_instructions": 327,
+          "final_instructions": 144,
+          "policy_final_instructions": 144,
+          "best_policy_instructions": 144,
+          "selected_actions": [
+            "mem2reg",
+            "gvn",
+            "simplifycfg",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 144,
+            "actions": [
+              "mem2reg",
+              "gvn",
+              "simplifycfg",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 327,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 181,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 156,
+              "actions": [
+                "mem2reg",
+                "gvn"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 146,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 144,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 327,
+              "after_instructions": 181,
+              "q_score": 0.9195656347061836,
+              "immediate_prediction": 0.6441344479963488,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007526295026764274
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 181,
+              "after_instructions": 164,
+              "q_score": 0.35266436407346724,
+              "immediate_prediction": 0.1383592677172495,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007502841996029019
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 164,
+              "after_instructions": 144,
+              "q_score": 0.2093762760232383,
+              "immediate_prediction": 0.0792110074210545,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.00946434901561588
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 144,
+              "after_instructions": 142,
+              "q_score": 0.1055193196052546,
+              "immediate_prediction": 0.09626137567625884,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007466714014299214
+            }
+          ],
+          "initial_instructions": 327,
+          "final_instructions": 142,
+          "policy_final_instructions": 142,
+          "best_policy_instructions": 142,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg",
+            "gvn",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 142,
+            "actions": [
+              "mem2reg",
+              "simplifycfg",
+              "gvn",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 327,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 181,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 164,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 144,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 142,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 327,
+              "after_instructions": 181,
+              "q_score": 0.9195656347061836,
+              "immediate_prediction": 0.6441344479963488,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.00781363301211968
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 181,
+              "after_instructions": 164,
+              "q_score": 0.35266436407346724,
+              "immediate_prediction": 0.1383592677172495,
+              "allowed_candidates": [
+                "gvn",
+                "simplifycfg",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.007827611989341676
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 164,
+              "after_instructions": 144,
+              "q_score": 0.2093762760232383,
+              "immediate_prediction": 0.0792110074210545,
+              "allowed_candidates": [
+                "gvn",
+                "instcombine",
+                "mem2reg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006888223986607045
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 144,
+              "after_instructions": 142,
+              "q_score": 0.1055193196052546,
+              "immediate_prediction": 0.09626137567625884,
+              "allowed_candidates": [
+                "instcombine",
+                "mem2reg",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.007245038985274732
+            }
+          ],
+          "initial_instructions": 327,
+          "final_instructions": 142,
+          "policy_final_instructions": 142,
+          "best_policy_instructions": 142,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg",
+            "gvn",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 142,
+            "actions": [
+              "mem2reg",
+              "simplifycfg",
+              "gvn",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 327,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 181,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 164,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 144,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 142,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "heapsort_1",
+      "family": "heapsort",
+      "source_sha256": "9d7694f7a4d903af28ed99c6daf6e47cffa37e3a959ca3de86f6d1f10f327abe",
+      "split": "test",
+      "counts": {
+        "O3": 168,
+        "Oz": 143,
+        "fixed": 144,
+        "random": 158,
+        "sl_raw": 144,
+        "sl_guarded": 144,
+        "rl_raw": 142,
+        "rl_guarded": 142,
+        "hybrid_raw": 142,
+        "hybrid_guarded": 142
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "licm",
+          "gvn",
+          "licm",
+          "instcombine"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 327,
+              "after_instructions": 181,
+              "q_score": 0.9195656347061836,
+              "immediate_prediction": 0.6441344479963488,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.010096354002598673
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 181,
+              "after_instructions": 156,
+              "q_score": 0.33117997834011526,
+              "immediate_prediction": 0.1563530400035783,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.009814278979320079
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 156,
+              "after_instructions": 146,
+              "q_score": 0.24041384455138112,
+              "immediate_prediction": 0.1043687808779724,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006607923016417772
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 146,
+              "after_instructions": 144,
+              "q_score": 0.11688747455013368,
+              "immediate_prediction": 0.12277803615398797,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0072012380114756525
+            }
+          ],
+          "initial_instructions": 327,
+          "final_instructions": 144,
+          "policy_final_instructions": 144,
+          "best_policy_instructions": 144,
+          "selected_actions": [
+            "mem2reg",
+            "gvn",
+            "simplifycfg",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 144,
+            "actions": [
+              "mem2reg",
+              "gvn",
+              "simplifycfg",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 327,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 181,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 156,
+              "actions": [
+                "mem2reg",
+                "gvn"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 146,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 144,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 327,
+              "after_instructions": 181,
+              "q_score": 0.9195656347061836,
+              "immediate_prediction": 0.6441344479963488,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.01239772600820288
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 181,
+              "after_instructions": 164,
+              "q_score": 0.35266436407346724,
+              "immediate_prediction": 0.1383592677172495,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.009589459048584104
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 164,
+              "after_instructions": 144,
+              "q_score": 0.2093762760232383,
+              "immediate_prediction": 0.0792110074210545,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0068757489789277315
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 144,
+              "after_instructions": 142,
+              "q_score": 0.1055193196052546,
+              "immediate_prediction": 0.09626137567625884,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007734865008387715
+            }
+          ],
+          "initial_instructions": 327,
+          "final_instructions": 142,
+          "policy_final_instructions": 142,
+          "best_policy_instructions": 142,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg",
+            "gvn",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 142,
+            "actions": [
+              "mem2reg",
+              "simplifycfg",
+              "gvn",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 327,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 181,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 164,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 144,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 142,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 327,
+              "after_instructions": 181,
+              "q_score": 0.9195656347061836,
+              "immediate_prediction": 0.6441344479963488,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.011983919015619904
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 181,
+              "after_instructions": 164,
+              "q_score": 0.35266436407346724,
+              "immediate_prediction": 0.1383592677172495,
+              "allowed_candidates": [
+                "gvn",
+                "simplifycfg",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.008933832985349
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 164,
+              "after_instructions": 144,
+              "q_score": 0.2093762760232383,
+              "immediate_prediction": 0.0792110074210545,
+              "allowed_candidates": [
+                "gvn",
+                "instcombine",
+                "mem2reg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.007385055010672659
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 144,
+              "after_instructions": 142,
+              "q_score": 0.1055193196052546,
+              "immediate_prediction": 0.09626137567625884,
+              "allowed_candidates": [
+                "instcombine",
+                "mem2reg",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.00985277397558093
+            }
+          ],
+          "initial_instructions": 327,
+          "final_instructions": 142,
+          "policy_final_instructions": 142,
+          "best_policy_instructions": 142,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg",
+            "gvn",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 142,
+            "actions": [
+              "mem2reg",
+              "simplifycfg",
+              "gvn",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 327,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 181,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 164,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 144,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 142,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "floyd_warshall_0",
+      "family": "floyd_warshall",
+      "source_sha256": "1da62c688a77d39a564020ab5795f0b4a239efafb8ba9956acb9477f2191976b",
+      "split": "test",
+      "counts": {
+        "O3": 425,
+        "Oz": 185,
+        "fixed": 99,
+        "random": 320,
+        "sl_raw": 99,
+        "sl_guarded": 99,
+        "rl_raw": 99,
+        "rl_guarded": 99,
+        "hybrid_raw": 99,
+        "hybrid_guarded": 99
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "mem2reg",
+          "instcombine",
+          "loop_unroll",
+          "loop_unroll"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 263,
+              "after_instructions": 139,
+              "q_score": 0.9317692467771287,
+              "immediate_prediction": 0.6520986619234165,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006684526044409722
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 139,
+              "after_instructions": 114,
+              "q_score": 0.31986572370500443,
+              "immediate_prediction": 0.17244825968129623,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007590388995595276
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 114,
+              "after_instructions": 103,
+              "q_score": 0.15296062361916565,
+              "immediate_prediction": 0.07939292005759467,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.00751653901534155
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 103,
+              "after_instructions": 99,
+              "q_score": 0.0012041010502365501,
+              "immediate_prediction": 0.03412243544629155,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.008766513026785105
+            }
+          ],
+          "initial_instructions": 263,
+          "final_instructions": 99,
+          "policy_final_instructions": 99,
+          "best_policy_instructions": 99,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg",
+            "gvn",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 99,
+            "actions": [
+              "mem2reg",
+              "simplifycfg",
+              "gvn",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 263,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 139,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 114,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 103,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 99,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 263,
+              "after_instructions": 139,
+              "q_score": 0.9317692467771287,
+              "immediate_prediction": 0.6520986619234165,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.01398700795834884
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 139,
+              "after_instructions": 114,
+              "q_score": 0.31986572370500443,
+              "immediate_prediction": 0.17244825968129623,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.015904029016382992
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 114,
+              "after_instructions": 103,
+              "q_score": 0.15296062361916565,
+              "immediate_prediction": 0.07939292005759467,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.01131355797406286
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 103,
+              "after_instructions": 99,
+              "q_score": 0.0012041010502365501,
+              "immediate_prediction": 0.03412243544629155,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.012387537048198283
+            }
+          ],
+          "initial_instructions": 263,
+          "final_instructions": 99,
+          "policy_final_instructions": 99,
+          "best_policy_instructions": 99,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg",
+            "gvn",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 99,
+            "actions": [
+              "mem2reg",
+              "simplifycfg",
+              "gvn",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 263,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 139,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 114,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 103,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 99,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 263,
+              "after_instructions": 139,
+              "q_score": 0.9317692467771287,
+              "immediate_prediction": 0.6520986619234165,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006962017971090972
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 139,
+              "after_instructions": 114,
+              "q_score": 0.31986572370500443,
+              "immediate_prediction": 0.17244825968129623,
+              "allowed_candidates": [
+                "simplifycfg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006808377045672387
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 114,
+              "after_instructions": 103,
+              "q_score": 0.15296062361916565,
+              "immediate_prediction": 0.07939292005759467,
+              "allowed_candidates": [
+                "gvn",
+                "simplifycfg",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.03174922103062272
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 103,
+              "after_instructions": 99,
+              "q_score": 0.0012041010502365501,
+              "immediate_prediction": 0.03412243544629155,
+              "allowed_candidates": [
+                "instcombine",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.016435754019767046
+            }
+          ],
+          "initial_instructions": 263,
+          "final_instructions": 99,
+          "policy_final_instructions": 99,
+          "best_policy_instructions": 99,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg",
+            "gvn",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 99,
+            "actions": [
+              "mem2reg",
+              "simplifycfg",
+              "gvn",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 263,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 139,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 114,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 103,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 99,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "floyd_warshall_1",
+      "family": "floyd_warshall",
+      "source_sha256": "9850b72fdc6d7027dffe692fdd3a82bd1737b5a00a0a8fb11746ad6e7e044b7d",
+      "split": "test",
+      "counts": {
+        "O3": 425,
+        "Oz": 185,
+        "fixed": 99,
+        "random": 287,
+        "sl_raw": 99,
+        "sl_guarded": 99,
+        "rl_raw": 99,
+        "rl_guarded": 99,
+        "hybrid_raw": 99,
+        "hybrid_guarded": 99
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "mem2reg",
+          "vectorize",
+          "simplifycfg",
+          "loop_unroll"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 263,
+              "after_instructions": 139,
+              "q_score": 0.9317692467771287,
+              "immediate_prediction": 0.6520986619234165,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0067169140093028545
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 139,
+              "after_instructions": 114,
+              "q_score": 0.31986572370500443,
+              "immediate_prediction": 0.17244825968129623,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007103118987288326
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 114,
+              "after_instructions": 103,
+              "q_score": 0.15296062361916565,
+              "immediate_prediction": 0.07939292005759467,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007220503990538418
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 103,
+              "after_instructions": 99,
+              "q_score": 0.0012041010502365501,
+              "immediate_prediction": 0.03412243544629155,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006576293031685054
+            }
+          ],
+          "initial_instructions": 263,
+          "final_instructions": 99,
+          "policy_final_instructions": 99,
+          "best_policy_instructions": 99,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg",
+            "gvn",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 99,
+            "actions": [
+              "mem2reg",
+              "simplifycfg",
+              "gvn",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 263,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 139,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 114,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 103,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 99,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 263,
+              "after_instructions": 139,
+              "q_score": 0.9317692467771287,
+              "immediate_prediction": 0.6520986619234165,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006722307007294148
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 139,
+              "after_instructions": 114,
+              "q_score": 0.31986572370500443,
+              "immediate_prediction": 0.17244825968129623,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0066718789748847485
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 114,
+              "after_instructions": 103,
+              "q_score": 0.15296062361916565,
+              "immediate_prediction": 0.07939292005759467,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0069653529790230095
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 103,
+              "after_instructions": 99,
+              "q_score": 0.0012041010502365501,
+              "immediate_prediction": 0.03412243544629155,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006560482026543468
+            }
+          ],
+          "initial_instructions": 263,
+          "final_instructions": 99,
+          "policy_final_instructions": 99,
+          "best_policy_instructions": 99,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg",
+            "gvn",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 99,
+            "actions": [
+              "mem2reg",
+              "simplifycfg",
+              "gvn",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 263,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 139,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 114,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 103,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 99,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 263,
+              "after_instructions": 139,
+              "q_score": 0.9317692467771287,
+              "immediate_prediction": 0.6520986619234165,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.00695862399879843
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 139,
+              "after_instructions": 114,
+              "q_score": 0.31986572370500443,
+              "immediate_prediction": 0.17244825968129623,
+              "allowed_candidates": [
+                "simplifycfg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.00735983403865248
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 114,
+              "after_instructions": 103,
+              "q_score": 0.15296062361916565,
+              "immediate_prediction": 0.07939292005759467,
+              "allowed_candidates": [
+                "gvn",
+                "simplifycfg",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006515830988064408
+            },
+            {
+              "action": "instcombine",
+              "before_instructions": 103,
+              "after_instructions": 99,
+              "q_score": 0.0012041010502365501,
+              "immediate_prediction": 0.03412243544629155,
+              "allowed_candidates": [
+                "instcombine",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.00693873199634254
+            }
+          ],
+          "initial_instructions": 263,
+          "final_instructions": 99,
+          "policy_final_instructions": 99,
+          "best_policy_instructions": 99,
+          "selected_actions": [
+            "mem2reg",
+            "simplifycfg",
+            "gvn",
+            "instcombine"
+          ],
+          "selection": {
+            "instructions": 99,
+            "actions": [
+              "mem2reg",
+              "simplifycfg",
+              "gvn",
+              "instcombine"
+            ],
+            "step": 4,
+            "applied": "learned_checkpoint",
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 263,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 139,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 114,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 103,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 99,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn",
+                "instcombine"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "integer_sqrt_0",
+      "family": "integer_sqrt",
+      "source_sha256": "a9c913c70d9884941e729553512202554419c2f7ccd4a0629fd5a5922ae09089",
+      "split": "test",
+      "counts": {
+        "O3": 45,
+        "Oz": 42,
+        "fixed": 55,
+        "random": 60,
+        "sl_raw": 58,
+        "sl_guarded": 45,
+        "rl_raw": 58,
+        "rl_guarded": 45,
+        "hybrid_raw": 58,
+        "hybrid_guarded": 45
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "gvn",
+          "mem2reg",
+          "licm",
+          "mem2reg"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 130,
+              "after_instructions": 62,
+              "q_score": 1.1069633555174014,
+              "immediate_prediction": 0.8431951366384807,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007267125998623669
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 58,
+              "q_score": 0.3659849727098661,
+              "immediate_prediction": 0.1272416204305981,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006632869015447795
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.18752006469539978,
+              "immediate_prediction": 0.12863729355236045,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006624636007472873
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.06959442075633113,
+              "immediate_prediction": 0.07745205866687764,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006627028982620686
+            }
+          ],
+          "initial_instructions": 130,
+          "final_instructions": 45,
+          "policy_final_instructions": 58,
+          "best_policy_instructions": 58,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 45,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 130,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 130,
+              "after_instructions": 62,
+              "q_score": 1.1069633555174014,
+              "immediate_prediction": 0.8431951366384807,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006798046990297735
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 58,
+              "q_score": 0.3659849727098661,
+              "immediate_prediction": 0.1272416204305981,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006511091021820903
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.2215582715020077,
+              "immediate_prediction": 0.06856925507561258,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.00666295102564618
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.1565235123096178,
+              "immediate_prediction": 0.1364993752356313,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0063911959878169
+            }
+          ],
+          "initial_instructions": 130,
+          "final_instructions": 45,
+          "policy_final_instructions": 58,
+          "best_policy_instructions": 58,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 45,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 130,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 130,
+              "after_instructions": 62,
+              "q_score": 1.1069633555174014,
+              "immediate_prediction": 0.8431951366384807,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.0071268799947574735
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 58,
+              "q_score": 0.3659849727098661,
+              "immediate_prediction": 0.1272416204305981,
+              "allowed_candidates": [
+                "simplifycfg",
+                "mem2reg",
+                "gvn",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.007111710961908102
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.2215582715020077,
+              "immediate_prediction": 0.06856925507561258,
+              "allowed_candidates": [
+                "mem2reg",
+                "simplifycfg",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006449253996834159
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.1565235123096178,
+              "immediate_prediction": 0.1364993752356313,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.0059829120291396976
+            }
+          ],
+          "initial_instructions": 130,
+          "final_instructions": 45,
+          "policy_final_instructions": 58,
+          "best_policy_instructions": 58,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 45,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 130,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "integer_sqrt_1",
+      "family": "integer_sqrt",
+      "source_sha256": "b1373f859ad7f7456d9915baa5b3d5f46c77051482847898cae7bd5f76ba6190",
+      "split": "test",
+      "counts": {
+        "O3": 45,
+        "Oz": 42,
+        "fixed": 55,
+        "random": 65,
+        "sl_raw": 58,
+        "sl_guarded": 45,
+        "rl_raw": 58,
+        "rl_guarded": 45,
+        "hybrid_raw": 58,
+        "hybrid_guarded": 45
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "loop_unroll",
+          "loop_unroll",
+          "mem2reg",
+          "licm"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 130,
+              "after_instructions": 62,
+              "q_score": 1.1069633555174014,
+              "immediate_prediction": 0.8431951366384807,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006466278049629182
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 58,
+              "q_score": 0.3659849727098661,
+              "immediate_prediction": 0.1272416204305981,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.010719263984356076
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.18752006469539978,
+              "immediate_prediction": 0.12863729355236045,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.012051876983605325
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.06959442075633113,
+              "immediate_prediction": 0.07745205866687764,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.009803978959098458
+            }
+          ],
+          "initial_instructions": 130,
+          "final_instructions": 45,
+          "policy_final_instructions": 58,
+          "best_policy_instructions": 58,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 45,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 130,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 130,
+              "after_instructions": 62,
+              "q_score": 1.1069633555174014,
+              "immediate_prediction": 0.8431951366384807,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006896487029734999
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 58,
+              "q_score": 0.3659849727098661,
+              "immediate_prediction": 0.1272416204305981,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006242391013074666
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.2215582715020077,
+              "immediate_prediction": 0.06856925507561258,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006605781032703817
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.1565235123096178,
+              "immediate_prediction": 0.1364993752356313,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007221020001452416
+            }
+          ],
+          "initial_instructions": 130,
+          "final_instructions": 45,
+          "policy_final_instructions": 58,
+          "best_policy_instructions": 58,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 45,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 130,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 130,
+              "after_instructions": 62,
+              "q_score": 1.1069633555174014,
+              "immediate_prediction": 0.8431951366384807,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.008083986002020538
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 62,
+              "after_instructions": 58,
+              "q_score": 0.3659849727098661,
+              "immediate_prediction": 0.1272416204305981,
+              "allowed_candidates": [
+                "simplifycfg",
+                "mem2reg",
+                "gvn",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.007350526982918382
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.2215582715020077,
+              "immediate_prediction": 0.06856925507561258,
+              "allowed_candidates": [
+                "mem2reg",
+                "simplifycfg",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006862842012196779
+            },
+            {
+              "action": "mem2reg",
+              "before_instructions": 58,
+              "after_instructions": 58,
+              "q_score": 0.1565235123096178,
+              "immediate_prediction": 0.1364993752356313,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.008111228002235293
+            }
+          ],
+          "initial_instructions": 130,
+          "final_instructions": 45,
+          "policy_final_instructions": 58,
+          "best_policy_instructions": 58,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 45,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 130,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 62,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 58,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "simplifycfg",
+                "mem2reg"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "rational_bezier_0",
+      "family": "rational_bezier",
+      "source_sha256": "a1ab9b8fbe185608ca966ffe5de09be9e104af1220a8bdb5905b23ebbc1505bd",
+      "split": "test",
+      "counts": {
+        "O3": 40,
+        "Oz": 39,
+        "fixed": 78,
+        "random": 143,
+        "sl_raw": 78,
+        "sl_guarded": 40,
+        "rl_raw": 78,
+        "rl_guarded": 40,
+        "hybrid_raw": 78,
+        "hybrid_guarded": 40
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "loop_unroll",
+          "simplifycfg",
+          "instcombine",
+          "simplifycfg"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 180,
+              "after_instructions": 97,
+              "q_score": 0.8515250936897347,
+              "immediate_prediction": 0.6072921191761929,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006593584024813026
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 97,
+              "after_instructions": 81,
+              "q_score": 0.25784175863155595,
+              "immediate_prediction": 0.17055938134738824,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007074018009006977
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 81,
+              "after_instructions": 78,
+              "q_score": 0.07984524615904337,
+              "immediate_prediction": 0.044522753692187604,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007180298038292676
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 78,
+              "after_instructions": 78,
+              "q_score": -0.04548141372351028,
+              "immediate_prediction": 0.008567921561035863,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.0071182510000653565
+            }
+          ],
+          "initial_instructions": 180,
+          "final_instructions": 40,
+          "policy_final_instructions": 78,
+          "best_policy_instructions": 78,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 40,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 180,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 97,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 81,
+              "actions": [
+                "mem2reg",
+                "gvn"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 180,
+              "after_instructions": 97,
+              "q_score": 0.8515250936897347,
+              "immediate_prediction": 0.6072921191761929,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006699841003865004
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 97,
+              "after_instructions": 88,
+              "q_score": 0.26850031969889343,
+              "immediate_prediction": 0.11237203015278786,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006275693012867123
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 88,
+              "after_instructions": 78,
+              "q_score": 0.1599230508780322,
+              "immediate_prediction": 0.10549267585857586,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006335943005979061
+            },
+            {
+              "action": "STOP",
+              "before_instructions": 78,
+              "after_instructions": 78,
+              "q_score": 0.0,
+              "immediate_prediction": 0.0,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 3.0797673389315605e-07
+            }
+          ],
+          "initial_instructions": 180,
+          "final_instructions": 40,
+          "policy_final_instructions": 78,
+          "best_policy_instructions": 78,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 40,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 180,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 97,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 88,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 180,
+              "after_instructions": 97,
+              "q_score": 0.8515250936897347,
+              "immediate_prediction": 0.6072921191761929,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006614799029193819
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 97,
+              "after_instructions": 88,
+              "q_score": 0.26850031969889343,
+              "immediate_prediction": 0.11237203015278786,
+              "allowed_candidates": [
+                "gvn",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006365779030602425
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 88,
+              "after_instructions": 78,
+              "q_score": 0.1599230508780322,
+              "immediate_prediction": 0.10549267585857586,
+              "allowed_candidates": [
+                "gvn",
+                "mem2reg",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.0060758659965358675
+            },
+            {
+              "action": "STOP",
+              "before_instructions": 78,
+              "after_instructions": 78,
+              "q_score": 0.0,
+              "immediate_prediction": 0.0,
+              "allowed_candidates": [
+                "gvn",
+                "STOP",
+                "simplifycfg"
+              ],
+              "compile_elapsed_seconds": 3.490131348371506e-07
+            }
+          ],
+          "initial_instructions": 180,
+          "final_instructions": 40,
+          "policy_final_instructions": 78,
+          "best_policy_instructions": 78,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 40,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 180,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 97,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 88,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    },
+    {
+      "id": "rational_bezier_1",
+      "family": "rational_bezier",
+      "source_sha256": "4912319f3bcb749639694bbb5a92edf8bd626b72534d94d69974d7d24e859408",
+      "split": "test",
+      "counts": {
+        "O3": 40,
+        "Oz": 39,
+        "fixed": 78,
+        "random": 99,
+        "sl_raw": 78,
+        "sl_guarded": 40,
+        "rl_raw": 78,
+        "rl_guarded": 40,
+        "hybrid_raw": 78,
+        "hybrid_guarded": 40
+      },
+      "native_checks": {
+        "O3": true,
+        "Oz": true,
+        "fixed": true,
+        "random": true,
+        "sl_raw": true,
+        "sl_guarded": true,
+        "rl_raw": true,
+        "rl_guarded": true,
+        "hybrid_raw": true,
+        "hybrid_guarded": true
+      },
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "traces": {
+        "fixed": [
+          "mem2reg",
+          "instcombine",
+          "simplifycfg",
+          "gvn"
+        ],
+        "random": [
+          "loop_unroll",
+          "mem2reg",
+          "licm",
+          "vectorize"
+        ],
+        "sl": {
+          "mode": "sl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 180,
+              "after_instructions": 97,
+              "q_score": 0.8515250936897347,
+              "immediate_prediction": 0.6072921191761929,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.01272614300251007
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 97,
+              "after_instructions": 81,
+              "q_score": 0.25784175863155595,
+              "immediate_prediction": 0.17055938134738824,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.010262416035402566
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 81,
+              "after_instructions": 78,
+              "q_score": 0.07984524615904337,
+              "immediate_prediction": 0.044522753692187604,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007454633014276624
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 78,
+              "after_instructions": 78,
+              "q_score": -0.04548141372351028,
+              "immediate_prediction": 0.008567921561035863,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.007172567013185471
+            }
+          ],
+          "initial_instructions": 180,
+          "final_instructions": 40,
+          "policy_final_instructions": 78,
+          "best_policy_instructions": 78,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 40,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 180,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 97,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 81,
+              "actions": [
+                "mem2reg",
+                "gvn"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "gvn",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "rl": {
+          "mode": "rl",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 180,
+              "after_instructions": 97,
+              "q_score": 0.8515250936897347,
+              "immediate_prediction": 0.6072921191761929,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.005990815989207476
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 97,
+              "after_instructions": 88,
+              "q_score": 0.26850031969889343,
+              "immediate_prediction": 0.11237203015278786,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006797946989536285
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 88,
+              "after_instructions": 78,
+              "q_score": 0.1599230508780322,
+              "immediate_prediction": 0.10549267585857586,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 0.006303969013970345
+            },
+            {
+              "action": "STOP",
+              "before_instructions": 78,
+              "after_instructions": 78,
+              "q_score": 0.0,
+              "immediate_prediction": 0.0,
+              "allowed_candidates": [
+                "STOP",
+                "mem2reg",
+                "instcombine",
+                "simplifycfg",
+                "gvn",
+                "licm",
+                "loop_unroll",
+                "vectorize"
+              ],
+              "compile_elapsed_seconds": 3.33995558321476e-07
+            }
+          ],
+          "initial_instructions": 180,
+          "final_instructions": 40,
+          "policy_final_instructions": 78,
+          "best_policy_instructions": 78,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 40,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 180,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 97,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 88,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        },
+        "hybrid": {
+          "mode": "hybrid",
+          "objective": "instruction_count",
+          "trace": [
+            {
+              "action": "mem2reg",
+              "before_instructions": 180,
+              "after_instructions": 97,
+              "q_score": 0.8515250936897347,
+              "immediate_prediction": 0.6072921191761929,
+              "allowed_candidates": [
+                "mem2reg",
+                "gvn",
+                "instcombine",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.007280951947905123
+            },
+            {
+              "action": "simplifycfg",
+              "before_instructions": 97,
+              "after_instructions": 88,
+              "q_score": 0.26850031969889343,
+              "immediate_prediction": 0.11237203015278786,
+              "allowed_candidates": [
+                "gvn",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.0063842799863778055
+            },
+            {
+              "action": "gvn",
+              "before_instructions": 88,
+              "after_instructions": 78,
+              "q_score": 0.1599230508780322,
+              "immediate_prediction": 0.10549267585857586,
+              "allowed_candidates": [
+                "gvn",
+                "mem2reg",
+                "simplifycfg",
+                "STOP"
+              ],
+              "compile_elapsed_seconds": 0.006070646981243044
+            },
+            {
+              "action": "STOP",
+              "before_instructions": 78,
+              "after_instructions": 78,
+              "q_score": 0.0,
+              "immediate_prediction": 0.0,
+              "allowed_candidates": [
+                "gvn",
+                "STOP",
+                "simplifycfg"
+              ],
+              "compile_elapsed_seconds": 3.989553079009056e-07
+            }
+          ],
+          "initial_instructions": 180,
+          "final_instructions": 40,
+          "policy_final_instructions": 78,
+          "best_policy_instructions": 78,
+          "selected_actions": [],
+          "selection": {
+            "instructions": 40,
+            "step": 0,
+            "applied": "O3",
+            "actions": [],
+            "rule": "Minimum static instruction count over policy checkpoints and O3; O3 wins ties.",
+            "learned_rule": false,
+            "runtime_protection": false
+          },
+          "checkpoints": [
+            {
+              "instructions": 180,
+              "actions": [],
+              "step": 0
+            },
+            {
+              "instructions": 97,
+              "actions": [
+                "mem2reg"
+              ],
+              "step": 1
+            },
+            {
+              "instructions": 88,
+              "actions": [
+                "mem2reg",
+                "simplifycfg"
+              ],
+              "step": 2
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 3
+            },
+            {
+              "instructions": 78,
+              "actions": [
+                "mem2reg",
+                "simplifycfg",
+                "gvn"
+              ],
+              "step": 4
+            }
+          ],
+          "model_sha256": "62941d0e873598e67a8505b9195d9c2122cb46dbbcbc9001aabda94bff460b5d",
+          "training_rows": 3832,
+          "training_programs": 40,
+          "dataset_sha256": "1c8762011622553588a540f5c47ddcf6600387b051cb06e2f6ce0db0485abe36",
+          "deployment_qualified": false,
+          "scope": "Trained count-proxy rollout plus explicit static checkpoint/O3 guard. Not runtime-trained; real-world generalization unproven."
+        }
+      }
+    }
+  ],
+  "summary": {
+    "O3": {
+      "fewer": 0,
+      "equal": 12,
+      "more": 0,
+      "geomean_O3_over_candidate": 1.0,
+      "family_balanced_geomean_O3_over_candidate": 1.0
+    },
+    "Oz": {
+      "fewer": 8,
+      "equal": 2,
+      "more": 2,
+      "geomean_O3_over_candidate": 1.180286925073411,
+      "family_balanced_geomean_O3_over_candidate": 1.180286925073411
+    },
+    "fixed": {
+      "fewer": 8,
+      "equal": 0,
+      "more": 4,
+      "geomean_O3_over_candidate": 1.2281391441937908,
+      "family_balanced_geomean_O3_over_candidate": 1.2281391441937908
+    },
+    "random": {
+      "fewer": 5,
+      "equal": 0,
+      "more": 7,
+      "geomean_O3_over_candidate": 0.7709366801729978,
+      "family_balanced_geomean_O3_over_candidate": 0.7709366801729977
+    },
+    "sl_raw": {
+      "fewer": 8,
+      "equal": 0,
+      "more": 4,
+      "geomean_O3_over_candidate": 1.2137544139098013,
+      "family_balanced_geomean_O3_over_candidate": 1.2137544139098013
+    },
+    "sl_guarded": {
+      "fewer": 8,
+      "equal": 4,
+      "more": 0,
+      "geomean_O3_over_candidate": 1.4152695761041205,
+      "family_balanced_geomean_O3_over_candidate": 1.4152695761041205
+    },
+    "rl_raw": {
+      "fewer": 8,
+      "equal": 0,
+      "more": 4,
+      "geomean_O3_over_candidate": 1.2133470452866248,
+      "family_balanced_geomean_O3_over_candidate": 1.2133470452866246
+    },
+    "rl_guarded": {
+      "fewer": 8,
+      "equal": 4,
+      "more": 0,
+      "geomean_O3_over_candidate": 1.4147945735731027,
+      "family_balanced_geomean_O3_over_candidate": 1.4147945735731027
+    },
+    "hybrid_raw": {
+      "fewer": 8,
+      "equal": 0,
+      "more": 4,
+      "geomean_O3_over_candidate": 1.2133470452866248,
+      "family_balanced_geomean_O3_over_candidate": 1.2133470452866246
+    },
+    "hybrid_guarded": {
+      "fewer": 8,
+      "equal": 4,
+      "more": 0,
+      "geomean_O3_over_candidate": 1.4147945735731027,
+      "family_balanced_geomean_O3_over_candidate": 1.4147945735731027
+    }
+  },
+  "all_output_checks_passed": true,
+  "scope": "Single frozen evaluation on authored synthetic unseen families. Variants are correlated. No real-world or runtime generalization claim. Guard gains are not evidence of an RL advantage over fixed/random/Oz.",
+  "derived_controls": {
+    "fixed_terminal_guarded": {
+      "counts": {
+        "crc32_0": 53,
+        "crc32_1": 53,
+        "edit_distance_0": 126,
+        "edit_distance_1": 126,
+        "heapsort_0": 145,
+        "heapsort_1": 144,
+        "floyd_warshall_0": 99,
+        "floyd_warshall_1": 99,
+        "integer_sqrt_0": 45,
+        "integer_sqrt_1": 45,
+        "rational_bezier_0": 40,
+        "rational_bezier_1": 40
+      },
+      "summary": {
+        "fewer": 8,
+        "equal": 4,
+        "more": 0,
+        "geomean_O3_over_candidate": 1.4194225645810858
+      },
+      "scope": "Post-evaluation arithmetic minimum of already measured terminal and O3 counts. No additional compilation, testing, or training. Baseline intermediate checkpoints were not scored."
+    },
+    "random_terminal_guarded": {
+      "counts": {
+        "crc32_0": 74,
+        "crc32_1": 55,
+        "edit_distance_0": 146,
+        "edit_distance_1": 147,
+        "heapsort_0": 170,
+        "heapsort_1": 158,
+        "floyd_warshall_0": 320,
+        "floyd_warshall_1": 287,
+        "integer_sqrt_0": 45,
+        "integer_sqrt_1": 45,
+        "rational_bezier_0": 40,
+        "rational_bezier_1": 40
+      },
+      "summary": {
+        "fewer": 5,
+        "equal": 7,
+        "more": 0,
+        "geomean_O3_over_candidate": 1.0906514324178762
+      },
+      "scope": "Post-evaluation arithmetic minimum of already measured terminal and O3 counts. No additional compilation, testing, or training. Baseline intermediate checkpoints were not scored."
+    },
+    "Oz_terminal_guarded": {
+      "counts": {
+        "crc32_0": 74,
+        "crc32_1": 74,
+        "edit_distance_0": 147,
+        "edit_distance_1": 147,
+        "heapsort_0": 147,
+        "heapsort_1": 143,
+        "floyd_warshall_0": 185,
+        "floyd_warshall_1": 185,
+        "integer_sqrt_0": 42,
+        "integer_sqrt_1": 42,
+        "rational_bezier_0": 39,
+        "rational_bezier_1": 39
+      },
+      "summary": {
+        "fewer": 8,
+        "equal": 4,
+        "more": 0,
+        "geomean_O3_over_candidate": 1.197075027033386
+      },
+      "scope": "Post-evaluation arithmetic minimum of already measured terminal and O3 counts. No additional compilation, testing, or training. Baseline intermediate checkpoints were not scored."
+    }
+  },
+  "evaluation_report_sha256": "d2d207a5bf698b813fba324d622ea1e4d294ce62ba6a1586b7d46132e444dad4"
+}

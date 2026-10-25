@@ -1,3 +1,9 @@
+> **25 October 2026 expansion:** the current count model uses 40 training
+> programs / 24 families / 3,832 native-checked transitions, with a frozen
+> 12-program / six-family evaluation and an explicit checkpoint/O3 static
+> guard. The original implementation notes below describe the first
+> eight-program prototype; see [the current evaluation](UNSEEN_EVALUATION.md).
+
 # NeuroCompiler: original-plan alignment and SL/RL implementation
 
 Prepared 25 October 2026 after reading the supplied NeuroCompiler Project Plan.pdf.
