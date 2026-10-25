@@ -61,6 +61,6 @@ def session_scorecard(results, examples):
         group[outcome] += 1
     totals = {key: sum(group[key] for group in groups.values()) for key in next(iter(groups.values()))}
     return {'schema':1, 'totals':totals, 'groups':groups, 'source_files':len(sources),
-            'scope':'Current server session only. Repeats of an identical input/model count once; the last completed comparison is used. Different arguments/stdin are different inputs, not independent programs. Outcomes are demo observations, not accuracy or generalization.',
+            'scope':'Current server session only. Repeats of an identical input/model/policy count once; the last completed comparison is used. Different arguments/stdin or learning modes are separate evaluations, not independent programs. Outcomes are demo observations, not accuracy or generalization.',
             'provenance_note':'Training example means the known bundled sieve source. Custom means unverified provenance, not a guaranteed unseen program. Other training-derived custom code is not automatically detected.',
             'quality_note':'Unchanged means identical O3 code, regardless of timing quality. Failed timing checks are also counted separately. Failed/cancelled workers are excluded; blocked completed correctness checks are included.'}

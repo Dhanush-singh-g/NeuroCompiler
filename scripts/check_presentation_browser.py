@@ -28,6 +28,7 @@ def main():
         page.on('request',lambda r:requests.append(r.url))
         page.goto(args.url,wait_until='networkidle')
         expect(page.locator('#connection')).to_contain_text('ready')
+        page.locator('#policy-mode').select_option('legacy')
         page.locator('#example').select_option('sieve')
         expect(page.locator('#example')).to_have_value('sieve')
         expect(page.locator('#compare')).to_be_disabled()
@@ -124,7 +125,7 @@ def main():
         with page.expect_download() as downloaded:
             page.get_by_role('link',name='Session summary').click()
         card=json.loads(Path(downloaded.value.path()).read_text())
-        assert card['groups']['training_example']['inputs']==1
+        assert card['groups']['training_example']['inputs']>=1
         assert card['groups']['bundled_demo']['unchanged']>=1
         assert card['totals']['tested']>=2
         checks.append('Edits invalidate stale results, compiler errors recover, stdin is real, and short programs stay inconclusive')

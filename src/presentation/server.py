@@ -18,6 +18,7 @@ from urllib.parse import unquote, urlsplit
 from src.presentation.model import ROOT, load_model
 from src.presentation.worker import save
 from src.presentation.scorecard import session_scorecard
+from src.hybrid.sequential import load_agent
 
 ASSETS = {'index.html': 'text/html', 'app.js': 'application/javascript', 'style.css': 'text/css', 'favicon.svg':'image/svg+xml'}
 RESEARCH_ASSETS = {'index.html', 'app.js', 'style.css', 'data.json', 'results.js',
@@ -68,7 +69,9 @@ def validate_input(data):
     iterations = data.get('iterations', 0)
     if type(iterations) is not int or not 0 <= iterations <= 1_000_000_000:
         raise ValueError('Iterations descriptor must be an integer from 0 to 1,000,000,000.')
-    return {'source': source, 'stdin': stdin, 'arguments': args, 'iterations': iterations}
+    mode=data.get('policy_mode','legacy')
+    if mode not in ('legacy','sl','rl','hybrid'):raise ValueError('Unknown learning mode.')
+    return {'source': source, 'stdin': stdin, 'arguments': args, 'iterations': iterations,'policy_mode':mode}
 
 
 def markdown_report(result):
@@ -76,7 +79,7 @@ def markdown_report(result):
     lines = ['# NeuroCompiler — Live Experiment Report', '',
              f"Created: {result['created_at']}", '',
              f"Experimental prediction: **{decision['choice']}**. Approved policy: **O3**.", '',
-             'The model decision was frozen before native execution. The experimental model failed research deployment gates.', '',
+             ('The model decision was frozen before native execution. The experimental model failed research deployment gates.' if not decision.get('sequential') else 'The sequential model decision was frozen before native execution. Its objective is instruction count, not measured runtime; deployment qualification is unproven.'), '',
              f"Prediction time: {result['prediction_frozen_at']}",
              f"Compiler: {result['compiler']}",
              f"Static fields per candidate: {decision['feature_count']}",
@@ -84,9 +87,14 @@ def markdown_report(result):
              f"Portable model SHA256: {decision['model_sha256']}",
              f"Original model SHA256: {decision['model_source_sha256']}", '',
              '## Prediction scores', '', '| Pipeline | Predicted log speedup | Binary alias |', '| --- | ---: | --- |']
+    if decision.get('sequential'):
+        lines=lines[:-4]
+        seq=decision['sequential']
+        lines += ['## Sequential learning policy','',f"Mode: {seq['mode']}; objective: instruction_count. Training: {seq['training_rows']} transitions / {seq['training_programs']} synthetic programs.",f"IR instructions: {seq['initial_instructions']} initial -> {seq['final_instructions']} selected. O3: {decision['metrics']['O3']['instructions']}.",'', '| Action | Before IR count | After IR count | Q estimate |', '| --- | ---: | ---: | ---: |']
+        for step in seq['trace']:lines.append(f"| {step['action']} | {step['before_instructions']} | {step['after_instructions']} | {step['q_score']:.5f} |")
     for choice, score in decision['scores'].items():
         lines.append(f"| {choice} | {score:.6f} | {decision['aliases'][choice]} |")
-    lines += ['', 'Scores are model outputs, not confidence estimates or measured speedups.', '']
+    lines += ['', 'Scores are model outputs, not confidence estimates or measured speedups. Sequential Q scores estimate the declared instruction-count reward, not runtime.', '']
     measurement = result.get('measurement')
     if measurement and measurement['status'] == 'completed':
         ranking = measurement.get('four_way')
@@ -146,7 +154,7 @@ def markdown_report(result):
     if 'correctness' in result:
         lines += ['', f"Correctness checks passed: {result['correctness']['passed']}", '', result['correctness']['scope']]
     lines += ['', '## Research status', '',
-              'The live app uses the earlier LLVM10 experimental transformation model. It does not change the later LLVM19 study, consume reserved holdouts, retrain on submitted code, or establish a generalizable improvement over O3.',
+              'The legacy mode uses the earlier LLVM10 model; sequential modes use separately trained instruction-count proxy models. No later LLVM19 study or reserved holdout is changed. Submitted code is not used to retrain. Generalizable runtime improvement over O3 is unproven.',
               '', 'Download the JSON report for all raw paired samples, features, attributions, hashes, and compiler pipelines.', '']
     return '\n'.join(lines)
 
@@ -299,6 +307,7 @@ class Handler(BaseHTTPRequestHandler):
                                   'model': {k:model[k] for k in ('name','policy','approved_policy','deployment_qualified',
                                            'training_rows','real_training_programs','synthetic_training_programs',
                                            'limitations','historical_cv','source_model_sha256')},
+                                  'sequential_model':{k:load_agent()[1][k] for k in ('objective','training_rows','training_programs','limitations','algorithm')},
                                   'examples':json.loads((ROOT/'presentation/examples.json').read_text())})
         if path == '/api/health':
             return self.send(200, {'status':'ready','compiler':self.app.config['compiler'],'approved_policy':'O3','live':True,
@@ -396,6 +405,7 @@ def main():
     try:
         config = toolchain(args.llvm_bin)
         load_model()
+        load_agent()
         if args.check:
             with __import__('tempfile').TemporaryDirectory() as scratch:
                 root = Path(scratch)

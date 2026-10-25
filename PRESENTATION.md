@@ -5,6 +5,31 @@ prediction → output checks → O1 / O2 / O3 / NeuroCompiler comparison** appli
 dashboard remains available through **Research evidence** in the navigation.
 The live app is separate from the frozen research experiments.
 
+## New SL / RL / hybrid modes (25 October 2026)
+
+The **Learning policy** dropdown now includes:
+
+| Mode | What it uses | Objective |
+| --- | --- | --- |
+| Legacy SL | Earlier 156-field frozen Ridge model | Experimental runtime estimate |
+| SL | Newly trained immediate-reward pass predictor | LLVM instruction-count reduction |
+| RL | Offline fitted Q iteration with future rewards | LLVM instruction-count reduction |
+| Hybrid SL + RL | Top-three SL shortlist plus STOP, then Q selection | LLVM instruction-count reduction |
+
+For the new demo, select **Hybrid SL + RL · instruction-count objective**, choose
+Prime sieve, and click Analyze & predict. Inspect the chosen actions, initial/
+selected/O3 counts, and the all-four static count comparison. Then run Live
+comparison to check output and measure native runtimes independently. IR-size
+reduction is not a promise of faster execution. All modes remain experimental.
+
+The new artifact is trained on 512 actual LLVM transitions from eight previously
+opened synthetic programs, not 512 independent programs. No real held-out
+compiler-policy generalization has been established. The legacy weights and
+formal research evidence are unchanged. Data/model/reproduction details and
+original-plan mapping are in [SL_RL_IMPLEMENTATION_PLAN.md](SL_RL_IMPLEMENTATION_PLAN.md).
+The raw transition dataset and portable coefficients are committed; normal setup
+needs no training, sklearn, PyTorch, CompilerGym Python package, or GPU.
+
 ## Current four-way demonstration (25 October 2026)
 
 Paste or upload one self-contained C program, set arguments/stdin, and select
@@ -12,7 +37,7 @@ Paste or upload one self-contained C program, set arguments/stdin, and select
 freezes its prediction **before** building the comparison-only O1/O2 baselines.
 No submitted program executes during analysis.
 
-In **Live comparison**, enable trusted execution and run. All six built
+In **Live comparison**, enable trusted execution and run. All built
 pipelines must match the O0 reference twice on the supplied input. Four large
 cards then show O1, O2, O3, and NeuroCompiler's selected executable. CPU/WALL
 switches the observed geometric-mean times. Exact binary aliases share their
@@ -269,7 +294,7 @@ not LLVM19's O3 or the latest LLVM release. Later LLVM19 library studies have a
 different feature contract and did not produce a qualified experimental model.
 Their declarations, labels, native artifacts, models and held-out programs are
 unchanged. This branch does not retrain, collect new formal labels, consume
-reserved holdouts, or implement RL/hybrid learning.
+reserved holdouts, or implement runtime-trained RL. New instruction-count SL/RL/hybrid modes are separately trained experimental proxies.
 
 ## Architecture and local storage
 

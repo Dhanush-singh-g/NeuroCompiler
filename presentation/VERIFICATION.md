@@ -1,5 +1,37 @@
 # Live application verification
 
+## Trained sequential proxy modes — 25 October 2026
+
+The user accepted instruction count or execution time as an objective. This
+update implements the instruction-count version explicitly. A source/tool-bound
+collector generated 512 actual LLVM state/action/next-state transitions across
+eight previously opened synthetic training programs. Immediate-reward ridge SL
+and 20 rounds of offline fitted Q iteration were trained on those transitions.
+The hybrid selects from a top-three SL shortlist plus STOP using Q values.
+Weights, dataset and diagnostic evaluation are committed as portable JSON.
+
+The product exposes legacy SL plus new SL, RL and hybrid selections. New modes
+show real opt action traces, initial/selected/O3 counts, four-way static counts,
+objective and limitations. The selected artifact is frozen before the independent
+native output/runtime comparison. Model/schema/tool hashes are checked; no
+submitted program is used to update weights. The legacy coefficients and all
+frozen studies remain unchanged.
+
+**54 selected tests pass**, including delayed-reward learning versus immediate
+SL, hybrid masking, reward/context/split guards, real LLVM transitions/STOP, all
+three trained modes compiling and preserving native output, plus prior app,
+ranking, dashboard and archive tests. Across five familiar examples and three
+policies, 90 O0/O3/selected output checks pass. These are diagnostic examples,
+not held-out scientific validation; mixed IR results against O3 are recorded in
+SEQUENTIAL_RESULTS.md, including losses.
+
+Browser checks exercise all three trained modes, hybrid native output and four-way
+comparison, IR and Markdown export, static counts, active learning labels and
+mobile layout with zero page errors. The legacy browser regression also passes.
+Proxy training uses structural LLVM verification, not native semantic checking
+of every training transition. Native correctness is separately gated in the app.
+No runtime-trained RL artifact or unseen-real-program gain is claimed.
+
 ## O1 / O2 / O3 / NeuroCompiler — 25 October 2026
 
 The application now builds the original four model pipelines, freezes the learned

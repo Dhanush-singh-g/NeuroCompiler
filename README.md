@@ -5,11 +5,11 @@ Windows/WSL2 setup and five-minute demonstration. The new decision explorer
 accepts C programs, extracts static features, shows an existing experimental
 model's LLVM pipeline prediction, and optionally checks output and compares
 native runs in a four-way **O1 / O2 / O3 / NeuroCompiler** comparison. Start it with `bash scripts/start_presentation.sh` after
-setup. The approved policy remains O3; this feature does not establish learned
+setup. The Learning policy dropdown also provides trained SL/RL/hybrid instruction-count modes. The approved research default remains O3; this feature does not establish learned
 generalization or alter the preserved research studies.
 
-An experimental LLVM optimization project using supervised learning, with RL and
-hybrid policies planned. Runtime improvement over O3 is the research objective;
+An experimental LLVM optimization project with a legacy supervised runtime
+selector and new SL, offline RL, and hybrid instruction-count proxy policies. Runtime improvement over O3 is the research objective;
 successful learned generalization has not yet been established.
 
 The [results dashboard](dashboard/README.md) provides an interactive overview,

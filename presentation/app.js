@@ -7,7 +7,7 @@ let session, analysis = null, latest = null, activeJob = null, dirty = true, clo
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const signed = n => `${n >= 0 ? '+' : ''}${n.toFixed(4)}`;
 const estimate = score => Math.abs(score)>Math.log(4) ? 'Outside reporting range' : `${Math.abs(100*Math.expm1(-score)).toFixed(1)}% ${score>=0?'less':'more'} time`;
-const pipeline = choice => labels[choice] || choice;
+const pipeline = choice => choice==='LearnedPolicy'?`${(analysis?.decision?.mode||'sequential').toUpperCase()} instruction-count policy`:labels[choice] || choice;
 
 async function api(path, body) {
   const response = await fetch(path, body === undefined ? {} : {method:'POST',headers:{'Content-Type':'application/json','X-NeuroCompiler-Token':session.token},body:JSON.stringify(body)});
@@ -45,7 +45,7 @@ function updateButtons() {
   $('analyze').disabled = !session || busy || !$('source').value.trim();
   $('compare').disabled = busy || dirty || !analysis || !$('trusted').checked;
   $('cancel').disabled = !activeJob;
-  ['source','arguments','iterations','stdin','example','upload','reset'].forEach(id => $(id).disabled = busy);
+  ['source','arguments','iterations','stdin','example','upload','reset','policy-mode'].forEach(id => $(id).disabled = busy);
 }
 function updateLines() {
   const source = $('source').value;
@@ -63,6 +63,7 @@ function customExample() {
 }
 function restoreInput(result) {
   $('source').value=result.input.source;
+  $('policy-mode').value=result.input.policy_mode||'legacy';updatePolicyLabels();
   $('arguments').value=result.input.arguments.map(a=>`'${a.replace(/'/g,`'\\''`)}'`).join(' ');
   $('stdin').value=result.input.stdin; $('iterations').value=result.input.iterations;
   const example = session.examples.find(e=>e.source===result.input.source);
@@ -159,7 +160,7 @@ $('analyze').addEventListener('click', async () => {
   try {
     const iterations = Number($('iterations').value);
     if (!Number.isSafeInteger(iterations)) throw new Error('Iterations descriptor must be a whole number.');
-    const job = await api('/api/jobs', {operation:'analyze',source:$('source').value,arguments:$('arguments').value,stdin:$('stdin').value,iterations});
+    const job = await api('/api/jobs', {operation:'analyze',source:$('source').value,arguments:$('arguments').value,stdin:$('stdin').value,iterations,policy_mode:$('policy-mode').value});
     startProgress(job);
   } catch (error) {busy = false; updateButtons(); showError(error.message);}
 });
@@ -175,7 +176,33 @@ $('cancel').addEventListener('click', async () => {
   try {await api(`/api/jobs/${activeJob}/cancel`, {});} catch (error) {showError(error.message);}
 });
 
+function updatePolicyLabels(){
+ const mode=$('policy-mode').value, sequential=mode!=='legacy';
+ $('feature-width').textContent=sequential?'30':'156';
+ if(session){const m=sequential?session.sequential_model:session.model;$('model-details').innerHTML=sequential?`<dl><dt>LEARNING METHOD</dt><dd>SL immediate reward / offline fitted Q iteration / SL-masked hybrid</dd><dt>OBJECTIVE</dt><dd>LLVM instruction-count reduction; not execution-time training</dd><dt>TRAINING</dt><dd>${m.training_rows} real LLVM transitions / ${m.training_programs.length} synthetic programs</dd><dt>LIMITATIONS</dt><dd>${m.limitations.map(escape).join('<br>')}</dd></dl>`:`<dl><dt>LEGACY MODEL</dt><dd>Ridge regression / ${escape(m.policy)}</dd><dt>TRAINING</dt><dd>${m.real_training_programs} real + ${m.synthetic_training_programs} synthetic programs / ${m.training_rows} targets</dd><dt>DEPLOYMENT DEFAULT</dt><dd>O3; model remains unqualified</dd></dl>`;}
+ $('policy-note').textContent=sequential?'Trained on LLVM instruction-count rewards, not execution-time rewards. Native output/runtime checks follow separately.':'Existing experimental runtime selector; no online retraining.';
+ $('step-predict').querySelector('p').textContent={legacy:'A frozen Ridge model scores candidate-specific compiler features.',sl:'A trained supervised model greedily selects passes for immediate instruction-count benefit.',rl:'The trained Q agent selects the next pass for discounted future instruction-count reward.',hybrid:'SL shortlists three actions plus STOP; the trained Q agent selects for future reward.'}[mode];
+ document.querySelector('.journey-head .badge').textContent={legacy:'SUPERVISED LEARNING',sl:'SUPERVISED LEARNING',rl:'REINFORCEMENT LEARNING',hybrid:'SL + RL HYBRID'}[mode];
+ $('step-compile').querySelector('p').textContent=sequential?'Compile to IR, apply the learned pass sequence, then build comparison baselines.':'Build the model’s four pipelines, then add O1/O2 comparison baselines.';
+ $('pipeline-preview').innerHTML=sequential?'<span class="small-label">LEARNED ACTIONS / MAXIMUM 4 STEPS</span><div><span>STOP</span><span>mem2reg</span><span>instcombine</span><span>simplifycfg</span><span>GVN</span><span>LICM</span><span>unroll</span><span>vectorize</span></div>':'<span class="small-label">MODEL CANDIDATE PASS PIPELINES</span><div><span>O3</span><span>loop preparation → O3</span><span>O3 → GVN → DCE</span><span>instcombine → O3</span></div>';
+}
+$('policy-mode').addEventListener('change',()=>{updatePolicyLabels();markDirty();});
+function renderSequentialDecision(result){
+ const d=result.decision,s=d.sequential, names={sl:'Supervised pass predictor',rl:'Reinforcement-learning agent',hybrid:'Hybrid SL + RL'};
+ $('decision-empty').hidden=true;$('decision-content').hidden=false;
+ const change=100*(1-s.final_instructions/Math.max(1,s.initial_instructions));
+ $('decision-content').innerHTML=`<div class="decision-grid"><div class="prediction-card"><span class="small-label">NEUROCOMPILER / ${names[s.mode].toUpperCase()}</span><span class="badge">EXPERIMENTAL PROXY</span><div class="prediction-choice">${s.trace.map(t=>escape(t.action)).join(' → ')}</div><p>Objective: reduce LLVM IR instruction count. This policy was trained from actual compiler transitions; it is not a runtime-trained policy.</p><p>${s.training_rows} transitions / ${s.training_programs} synthetic training programs. Native execution has not occurred.</p><div class="approved-line">Research deployment default<strong>O3</strong></div></div><div class="analysis-side"><div class="feature-strip"><div><strong>${s.initial_instructions}</strong><span>Initial IR instructions</span></div><div><strong>${s.final_instructions}</strong><span>Selected IR instructions</span></div><div><strong>${d.metrics.O3.instructions}</strong><span>O3 IR instructions</span></div></div><h3>${Math.abs(change).toFixed(1)}% ${change>=0?'fewer':'more'} instructions than initial IR</h3><p class="result-note">This is a measured static count, not a speedup prediction. O3 may still produce smaller or faster code. The runtime comparison evaluates the selected executable independently.</p><p class="result-note">${s.trace.at(-1)?.action==='STOP'?'Agent selected STOP.':'Four-step horizon reached.'} Q values estimate discounted future instruction-count reward, not confidence or execution time.</p></div></div><div class="table-scroll"><table><thead><tr><th>CHOSEN ACTION</th><th>BEFORE IR COUNT</th><th>AFTER IR COUNT</th><th>SL IMMEDIATE ESTIMATE</th><th>RL Q ESTIMATE</th><th>ALLOWED / SL-SHORTLISTED ACTIONS</th></tr></thead><tbody>${s.trace.map(t=>`<tr><td>${escape(t.action)}</td><td>${t.before_instructions}</td><td>${t.after_instructions}</td><td>${signed(t.immediate_prediction)}</td><td>${signed(t.q_score)}</td><td>${escape(t.allowed_candidates.join(', '))}</td></tr>`).join('')}</tbody></table></div><p class="result-note">Hybrid masks to the top three SL actions plus STOP before Q selection. Small synthetic corpus, offline extrapolation, and unseen-program generalization remain limitations. Model frozen before native timing.</p><div class="artifact-exports"><a href="/api/jobs/${result.id}/selected.bc" download>↓ Export learned choice .bc</a><a href="/api/jobs/${result.id}/approved.bc" download>↓ Export O3 .bc</a><button class="text-button" id="go-benchmark">Check output and runtime →</button></div>`;
+ const counts=document.createElement('div');counts.className='static-counts';
+ const entries=Object.entries(result.comparison_options).map(([label,artifact])=>[label,result.comparison_metrics[artifact].instructions]);
+ const minimum=Math.min(...entries.map(([,count])=>count));
+ counts.innerHTML=`<h3>Instruction-count objective: compare all four entries</h3><div class="feature-strip">${entries.map(([label,count])=>`<div><strong>${count}</strong><span>${escape(label)}</span></div>`).join('')}</div><p class="result-note">Fewest observed LLVM IR instructions: ${entries.filter(([,count])=>count===minimum).map(([label])=>escape(label)).join(' / ')}. These are static counts, not runtime or semantic-correctness evidence; native checks are available in Live comparison.</p>`;
+ $('decision-content').append(counts);
+ $('go-benchmark').addEventListener('click',()=>setTab('benchmark'));
+ $('ir-choice').innerHTML=Object.keys(result.artifacts).filter(c=>c!=='O3').map(c=>`<option value="${c}">${escape(pipeline(c))}</option>`).join('');$('ir-choice').value='LearnedPolicy';
+}
+
 function renderDecision(result) {
+  if(result.decision.sequential){renderSequentialDecision(result);return;}
   const d = result.decision, metrics = d.metrics.O3;
   const candidates = Object.keys(d.scores).filter(c => c !== 'O3');
   const best = candidates.reduce((a,b)=>d.scores[a]>d.scores[b]?a:b);
@@ -210,7 +237,7 @@ function renderBenchmark(result) {
   }
   const choice = result.decision.choice;
   const selected = m.cells[choice];
-  $('benchmark-content').innerHTML = `<div class="benchmark-heading"><h3>Prediction: ${escape(pipeline(choice))}</h3><div class="clock-switch" aria-label="Timing clock"><button data-clock="cpu" class="${clock==='cpu'?'selected':''}" aria-pressed="${clock==='cpu'}">CPU</button><button data-clock="wall" class="${clock==='wall'?'selected':''}" aria-pressed="${clock==='wall'}">WALL</button></div></div><div class="quality-banner ${(m.four_way?m.four_way.status==='reliable_winner':m.self_control_passed)?'passed':''}"><strong>${m.four_way?(m.four_way.controls_passed?'All executable self-controls passed.':'One or more executable self-controls failed.'):(m.self_control_passed?'O3 self-control passed.':'O3 self-control did not qualify.')}</strong> Direct comparisons decide the preference on both clocks; all observed times remain visible.</div><div id="nc-summary" class="nc-summary"></div><div class="chart-wrap"><canvas id="timing-chart" role="img" aria-label="Compiler comparison chart; values and reliability details follow in the table."></canvas></div><p class="chart-caption">O3 TIME ÷ CANDIDATE TIME · ABOVE 1 = FASTER · ADJUSTED BOOTSTRAP INTERVALS</p><div class="table-scroll"><table><thead><tr><th>PIPELINE</th><th>MEDIAN TIME</th><th>RATIO [ADJUSTED INTERVAL]</th><th>INTERPRETATION</th></tr></thead><tbody id="timing-table"></tbody></table></div><div class="correctness-card"><span class="check-mark">✓</span><div><h4>Output checks passed / O0 + all six built pipelines</h4><p>${escape(correctness.scope)}</p><pre>${escape(correctness.checks['O0 reference'].stdout_preview || '(empty stdout)')}</pre></div></div><p class="result-note">${escape(m.timer)} ${m.pairs_per_distinct_cell} pairs per distinct cell; all samples retained. Binary aliases reuse the canonical measurement. The table includes post-prediction candidate exploration; the fastest observed candidate is not automatically the model recommendation.</p><details class="input-details"><summary>Measurement protocol & interpretation</summary><p class="muted">${escape(m.quality_rule)}</p><p class="muted">${escape(m.interval_scope)}</p><p class="muted">${escape(m.scope)}</p></details>`;
+  $('benchmark-content').innerHTML = `<div class="benchmark-heading"><h3>Prediction: ${escape(pipeline(choice))}</h3><div class="clock-switch" aria-label="Timing clock"><button data-clock="cpu" class="${clock==='cpu'?'selected':''}" aria-pressed="${clock==='cpu'}">CPU</button><button data-clock="wall" class="${clock==='wall'?'selected':''}" aria-pressed="${clock==='wall'}">WALL</button></div></div><div class="quality-banner ${(m.four_way?m.four_way.status==='reliable_winner':m.self_control_passed)?'passed':''}"><strong>${m.four_way?(m.four_way.controls_passed?'All executable self-controls passed.':'One or more executable self-controls failed.'):(m.self_control_passed?'O3 self-control passed.':'O3 self-control did not qualify.')}</strong> Direct comparisons decide the preference on both clocks; all observed times remain visible.</div><div id="nc-summary" class="nc-summary"></div><div class="chart-wrap"><canvas id="timing-chart" role="img" aria-label="Compiler comparison chart; values and reliability details follow in the table."></canvas></div><p class="chart-caption">O3 TIME ÷ CANDIDATE TIME · ABOVE 1 = FASTER · ADJUSTED BOOTSTRAP INTERVALS</p><div class="table-scroll"><table><thead><tr><th>PIPELINE</th><th>MEDIAN TIME</th><th>RATIO [ADJUSTED INTERVAL]</th><th>INTERPRETATION</th></tr></thead><tbody id="timing-table"></tbody></table></div><div class="correctness-card"><span class="check-mark">✓</span><div><h4>Output checks passed / O0 + ${Object.keys(result.artifacts).length} built pipelines</h4><p>${escape(correctness.scope)}</p><pre>${escape(correctness.checks['O0 reference'].stdout_preview || '(empty stdout)')}</pre></div></div><p class="result-note">${escape(m.timer)} ${m.pairs_per_distinct_cell} pairs per distinct cell; all samples retained. Binary aliases reuse the canonical measurement. The table includes post-prediction candidate exploration; the fastest observed candidate is not automatically the model recommendation.</p><details class="input-details"><summary>Measurement protocol & interpretation</summary><p class="muted">${escape(m.quality_rule)}</p><p class="muted">${escape(m.interval_scope)}</p><p class="muted">${escape(m.scope)}</p></details>`;
   document.querySelectorAll('[data-clock]').forEach(button=>button.addEventListener('click',()=>{
     clock = button.dataset.clock;
     document.querySelectorAll('[data-clock]').forEach(b=>{b.classList.toggle('selected',b===button);b.setAttribute('aria-pressed',String(b===button));});

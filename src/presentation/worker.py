@@ -22,6 +22,8 @@ from src.benchmarks.compact import MENU, CODEGEN
 from src.presentation.model import predict, MODEL_PATH
 from src.presentation.summary import comparison_summary
 from src.presentation.four_way import four_way_summary
+from src.hybrid.sequential import rollout, MODEL_PATH as SEQUENTIAL_MODEL_PATH
+from src.rl.llvm_environment import ACTIONS, FEATURE_NAMES as SEQUENTIAL_FEATURE_NAMES
 from src.features.transform import parse_ir, summaries, METRICS
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -86,10 +88,10 @@ def analyze(root, request):
     command(['gcc', '-std=c11', '-O2', '-Wall', '-Wextra', ROOT/'src/presentation/native_runner.c',
              '-o', root/'native-runner'], root)
     irs, sizes, aliases, artifacts = {}, {}, {}, {}
-    def build(choice, stages, codegen):
+    def build(choice, stages, codegen, input_bc=None):
         directory = root / choice
         directory.mkdir()
-        current = initial
+        current = initial if input_bc is None else input_bc
         for step, flags in enumerate(stages):
             output = directory / f'stage{step}.bc'
             command([tools/'opt', *flags, current, '-o', output], root)
@@ -110,6 +112,19 @@ def analyze(root, request):
         build(choice,stages,CODEGEN)
     progress(root,'predict','Freezing the model decision before baseline comparison',65)
     decision = predict(irs, sizes, dict(aliases), len(request['stdin'].encode()), request['iterations'])
+    mode=request.get('policy_mode','legacy')
+    if mode!='legacy':
+        progress(root,'predict',f'Applying trained {mode} instruction-count policy',65)
+        sequential,final_bc=rollout(tools,initial,root/'sequential_episode',mode,request['toolchain_sha256'])
+        build('LearnedPolicy',[],CODEGEN,input_bc=final_bc)
+        artifacts['LearnedPolicy']['passes']=[ACTIONS[t['action']] for t in sequential['trace'] if t['action']!='STOP']
+        counts,_indirect=summaries(parse_ir(irs['LearnedPolicy']))
+        decision['metrics']['LearnedPolicy']=dict(zip(METRICS,map(int,counts[0])))
+        decision.update(choice='LearnedPolicy',policy=mode+'_instruction_count',mode=mode,sequential=sequential,
+                        model_sha256=sequential['model_sha256'],model_source_sha256=sequential['model_sha256'],
+                        scores={},explanations={},vectors={},feature_count=len(SEQUENTIAL_FEATURE_NAMES),aliases=dict(aliases),
+                        reason='A trained '+mode+' policy chose this pass sequence for instruction-count reduction before native execution.',
+                        diagnostics={'recommendation_notes':['Instruction-count objective, not runtime-trained. Small synthetic training corpus; unseen-program benefit is unproven.']})
     prediction_frozen = now()
     for index,choice in enumerate(('O1','O2')):
         progress(root,'baselines',f'Building {choice} comparison baseline; prediction already frozen',75+index*10)
@@ -130,7 +145,7 @@ def analyze(root, request):
         'host': {'system': platform.system(), 'machine': platform.machine(),
                  'cpu': platform.processor(), 'platform': platform.platform()},
         'measurement': None,
-        'input': {k: request[k] for k in ('source', 'arguments', 'stdin', 'iterations')},
+        'input': {**{k: request[k] for k in ('source', 'arguments', 'stdin', 'iterations')},'policy_mode':mode},
         'comparison_options': {'O1':'O1','O2':'O2','O3':'O3','NeuroCompiler':decision['choice']},
         'artifact_aliases':aliases, 'comparison_metrics':comparison_metrics,
         'reference_sha256': digest((root/'reference').read_bytes()),
@@ -210,7 +225,8 @@ def compare(root, request):
     analysis_root = Path(request['analysis_root'])
     result = json.loads((analysis_root/'result.json').read_text())
     original = json.loads((analysis_root/'request.json').read_text())
-    if digest(MODEL_PATH.read_bytes()) != result['decision']['model_sha256']:
+    model_path=SEQUENTIAL_MODEL_PATH if result['decision'].get('sequential') else MODEL_PATH
+    if digest(model_path.read_bytes()) != result['decision']['model_sha256']:
         raise JobError('Model changed after prediction; analyze again.')
     if digest((analysis_root/'input.c').read_bytes()) != result['source_sha256']:
         raise JobError('Source changed after prediction; analyze again.')
@@ -218,7 +234,8 @@ def compare(root, request):
         raise JobError('Correctness reference changed after prediction; analyze again.')
     if digest((analysis_root/'native-runner').read_bytes()) != result['runner_sha256']:
         raise JobError('Timing helper changed after prediction; analyze again.')
-    if any(original[k] != result['input'][k] for k in ('source','arguments','stdin','iterations')):
+    if (any(original[k] != result['input'][k] for k in ('source','arguments','stdin','iterations'))
+            or original.get('policy_mode','legacy') != result['input'].get('policy_mode','legacy')):
         raise JobError('Input changed after prediction; analyze again.')
     executables = {c: analysis_root/c/'program' for c in result['artifacts']}
     for c, path in executables.items():
